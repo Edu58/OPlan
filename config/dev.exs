@@ -1,5 +1,9 @@
 import Config
 
+if File.exists?("#{__DIR__}/dev.local.exs") do
+  import_config "dev.local.exs"
+end
+
 # Configure your database
 config :oplan, Oplan.Repo,
   username: "postgres",
