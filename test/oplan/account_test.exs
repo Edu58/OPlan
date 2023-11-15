@@ -505,4 +505,63 @@ defmodule Oplan.AccountTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "account_types" do
+    alias Oplan.Account.AccountType
+
+    import Oplan.AccountFixtures
+
+    @invalid_attrs %{name: nil}
+
+    test "list_account_types/0 returns all account_types" do
+      account_type = account_type_fixture()
+      assert Account.list_account_types() == [account_type]
+    end
+
+    test "get_account_type!/1 returns the account_type with given id" do
+      account_type = account_type_fixture()
+      assert Account.get_account_type!(account_type.id) == account_type
+    end
+
+    test "create_account_type/1 with valid data creates a account_type" do
+      valid_attrs = %{name: "some name"}
+
+      assert {:ok, %AccountType{} = account_type} = Account.create_account_type(valid_attrs)
+      assert account_type.name == "some name"
+    end
+
+    test "create_account_type/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Account.create_account_type(@invalid_attrs)
+    end
+
+    test "update_account_type/2 with valid data updates the account_type" do
+      account_type = account_type_fixture()
+      update_attrs = %{name: "some updated name"}
+
+      assert {:ok, %AccountType{} = account_type} =
+               Account.update_account_type(account_type, update_attrs)
+
+      assert account_type.name == "some updated name"
+    end
+
+    test "update_account_type/2 with invalid data returns error changeset" do
+      account_type = account_type_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Account.update_account_type(account_type, @invalid_attrs)
+
+      assert account_type == Account.get_account_type!(account_type.id)
+    end
+
+    test "delete_account_type/1 deletes the account_type" do
+      account_type = account_type_fixture()
+      assert {:ok, %AccountType{}} = Account.delete_account_type(account_type)
+      assert_raise Ecto.NoResultsError, fn -> Account.get_account_type!(account_type.id) end
+    end
+
+    test "change_account_type/1 returns a account_type changeset" do
+      account_type = account_type_fixture()
+      assert %Ecto.Changeset{} = Account.change_account_type(account_type)
+    end
+  end
 end

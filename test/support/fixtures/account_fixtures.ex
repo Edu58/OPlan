@@ -28,4 +28,18 @@ defmodule Oplan.AccountFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a account_type.
+  """
+  def account_type_fixture(attrs \\ %{}) do
+    {:ok, account_type} =
+      attrs
+      |> Enum.into(%{
+        name: "some name"
+      })
+      |> Oplan.Account.create_account_type()
+
+    account_type
+  end
 end

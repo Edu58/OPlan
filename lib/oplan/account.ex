@@ -6,6 +6,7 @@ defmodule Oplan.Account do
   import Ecto.Query, warn: false
   alias Oplan.Repo
 
+  alias Oplan.Account.AccountType
   alias Oplan.Account.{User, UserToken, UserNotifier}
 
   ## Database getters
@@ -349,5 +350,99 @@ defmodule Oplan.Account do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  @doc """
+  Returns the list of account_types.
+
+  ## Examples
+
+      iex> list_account_types()
+      [%AccountType{}, ...]
+
+  """
+  def list_account_types do
+    Repo.all(AccountType)
+  end
+
+  @doc """
+  Gets a single account_type.
+
+  Raises `Ecto.NoResultsError` if the Account type does not exist.
+
+  ## Examples
+
+      iex> get_account_type!(123)
+      %AccountType{}
+
+      iex> get_account_type!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_account_type!(id), do: Repo.get!(AccountType, id)
+
+  @doc """
+  Creates a account_type.
+
+  ## Examples
+
+      iex> create_account_type(%{field: value})
+      {:ok, %AccountType{}}
+
+      iex> create_account_type(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_account_type(attrs \\ %{}) do
+    %AccountType{}
+    |> AccountType.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a account_type.
+
+  ## Examples
+
+      iex> update_account_type(account_type, %{field: new_value})
+      {:ok, %AccountType{}}
+
+      iex> update_account_type(account_type, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_account_type(%AccountType{} = account_type, attrs) do
+    account_type
+    |> AccountType.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a account_type.
+
+  ## Examples
+
+      iex> delete_account_type(account_type)
+      {:ok, %AccountType{}}
+
+      iex> delete_account_type(account_type)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_account_type(%AccountType{} = account_type) do
+    Repo.delete(account_type)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking account_type changes.
+
+  ## Examples
+
+      iex> change_account_type(account_type)
+      %Ecto.Changeset{data: %AccountType{}}
+
+  """
+  def change_account_type(%AccountType{} = account_type, attrs \\ %{}) do
+    AccountType.changeset(account_type, attrs)
   end
 end

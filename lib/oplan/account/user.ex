@@ -2,8 +2,14 @@ defmodule Oplan.Account.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Oplan.Account.AccountType
+
   schema "users" do
+    field :username, :string
+    field :first_name, :string
+    field :last_name, :string
     field :email, :string
+    belongs_to :account_type, AccountType
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -37,6 +43,7 @@ defmodule Oplan.Account.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
+    |> validate_required([:username, :account_type])
     |> validate_email(opts)
     |> validate_password(opts)
   end
