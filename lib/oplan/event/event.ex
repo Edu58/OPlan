@@ -59,7 +59,6 @@ defmodule Oplan.Event.Event do
       :sponsors,
       :number_of_tickets
     ])
-    |> cast_assoc([:event_ratings, :event_comments, :event_tickets])
     |> validate_required([
       :name,
       :venue,
