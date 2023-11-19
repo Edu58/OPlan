@@ -8,6 +8,7 @@ defmodule Oplan.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      elixirc_options: [warnings_as_errors: true],
       aliases: aliases(),
       deps: deps()
     ]
@@ -32,6 +33,7 @@ defmodule Oplan.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.7"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
