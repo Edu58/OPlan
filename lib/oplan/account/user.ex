@@ -3,6 +3,7 @@ defmodule Oplan.Account.User do
   import Ecto.Changeset
 
   alias Oplan.Account.AccountType
+  alias Oplan.Event.Event
 
   schema "users" do
     field :username, :string
@@ -13,6 +14,8 @@ defmodule Oplan.Account.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+
+    has_many :events, Event, on_replace: :delete
 
     timestamps()
   end
@@ -42,8 +45,9 @@ defmodule Oplan.Account.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
-    |> validate_required([:username, :account_type])
+    |> cast(attrs, [:username, :first_name, :last_name, :email, :password, :account_type, :events])
+    |> cast_assoc(:events)
+    |> validate_required([:username, :email, :account_type])
     |> validate_email(opts)
     |> validate_password(opts)
   end

@@ -8,6 +8,7 @@ defmodule Oplan.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      elixirc_options: [warnings_as_errors: true],
       aliases: aliases(),
       deps: deps()
     ]
