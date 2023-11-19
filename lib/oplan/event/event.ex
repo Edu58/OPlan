@@ -8,6 +8,7 @@ defmodule Oplan.Event.Event do
   alias Oplan.Event.EventRating
   alias Oplan.Event.EventComment
   alias Oplan.Payments.Tickets
+  alias Oplan.Support.SupportTickets
 
   schema "events" do
     field :age_restriction, :integer
@@ -33,6 +34,8 @@ defmodule Oplan.Event.Event do
     has_many :event_comments, EventComment, on_replace: :delete
 
     has_many :event_tickets, Tickets, on_replace: :delete
+
+    has_many :support_tickets, SupportTickets, on_replace: :delete
 
     many_to_many :guests, EventGuest, join_through: "event_guests"
 
