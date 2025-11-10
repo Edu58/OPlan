@@ -1,7 +1,32 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
+
+	"github.com/Edu58/Oplan/config"
+	"github.com/Edu58/Oplan/internal/database"
+)
 
 func main() {
-	fmt.Println("Start of a billionaire")
+	config, err := config.LoadConfig(".")
+
+	if err != nil {
+		log.Fatalf("Could not load config with err: %v", err)
+		return
+	}
+
+	_, err = database.InitDB(&config)
+
+	if err != nil {
+		log.Fatalf("Could not load config with err: %v", err)
+		return
+	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello"))
+	})
+
+	log.Println("Starting server")
+	log.Fatal(http.ListenAndServe(config.HOST+":"+config.PORT, nil))
 }
