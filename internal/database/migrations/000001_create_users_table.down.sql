@@ -1,0 +1,7 @@
+DROP INDEX CONCURRENTLY IF EXISTS  users_email_idx;
+DROP INDEX CONCURRENTLY IF EXISTS users_username_idx;
+DROP INDEX CONCURRENTLY IF EXISTS users_msisdn_idx;
+DELETE TABLE users;
+
+DROP INDEX CONCURRENTLY IF EXISTS account_types_name_idx;
+DELETE TABLE account_types;
