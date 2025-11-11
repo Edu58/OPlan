@@ -18,6 +18,8 @@ func main() {
 
 	_, err = database.InitDB(&config)
 
+	// store := db.New(dbPoolConn)
+
 	if err != nil {
 		log.Fatalf("Could not load config with err: %v", err)
 		return

@@ -7,9 +7,8 @@ package db
 
 import (
 	"context"
-	"database/sql"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createAccountType = `-- name: CreateAccountType :one
@@ -20,12 +19,12 @@ RETURNING id, name, active, inserted_at, updated_at
 `
 
 type CreateAccountTypeParams struct {
-	Name   string       `json:"name"`
-	Active sql.NullBool `json:"active"`
+	Name   string      `json:"name"`
+	Active pgtype.Bool `json:"active"`
 }
 
 func (q *Queries) CreateAccountType(ctx context.Context, arg CreateAccountTypeParams) (AccountType, error) {
-	row := q.db.QueryRowContext(ctx, createAccountType, arg.Name, arg.Active)
+	row := q.db.QueryRow(ctx, createAccountType, arg.Name, arg.Active)
 	var i AccountType
 	err := row.Scan(
 		&i.ID,
@@ -43,8 +42,8 @@ WHERE id = $1 OR name = $1
 RETURNING id, name, active, inserted_at, updated_at
 `
 
-func (q *Queries) DeleteAccountType(ctx context.Context, id uuid.UUID) (AccountType, error) {
-	row := q.db.QueryRowContext(ctx, deleteAccountType, id)
+func (q *Queries) DeleteAccountType(ctx context.Context, id pgtype.UUID) (AccountType, error) {
+	row := q.db.QueryRow(ctx, deleteAccountType, id)
 	var i AccountType
 	err := row.Scan(
 		&i.ID,
@@ -61,8 +60,8 @@ SELECT id, name, active, inserted_at, updated_at FROM account_types
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetAccountTypeById(ctx context.Context, id uuid.UUID) (AccountType, error) {
-	row := q.db.QueryRowContext(ctx, getAccountTypeById, id)
+func (q *Queries) GetAccountTypeById(ctx context.Context, id pgtype.UUID) (AccountType, error) {
+	row := q.db.QueryRow(ctx, getAccountTypeById, id)
 	var i AccountType
 	err := row.Scan(
 		&i.ID,
@@ -80,7 +79,7 @@ WHERE name = $1 LIMIT 1
 `
 
 func (q *Queries) GetAccountTypeByName(ctx context.Context, name string) (AccountType, error) {
-	row := q.db.QueryRowContext(ctx, getAccountTypeByName, name)
+	row := q.db.QueryRow(ctx, getAccountTypeByName, name)
 	var i AccountType
 	err := row.Scan(
 		&i.ID,
@@ -98,7 +97,7 @@ ORDER BY inserted_at DESC
 `
 
 func (q *Queries) ListAccountTypes(ctx context.Context) ([]AccountType, error) {
-	rows, err := q.db.QueryContext(ctx, listAccountTypes)
+	rows, err := q.db.Query(ctx, listAccountTypes)
 	if err != nil {
 		return nil, err
 	}
@@ -117,9 +116,6 @@ func (q *Queries) ListAccountTypes(ctx context.Context) ([]AccountType, error) {
 		}
 		items = append(items, i)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -134,12 +130,12 @@ RETURNING id, name, active, inserted_at, updated_at
 `
 
 type UpdateAccountTypeByIDParams struct {
-	ID   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
+	ID   pgtype.UUID `json:"id"`
+	Name string      `json:"name"`
 }
 
 func (q *Queries) UpdateAccountTypeByID(ctx context.Context, arg UpdateAccountTypeByIDParams) (AccountType, error) {
-	row := q.db.QueryRowContext(ctx, updateAccountTypeByID, arg.ID, arg.Name)
+	row := q.db.QueryRow(ctx, updateAccountTypeByID, arg.ID, arg.Name)
 	var i AccountType
 	err := row.Scan(
 		&i.ID,

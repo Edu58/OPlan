@@ -7,13 +7,13 @@ package db
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Querier interface {
 	CreateAccountType(ctx context.Context, arg CreateAccountTypeParams) (AccountType, error)
-	DeleteAccountType(ctx context.Context, id uuid.UUID) (AccountType, error)
-	GetAccountTypeById(ctx context.Context, id uuid.UUID) (AccountType, error)
+	DeleteAccountType(ctx context.Context, id pgtype.UUID) (AccountType, error)
+	GetAccountTypeById(ctx context.Context, id pgtype.UUID) (AccountType, error)
 	GetAccountTypeByName(ctx context.Context, name string) (AccountType, error)
 	ListAccountTypes(ctx context.Context) ([]AccountType, error)
 	UpdateAccountTypeByID(ctx context.Context, arg UpdateAccountTypeByIDParams) (AccountType, error)

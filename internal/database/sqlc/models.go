@@ -5,32 +5,30 @@
 package db
 
 import (
-	"database/sql"
-
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type AccountType struct {
-	ID         uuid.UUID    `json:"id"`
-	Name       string       `json:"name"`
-	Active     sql.NullBool `json:"active"`
-	InsertedAt sql.NullTime `json:"inserted_at"`
-	UpdatedAt  sql.NullTime `json:"updated_at"`
+	ID         pgtype.UUID        `json:"id"`
+	Name       string             `json:"name"`
+	Active     pgtype.Bool        `json:"active"`
+	InsertedAt pgtype.Timestamptz `json:"inserted_at"`
+	UpdatedAt  pgtype.Timestamptz `json:"updated_at"`
 }
 
 type User struct {
-	ID             uuid.UUID      `json:"id"`
-	Email          string         `json:"email"`
-	Username       string         `json:"username"`
-	FirstName      string         `json:"first_name"`
-	LastName       sql.NullString `json:"last_name"`
-	Password       string         `json:"password"`
-	Msisdn         sql.NullString `json:"msisdn"`
-	Dob            sql.NullTime   `json:"dob"`
-	EmailVerified  sql.NullBool   `json:"email_verified"`
-	MsisdnVerified sql.NullBool   `json:"msisdn_verified"`
-	Active         sql.NullBool   `json:"active"`
-	AccountTypeID  uuid.NullUUID  `json:"account_type_id"`
-	InsertedAt     sql.NullTime   `json:"inserted_at"`
-	UpdatedAt      sql.NullTime   `json:"updated_at"`
+	ID             pgtype.UUID        `json:"id"`
+	Email          string             `json:"email"`
+	Username       string             `json:"username"`
+	FirstName      string             `json:"first_name"`
+	LastName       pgtype.Text        `json:"last_name"`
+	Password       string             `json:"password"`
+	Msisdn         pgtype.Text        `json:"msisdn"`
+	Dob            pgtype.Date        `json:"dob"`
+	EmailVerified  pgtype.Bool        `json:"email_verified"`
+	MsisdnVerified pgtype.Bool        `json:"msisdn_verified"`
+	Active         pgtype.Bool        `json:"active"`
+	AccountTypeID  pgtype.UUID        `json:"account_type_id"`
+	InsertedAt     pgtype.Timestamptz `json:"inserted_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
 }
