@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func setupConfig() (map[string]string, *os.File) {
@@ -33,10 +34,7 @@ func TestLoadConfig(t *testing.T) {
 	for key, value := range sample_configs {
 		line := fmt.Sprintf("%s=%s\n", key, value)
 		_, err := test_config_file.WriteString(line)
-
-		if err != nil {
-			t.Errorf("Error writing to temp config file: %v", err)
-		}
+		assert.NoError(t, err)
 	}
 
 	test_config_file.Sync()
@@ -48,18 +46,12 @@ func TestLoadConfig(t *testing.T) {
 		configType, _ := strings.CutPrefix(fileExt, ".")
 
 		config, err := LoadConfig(fileDir, filename, configType)
+		assert.NoError(t, err)
 
-		if err != nil {
-			t.Errorf("Error loading config: %v", err)
-		}
-
-		for key, value := range sample_configs {
-			configValues := reflect.ValueOf(config)
-			configValue := configValues.FieldByName(key)
-
-			if value != configValue.String() {
-				t.Errorf("Expected \"%s\" got: %v", value, configValue.String())
-			}
-		}
+		assert.Equal(t, "localhost", config.HOST)
+		assert.Equal(t, "6000", config.PORT)
+		assert.Equal(t, "postgres://test_postgres_dsn", config.DSN_URL)
+		assert.Equal(t, "", config.DSN_OPTIONS)
+		assert.Equal(t, "file://test_migration_url", config.MIGRATIONS_URL)
 	})
 }
