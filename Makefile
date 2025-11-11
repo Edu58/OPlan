@@ -1,7 +1,7 @@
 .PHONY: server migrate force_migrate fmt
 
 fmt:
-	go fmt ./cmd/api/
+	go fmt -n ./...
 	
 server:
 	go run ./cmd/api/main.go

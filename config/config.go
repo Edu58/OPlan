@@ -12,10 +12,10 @@ type Config struct {
 	MIGRATIONS_URL string `mapstructure:"migrations_url"`
 }
 
-func LoadConfig(path string) (config Config, err error) {
-	viper.SetConfigName("app")
-	viper.AddConfigPath(path)
-	viper.SetConfigType("env")
+func LoadConfig(dir string, configName string, configType string) (config Config, err error) {
+	viper.SetConfigName(configName)
+	viper.AddConfigPath(dir)
+	viper.SetConfigType(configType)
 
 	viper.SetDefault("HOST", "localhost")
 	viper.SetDefault("PORT", "4000")

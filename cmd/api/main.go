@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -9,14 +10,14 @@ import (
 )
 
 func main() {
-	config, err := config.LoadConfig(".")
+	appConfig, err := config.LoadConfig(".", "app", "env")
 
 	if err != nil {
 		log.Fatalf("Could not load config with err: %v", err)
 		return
 	}
 
-	_, err = database.InitDB(&config)
+	_, err = database.InitDB(context.Background(), &appConfig)
 
 	// store := db.New(dbPoolConn)
 
@@ -30,5 +31,5 @@ func main() {
 	})
 
 	log.Println("Starting server")
-	log.Fatal(http.ListenAndServe(config.HOST+":"+config.PORT, nil))
+	log.Fatal(http.ListenAndServe(appConfig.HOST+":"+appConfig.PORT, nil))
 }

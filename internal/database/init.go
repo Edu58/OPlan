@@ -12,10 +12,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func InitDB(config *config.Config) (*pgxpool.Pool, error) {
+func InitDB(context context.Context, config *config.Config) (*pgxpool.Pool, error) {
 	log.Println("Initializing Database")
 
-	dbPool, err := pgxpool.New(context.Background(), config.DSN_URL)
+	dbPool, err := pgxpool.New(context, config.DSN_URL)
 
 	if err != nil {
 		log.Printf("Error initializing database: %v", err)
@@ -24,7 +24,7 @@ func InitDB(config *config.Config) (*pgxpool.Pool, error) {
 
 	defer dbPool.Close()
 
-	log.Println("Database initialized succesfully")
+	log.Println("Database initialized successfully")
 
 	if err := runMigrations(config); err != nil {
 		log.Printf("Error running migrations: %v", err)
