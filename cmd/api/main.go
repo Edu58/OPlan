@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	_, err = database.InitDB(context.Background(), &appConfig)
+	dbPool, err := database.InitDB(context.Background(), &appConfig)
 
 	// store := db.New(dbPoolConn)
 
@@ -25,6 +25,8 @@ func main() {
 		log.Fatalf("Could not load config with err: %v", err)
 		return
 	}
+
+	defer dbPool.Close()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello"))

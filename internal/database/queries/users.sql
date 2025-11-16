@@ -18,11 +18,11 @@ RETURNING *;
 
 -- name: UpdateAccountTypeByID :one
 UPDATE account_types
-SET name=$2, active=$2
+SET name=$2, active=$3
 WHERE id = $1
 RETURNING *;
 
 -- name: DeleteAccountType :one
 DELETE FROM account_types
-WHERE id = $1 OR name = $1
+WHERE id = $1
 RETURNING *;

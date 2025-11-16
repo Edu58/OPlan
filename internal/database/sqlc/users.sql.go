@@ -38,7 +38,7 @@ func (q *Queries) CreateAccountType(ctx context.Context, arg CreateAccountTypePa
 
 const deleteAccountType = `-- name: DeleteAccountType :one
 DELETE FROM account_types
-WHERE id = $1 OR name = $1
+WHERE id = $1
 RETURNING id, name, active, inserted_at, updated_at
 `
 
@@ -124,18 +124,19 @@ func (q *Queries) ListAccountTypes(ctx context.Context) ([]AccountType, error) {
 
 const updateAccountTypeByID = `-- name: UpdateAccountTypeByID :one
 UPDATE account_types
-SET name=$2, active=$2
+SET name=$2, active=$3
 WHERE id = $1
 RETURNING id, name, active, inserted_at, updated_at
 `
 
 type UpdateAccountTypeByIDParams struct {
-	ID   pgtype.UUID `json:"id"`
-	Name string      `json:"name"`
+	ID     pgtype.UUID `json:"id"`
+	Name   string      `json:"name"`
+	Active pgtype.Bool `json:"active"`
 }
 
 func (q *Queries) UpdateAccountTypeByID(ctx context.Context, arg UpdateAccountTypeByIDParams) (AccountType, error) {
-	row := q.db.QueryRow(ctx, updateAccountTypeByID, arg.ID, arg.Name)
+	row := q.db.QueryRow(ctx, updateAccountTypeByID, arg.ID, arg.Name, arg.Active)
 	var i AccountType
 	err := row.Scan(
 		&i.ID,

@@ -22,8 +22,6 @@ func InitDB(context context.Context, config *config.Config) (*pgxpool.Pool, erro
 		return nil, err
 	}
 
-	defer dbPool.Close()
-
 	log.Println("Database initialized successfully")
 
 	if err := runMigrations(config); err != nil {
