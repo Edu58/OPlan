@@ -9,6 +9,9 @@ test:
 server:
 	go run ./cmd/api/main.go
 
+race:
+	go test -race ./...
+
 migrate:
 	migrate -database postgresql://postgres:postgres@localhost:5432/oplan_dev?sslmode=disable \
 	-path ./internal/database/migrations/ \

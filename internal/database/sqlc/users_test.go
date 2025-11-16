@@ -10,15 +10,12 @@ import (
 	"github.com/Edu58/Oplan/internal/database"
 	db "github.com/Edu58/Oplan/internal/database/sqlc"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 )
 
 var (
-	queries     *db.Queries
-	pgxPool     *pgxpool.Pool
-	pgContainer *postgres.PostgresContainer
+	queries *db.Queries
 )
 
 func TestMain(m *testing.M) {
@@ -35,8 +32,6 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatalf("Error starting postgres container: %v", err)
 	}
-
-	defer pgContainer.Terminate(ctx)
 
 	log.Printf("Created postgres container: %s", pgContainer.GetContainerID())
 
@@ -58,11 +53,13 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatalf("Error creating pgx pool: %v", err)
 	}
-	defer pgxPool.Close()
 
 	queries = db.New(pgxPool)
 
 	code := m.Run()
+
+	pgContainer.Terminate(ctx)
+	pgxPool.Close()
 
 	os.Exit(code)
 }
