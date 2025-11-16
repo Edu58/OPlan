@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
+	"time"
 
 	"github.com/Edu58/Oplan/config"
+	"github.com/Edu58/Oplan/internal/app"
 	"github.com/Edu58/Oplan/internal/database"
 )
 
@@ -19,19 +20,23 @@ func main() {
 
 	dbPool, err := database.InitDB(context.Background(), &appConfig)
 
-	// store := db.New(dbPoolConn)
+	app, err := app.NewApp(&appConfig, dbPool)
 
 	if err != nil {
-		log.Fatalf("Could not load config with err: %v", err)
-		return
+		log.Fatalf("Could create app with err: %v", err)
 	}
 
-	defer dbPool.Close()
+	if err := app.Init(); err != nil {
+		log.Fatalf("Error initializing app: %v", err)
+	}
+	waitForShutdownCompletion := make(chan struct{})
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	go app.Shutdown(ctx, waitForShutdownCompletion)
+	defer cancel()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello"))
-	})
+	if err := app.Start(); err != nil {
+		log.Fatal(err)
+	}
 
-	log.Println("Starting server")
-	log.Fatal(http.ListenAndServe(appConfig.HOST+":"+appConfig.PORT, nil))
+	<-waitForShutdownCompletion
 }

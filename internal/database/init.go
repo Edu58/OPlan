@@ -26,6 +26,9 @@ func InitDB(context context.Context, config *config.Config) (*pgxpool.Pool, erro
 
 	if err := runMigrations(config); err != nil {
 		log.Printf("Error running migrations: %v", err)
+
+		dbPool.Close()
+
 		return dbPool, err
 	}
 
