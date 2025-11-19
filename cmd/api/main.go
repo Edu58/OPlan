@@ -26,7 +26,7 @@ func main() {
 		log.Fatalf("Could create app with err: %v", err)
 	}
 
-	if err := app.Init(); err != nil {
+	if err := app.InitApp(); err != nil {
 		log.Fatalf("Error initializing app: %v", err)
 	}
 	waitForShutdownCompletion := make(chan struct{})

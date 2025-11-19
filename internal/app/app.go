@@ -10,15 +10,20 @@ import (
 
 	"github.com/Edu58/Oplan/config"
 	db "github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/internal/domain"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
+	"github.com/Edu58/Oplan/internal/repository"
+	"github.com/Edu58/Oplan/internal/service"
 )
 
 type App struct {
-	config  *config.Config
-	queries *db.Queries
-	pgxPool db.DBTX
-	server  *http.Server
-	mux     *http.ServeMux
+	config             *config.Config
+	queries            *db.Queries
+	pgxPool            db.DBTX
+	server             *http.Server
+	mux                *http.ServeMux
+	accountTypeRepo    domain.AccountTypeRepository
+	accountTypeService domain.AccountTypeService
 }
 
 func NewApp(config *config.Config, pgxPool db.DBTX) (*App, error) {
@@ -37,9 +42,30 @@ func NewApp(config *config.Config, pgxPool db.DBTX) (*App, error) {
 	}, nil
 }
 
-func (app *App) Init() error {
-	log.Println("Setting up routes")
-	httphandlers.NewDefaultHandler().RegisterRoutes(app.mux)
+func (app *App) InitApp() error {
+	app.InitRepositories()
+	app.InitServices()
+	app.InitHandlers()
+
+	return nil
+}
+
+func (app *App) InitRepositories() error {
+	log.Println("Setting up repositories")
+	app.accountTypeRepo = repository.NewAccountTypeRepository(app.queries)
+	return nil
+}
+
+func (app *App) InitServices() error {
+	log.Println("Setting up services")
+	app.accountTypeService = service.NewAccountTypesService(app.accountTypeRepo)
+	return nil
+}
+
+func (app *App) InitHandlers() error {
+	log.Println("Setting up http handler")
+	accountTypeHandler := httphandlers.NewAccountTypesHandler(app.accountTypeService)
+	accountTypeHandler.RegisterRoutes(app.mux)
 	return nil
 }
 
