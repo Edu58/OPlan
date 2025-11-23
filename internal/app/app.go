@@ -2,18 +2,19 @@ package app
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/Edu58/Oplan/config"
+	"github.com/Edu58/Oplan/internal/database"
 	db "github.com/Edu58/Oplan/internal/database/sqlc"
 	"github.com/Edu58/Oplan/internal/domain"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
 	"github.com/Edu58/Oplan/internal/repository"
 	"github.com/Edu58/Oplan/internal/service"
+	"github.com/Edu58/Oplan/pkg/logger"
 )
 
 type App struct {
@@ -24,17 +25,17 @@ type App struct {
 	mux                *http.ServeMux
 	accountTypeRepo    domain.AccountTypeRepository
 	accountTypeService domain.AccountTypeService
+	logger             logger.Logger
 }
 
-func NewApp(config *config.Config, pgxPool db.DBTX) (*App, error) {
+func NewApp(config *config.Config, logger logger.Logger) (*App, error) {
 	mux := http.NewServeMux()
 	addr := config.HOST + ":" + config.PORT
 
 	return &App{
-		config:  config,
-		pgxPool: pgxPool,
-		queries: db.New(pgxPool),
-		mux:     mux,
+		mux:    mux,
+		config: config,
+		logger: logger,
 		server: &http.Server{
 			Addr:    addr,
 			Handler: mux,
@@ -43,6 +44,7 @@ func NewApp(config *config.Config, pgxPool db.DBTX) (*App, error) {
 }
 
 func (app *App) InitApp() error {
+	app.InitDB()
 	app.InitRepositories()
 	app.InitServices()
 	app.InitHandlers()
@@ -50,39 +52,54 @@ func (app *App) InitApp() error {
 	return nil
 }
 
+func (app *App) InitDB() {
+	pgxPool, err := database.InitDB(context.Background(), app.config, app.logger)
+
+	if err != nil {
+		app.logger.Err(err)
+		return
+	}
+
+	app.pgxPool = pgxPool
+	app.queries = db.New(pgxPool)
+}
+
 func (app *App) InitRepositories() error {
-	log.Println("Setting up repositories")
+	app.logger.Info("Setting up repositories")
 	app.accountTypeRepo = repository.NewAccountTypeRepository(app.queries)
 	return nil
 }
 
 func (app *App) InitServices() error {
-	log.Println("Setting up services")
+	app.logger.Info("Setting up services")
 	app.accountTypeService = service.NewAccountTypesService(app.accountTypeRepo)
 	return nil
 }
 
 func (app *App) InitHandlers() error {
-	log.Println("Setting up http handler")
+	app.logger.Info("Setting up http handlers")
 	accountTypeHandler := httphandlers.NewAccountTypesHandler(app.accountTypeService)
 	accountTypeHandler.RegisterRoutes(app.mux)
 	return nil
 }
 
 func (app *App) Start() error {
-	log.Printf("Starting server on %s", app.server.Addr)
+	app.logger.WithField("HOST", app.config.HOST).
+		WithField("PORT", app.config.PORT).
+		Info("Starting server")
+
 	return app.server.ListenAndServe()
 }
 
 func (app *App) Shutdown(ctx context.Context, waitForShutdownCompletion chan struct{}) {
 	sigch := make(chan os.Signal, 1)
 	signal.Notify(sigch, syscall.SIGINT, syscall.SIGTERM)
-	sig := <-sigch
+	_ = <-sigch
 
-	log.Printf("Got signal: %v . Server shutting down.", sig)
+	app.logger.Warn("Received shutdown signal")
 
 	if err := app.server.Shutdown(ctx); err != nil {
-		log.Printf("Error during shutdown: %v", err)
+		app.logger.Err(err)
 	}
 	waitForShutdownCompletion <- struct{}{}
 }

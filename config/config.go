@@ -8,6 +8,8 @@ type Config struct {
 	HOST           string `mapstructure:"host"`
 	PORT           string `mapstructure:"port"`
 	DSN_URL        string `mapstructure:"dsn_url"`
+	LOGGER_LEVEL   string `mapstructuture:"logger_level"`
+	LOGGER_PATH    string `mapstructuture:"string"`
 	DSN_OPTIONS    string `mapstructure:"dsn_options"`
 	MIGRATIONS_URL string `mapstructure:"migrations_url"`
 }
