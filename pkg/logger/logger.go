@@ -14,6 +14,7 @@ type Logger interface {
 	Err(err error)
 	Error(msg string)
 	Fatal(msg string)
+	GetLevel() string
 	WithField(key string, value any) Logger
 	WithFields(fields map[string]any) Logger
 }
@@ -22,10 +23,15 @@ type ZeroLogger struct {
 	zerolog.Logger
 }
 
-func NewLogger(level string, out io.Writer) Logger {
+func NewLogger(out io.Writer) Logger {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
-	return &ZeroLogger{zerolog.New(out).With().Timestamp().Logger()}
+	return &ZeroLogger{zerolog.
+		New(out).
+		With().
+		Timestamp().
+		Logger(),
+	}
 }
 
 func NewLoggerWithLevel(level string, out io.Writer) Logger {
@@ -52,11 +58,18 @@ func NewLoggerWithLevel(level string, out io.Writer) Logger {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
-	return &ZeroLogger{zerolog.New(out).With().Timestamp().Logger()}
+	return &ZeroLogger{
+		zerolog.
+			New(out).
+			Level(zerolog.GlobalLevel()).
+			With().
+			Timestamp().
+			Logger(),
+	}
 }
 
 func (l *ZeroLogger) GetLevel() string {
-	return l.Logger.With().Logger().GetLevel().String()
+	return l.Logger.GetLevel().String()
 }
 
 func (l *ZeroLogger) Info(msg string) {
