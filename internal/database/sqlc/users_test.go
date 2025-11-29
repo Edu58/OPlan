@@ -9,6 +9,7 @@ import (
 	"github.com/Edu58/Oplan/config"
 	"github.com/Edu58/Oplan/internal/database"
 	db "github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
@@ -44,11 +45,14 @@ func TestMain(m *testing.M) {
 	config := config.Config{
 		DSN_URL:        dsn,
 		MIGRATIONS_URL: "file://../migrations",
+		LOGGER_LEVEL:   "info",
 	}
 
 	log.Printf("Configured postgres container DSN: %s", dsn)
 
-	pgxPool, err := database.InitDB(ctx, &config)
+	logger := logger.NewLoggerWithLevel(config.LOGGER_LEVEL, os.Stdout)
+
+	pgxPool, err := database.InitDB(ctx, &config, logger)
 
 	if err != nil {
 		log.Fatalf("Error creating pgx pool: %v", err)
@@ -58,8 +62,8 @@ func TestMain(m *testing.M) {
 
 	code := m.Run()
 
-	pgContainer.Terminate(ctx)
 	pgxPool.Close()
+	pgContainer.Terminate(ctx)
 
 	os.Exit(code)
 }

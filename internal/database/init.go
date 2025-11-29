@@ -15,7 +15,14 @@ import (
 func InitDB(context context.Context, config *config.Config, logger logger.Logger) (*pgxpool.Pool, error) {
 	logger.Info("Initializing Database")
 
-	dbPool, err := pgxpool.New(context, config.DSN_URL)
+	cfg, err := pgxpool.ParseConfig(config.DSN_URL)
+
+	if err != nil {
+		logger.Err(err)
+		return nil, err
+	}
+
+	dbPool, err := pgxpool.NewWithConfig(context, cfg)
 
 	if err != nil {
 		logger.Err(err)
