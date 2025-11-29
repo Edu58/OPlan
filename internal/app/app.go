@@ -17,6 +17,16 @@ import (
 	"github.com/Edu58/Oplan/pkg/logger"
 )
 
+type AppInterface interface {
+	InitApp() error
+	InitDB()
+	InitHandlers() error
+	InitRepositories() error
+	InitServices() error
+	Shutdown(ctx context.Context, waitForShutdownCompletion chan struct{})
+	Start() error
+}
+
 type App struct {
 	config             *config.Config
 	queries            *db.Queries
@@ -28,7 +38,7 @@ type App struct {
 	logger             logger.Logger
 }
 
-func NewApp(config *config.Config, logger logger.Logger) (*App, error) {
+func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
 	mux := http.NewServeMux()
 	addr := config.HOST + ":" + config.PORT
 

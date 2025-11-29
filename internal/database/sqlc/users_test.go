@@ -71,19 +71,19 @@ func TestMain(m *testing.M) {
 func TestAccountTypes(t *testing.T) {
 	tests := []struct {
 		name   string
-		setup  func(ctx context.Context) (context.Context, db.AccountType, error)
+		setup  func(ctx context.Context) (context.Context, *db.AccountType, error)
 		verify func(t *testing.T, ctx context.Context, result any, err error)
 	}{
 		{
 			name: "Create Account Type",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
 				createAccountTypeParams := db.CreateAccountTypeParams{"Test", pgtype.Bool{Bool: true, Valid: true}}
 				accType, err := queries.CreateAccountType(context.Background(), createAccountTypeParams)
 				return ctx, accType, err
 			},
 			verify: func(t *testing.T, ctx context.Context, result any, err error) {
 				require.NoError(t, err)
-				r := result.(db.AccountType)
+				r := result.(*db.AccountType)
 				require.NotNil(t, r.ID.Bytes)
 				require.NotNil(t, r.InsertedAt)
 				require.NotNil(t, r.UpdatedAt)
@@ -93,7 +93,7 @@ func TestAccountTypes(t *testing.T) {
 		},
 		{
 			name: "Handle Duplicate Account Types",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
 				createAccountTypeParams := db.CreateAccountTypeParams{"Test", pgtype.Bool{Bool: true, Valid: true}}
 				accType, err := queries.CreateAccountType(context.Background(), createAccountTypeParams)
 				return ctx, accType, err
@@ -105,7 +105,7 @@ func TestAccountTypes(t *testing.T) {
 		},
 		{
 			name: "GET Account Type by ID",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
 				createAccountTypeParams := db.CreateAccountTypeParams{"Test num 2", pgtype.Bool{Bool: true, Valid: true}}
 				accType, err := queries.CreateAccountType(context.Background(), createAccountTypeParams)
 				ctx = context.WithValue(ctx, "ACC_TYPE_ID", accType.ID)
@@ -113,7 +113,7 @@ func TestAccountTypes(t *testing.T) {
 			},
 			verify: func(t *testing.T, ctx context.Context, result any, err error) {
 				require.NoError(t, err)
-				r := result.(db.AccountType)
+				r := result.(*db.AccountType)
 
 				accTypeID := ctx.Value("ACC_TYPE_ID").(pgtype.UUID)
 				accType, err := queries.GetAccountTypeById(context.Background(), accTypeID)
@@ -128,8 +128,8 @@ func TestAccountTypes(t *testing.T) {
 		},
 		{
 			name: "GET Account Type by Name",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
-				return ctx, db.AccountType{}, nil
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
+				return ctx, nil, nil
 			},
 			verify: func(t *testing.T, ctx context.Context, result any, err error) {
 				accType, err := queries.GetAccountTypeByName(context.Background(), "Test")
@@ -140,12 +140,12 @@ func TestAccountTypes(t *testing.T) {
 		},
 		{
 			name: "Update Account Type",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
 				accType, err := queries.GetAccountTypeByName(context.Background(), "Test")
 				return ctx, accType, err
 			},
 			verify: func(t *testing.T, ctx context.Context, result any, err error) {
-				r := result.(db.AccountType)
+				r := result.(*db.AccountType)
 				updateAccountTypeParams := db.UpdateAccountTypeByIDParams{r.ID, "Updated Test Name", r.Active}
 				updatedAccType, err := queries.UpdateAccountTypeByID(context.Background(), updateAccountTypeParams)
 
@@ -156,13 +156,13 @@ func TestAccountTypes(t *testing.T) {
 		},
 		{
 			name: "List Account Types",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
 				accTypes, err := queries.ListAccountTypes(context.Background())
 				ctx = context.WithValue(ctx, "ACC_TYPES", accTypes)
-				return ctx, db.AccountType{}, err
+				return ctx, nil, err
 			},
 			verify: func(t *testing.T, ctx context.Context, result any, err error) {
-				accTypes := ctx.Value("ACC_TYPES").([]db.AccountType)
+				accTypes := ctx.Value("ACC_TYPES").([]*db.AccountType)
 
 				require.NoError(t, err)
 				require.Len(t, accTypes, 2)
@@ -170,12 +170,12 @@ func TestAccountTypes(t *testing.T) {
 		},
 		{
 			name: "Delete Account Type",
-			setup: func(ctx context.Context) (context.Context, db.AccountType, error) {
+			setup: func(ctx context.Context) (context.Context, *db.AccountType, error) {
 				accType, err := queries.GetAccountTypeByName(context.Background(), "Updated Test Name")
 				return ctx, accType, err
 			},
 			verify: func(t *testing.T, ctx context.Context, result any, err error) {
-				r := result.(db.AccountType)
+				r := result.(*db.AccountType)
 				deletedAccType, err := queries.DeleteAccountType(context.Background(), r.ID)
 
 				require.NoError(t, err)

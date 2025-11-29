@@ -23,7 +23,7 @@ type CreateAccountTypeParams struct {
 	Active pgtype.Bool `json:"active"`
 }
 
-func (q *Queries) CreateAccountType(ctx context.Context, arg CreateAccountTypeParams) (AccountType, error) {
+func (q *Queries) CreateAccountType(ctx context.Context, arg CreateAccountTypeParams) (*AccountType, error) {
 	row := q.db.QueryRow(ctx, createAccountType, arg.Name, arg.Active)
 	var i AccountType
 	err := row.Scan(
@@ -33,7 +33,7 @@ func (q *Queries) CreateAccountType(ctx context.Context, arg CreateAccountTypePa
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const deleteAccountType = `-- name: DeleteAccountType :one
@@ -42,7 +42,7 @@ WHERE id = $1
 RETURNING id, name, active, inserted_at, updated_at
 `
 
-func (q *Queries) DeleteAccountType(ctx context.Context, id pgtype.UUID) (AccountType, error) {
+func (q *Queries) DeleteAccountType(ctx context.Context, id pgtype.UUID) (*AccountType, error) {
 	row := q.db.QueryRow(ctx, deleteAccountType, id)
 	var i AccountType
 	err := row.Scan(
@@ -52,7 +52,7 @@ func (q *Queries) DeleteAccountType(ctx context.Context, id pgtype.UUID) (Accoun
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const getAccountTypeById = `-- name: GetAccountTypeById :one
@@ -60,7 +60,7 @@ SELECT id, name, active, inserted_at, updated_at FROM account_types
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetAccountTypeById(ctx context.Context, id pgtype.UUID) (AccountType, error) {
+func (q *Queries) GetAccountTypeById(ctx context.Context, id pgtype.UUID) (*AccountType, error) {
 	row := q.db.QueryRow(ctx, getAccountTypeById, id)
 	var i AccountType
 	err := row.Scan(
@@ -70,7 +70,7 @@ func (q *Queries) GetAccountTypeById(ctx context.Context, id pgtype.UUID) (Accou
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const getAccountTypeByName = `-- name: GetAccountTypeByName :one
@@ -78,7 +78,7 @@ SELECT id, name, active, inserted_at, updated_at FROM account_types
 WHERE name = $1 LIMIT 1
 `
 
-func (q *Queries) GetAccountTypeByName(ctx context.Context, name string) (AccountType, error) {
+func (q *Queries) GetAccountTypeByName(ctx context.Context, name string) (*AccountType, error) {
 	row := q.db.QueryRow(ctx, getAccountTypeByName, name)
 	var i AccountType
 	err := row.Scan(
@@ -88,7 +88,7 @@ func (q *Queries) GetAccountTypeByName(ctx context.Context, name string) (Accoun
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const listAccountTypes = `-- name: ListAccountTypes :many
@@ -96,13 +96,13 @@ SELECT id, name, active, inserted_at, updated_at FROM account_types
 ORDER BY inserted_at DESC
 `
 
-func (q *Queries) ListAccountTypes(ctx context.Context) ([]AccountType, error) {
+func (q *Queries) ListAccountTypes(ctx context.Context) ([]*AccountType, error) {
 	rows, err := q.db.Query(ctx, listAccountTypes)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []AccountType{}
+	items := []*AccountType{}
 	for rows.Next() {
 		var i AccountType
 		if err := rows.Scan(
@@ -114,7 +114,7 @@ func (q *Queries) ListAccountTypes(ctx context.Context) ([]AccountType, error) {
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -135,7 +135,7 @@ type UpdateAccountTypeByIDParams struct {
 	Active pgtype.Bool `json:"active"`
 }
 
-func (q *Queries) UpdateAccountTypeByID(ctx context.Context, arg UpdateAccountTypeByIDParams) (AccountType, error) {
+func (q *Queries) UpdateAccountTypeByID(ctx context.Context, arg UpdateAccountTypeByIDParams) (*AccountType, error) {
 	row := q.db.QueryRow(ctx, updateAccountTypeByID, arg.ID, arg.Name, arg.Active)
 	var i AccountType
 	err := row.Scan(
@@ -145,5 +145,5 @@ func (q *Queries) UpdateAccountTypeByID(ctx context.Context, arg UpdateAccountTy
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
