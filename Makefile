@@ -6,6 +6,9 @@ fmt:
 test:
 	go test -v -cover ./...
 
+test-unit:
+	go test -short -v -cover ./...
+
 server:
 	go run ./cmd/api/main.go
 

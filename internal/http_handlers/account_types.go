@@ -20,7 +20,7 @@ func (a *AccountTypesHandler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 func (a *AccountTypesHandler) listAccountTypes(w http.ResponseWriter, r *http.Request) {
-	account_types, err := a.service.List(r.Context())
+	account_types, err := a.service.ListAll(r.Context())
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

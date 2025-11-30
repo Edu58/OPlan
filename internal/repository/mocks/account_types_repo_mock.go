@@ -6,15 +6,15 @@
 //	mockgen ./internal/domain/ AccountTypeRepository
 //
 
-// Package mock_domain is a generated GoMock package.
-package mock_domain
+// Package mock_repo is a generated GoMock package.
+package mock_repo
 
 import (
 	context "context"
 	reflect "reflect"
 
-	db "github.com/Edu58/Oplan/internal/database/sqlc"
-	pgtype "github.com/jackc/pgx/v5/pgtype"
+	domain "github.com/Edu58/Oplan/internal/domain"
+	uuid "github.com/google/uuid"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,92 +42,106 @@ func (m *MockAccountTypeRepository) EXPECT() *MockAccountTypeRepositoryMockRecor
 	return m.recorder
 }
 
-// CreateAccountType mocks base method.
-func (m *MockAccountTypeRepository) CreateAccountType(ctx context.Context, arg db.CreateAccountTypeParams) (*db.AccountType, error) {
+// Create mocks base method.
+func (m *MockAccountTypeRepository) Create(ctx context.Context, req domain.CreateAccountTypeParams) (*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateAccountType", ctx, arg)
-	ret0, _ := ret[0].(*db.AccountType)
+	ret := m.ctrl.Call(m, "Create", ctx, req)
+	ret0, _ := ret[0].(*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateAccountType indicates an expected call of CreateAccountType.
-func (mr *MockAccountTypeRepositoryMockRecorder) CreateAccountType(ctx, arg any) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockAccountTypeRepositoryMockRecorder) Create(ctx, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAccountType", reflect.TypeOf((*MockAccountTypeRepository)(nil).CreateAccountType), ctx, arg)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockAccountTypeRepository)(nil).Create), ctx, req)
 }
 
-// DeleteAccountType mocks base method.
-func (m *MockAccountTypeRepository) DeleteAccountType(ctx context.Context, id pgtype.UUID) (*db.AccountType, error) {
+// Delete mocks base method.
+func (m *MockAccountTypeRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteAccountType", ctx, id)
-	ret0, _ := ret[0].(*db.AccountType)
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockAccountTypeRepositoryMockRecorder) Delete(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockAccountTypeRepository)(nil).Delete), ctx, id)
+}
+
+// Exists mocks base method.
+func (m *MockAccountTypeRepository) Exists(ctx context.Context, name string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Exists", ctx, name)
+	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// DeleteAccountType indicates an expected call of DeleteAccountType.
-func (mr *MockAccountTypeRepositoryMockRecorder) DeleteAccountType(ctx, id any) *gomock.Call {
+// Exists indicates an expected call of Exists.
+func (mr *MockAccountTypeRepositoryMockRecorder) Exists(ctx, name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAccountType", reflect.TypeOf((*MockAccountTypeRepository)(nil).DeleteAccountType), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exists", reflect.TypeOf((*MockAccountTypeRepository)(nil).Exists), ctx, name)
 }
 
-// GetAccountTypeById mocks base method.
-func (m *MockAccountTypeRepository) GetAccountTypeById(ctx context.Context, id pgtype.UUID) (*db.AccountType, error) {
+// GetByID mocks base method.
+func (m *MockAccountTypeRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAccountTypeById", ctx, id)
-	ret0, _ := ret[0].(*db.AccountType)
+	ret := m.ctrl.Call(m, "GetByID", ctx, id)
+	ret0, _ := ret[0].(*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAccountTypeById indicates an expected call of GetAccountTypeById.
-func (mr *MockAccountTypeRepositoryMockRecorder) GetAccountTypeById(ctx, id any) *gomock.Call {
+// GetByID indicates an expected call of GetByID.
+func (mr *MockAccountTypeRepositoryMockRecorder) GetByID(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccountTypeById", reflect.TypeOf((*MockAccountTypeRepository)(nil).GetAccountTypeById), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByID", reflect.TypeOf((*MockAccountTypeRepository)(nil).GetByID), ctx, id)
 }
 
-// GetAccountTypeByName mocks base method.
-func (m *MockAccountTypeRepository) GetAccountTypeByName(ctx context.Context, name string) (*db.AccountType, error) {
+// GetByName mocks base method.
+func (m *MockAccountTypeRepository) GetByName(ctx context.Context, name string) (*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAccountTypeByName", ctx, name)
-	ret0, _ := ret[0].(*db.AccountType)
+	ret := m.ctrl.Call(m, "GetByName", ctx, name)
+	ret0, _ := ret[0].(*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAccountTypeByName indicates an expected call of GetAccountTypeByName.
-func (mr *MockAccountTypeRepositoryMockRecorder) GetAccountTypeByName(ctx, name any) *gomock.Call {
+// GetByName indicates an expected call of GetByName.
+func (mr *MockAccountTypeRepositoryMockRecorder) GetByName(ctx, name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccountTypeByName", reflect.TypeOf((*MockAccountTypeRepository)(nil).GetAccountTypeByName), ctx, name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByName", reflect.TypeOf((*MockAccountTypeRepository)(nil).GetByName), ctx, name)
 }
 
-// ListAccountTypes mocks base method.
-func (m *MockAccountTypeRepository) ListAccountTypes(ctx context.Context) ([]*db.AccountType, error) {
+// List mocks base method.
+func (m *MockAccountTypeRepository) List(ctx context.Context) ([]*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListAccountTypes", ctx)
-	ret0, _ := ret[0].([]*db.AccountType)
+	ret := m.ctrl.Call(m, "List", ctx)
+	ret0, _ := ret[0].([]*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListAccountTypes indicates an expected call of ListAccountTypes.
-func (mr *MockAccountTypeRepositoryMockRecorder) ListAccountTypes(ctx any) *gomock.Call {
+// List indicates an expected call of List.
+func (mr *MockAccountTypeRepositoryMockRecorder) List(ctx any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccountTypes", reflect.TypeOf((*MockAccountTypeRepository)(nil).ListAccountTypes), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockAccountTypeRepository)(nil).List), ctx)
 }
 
-// UpdateAccountTypeByID mocks base method.
-func (m *MockAccountTypeRepository) UpdateAccountTypeByID(ctx context.Context, arg db.UpdateAccountTypeByIDParams) (*db.AccountType, error) {
+// Update mocks base method.
+func (m *MockAccountTypeRepository) Update(ctx context.Context, req domain.UpdateAccountTypeByIDParams) (*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateAccountTypeByID", ctx, arg)
-	ret0, _ := ret[0].(*db.AccountType)
+	ret := m.ctrl.Call(m, "Update", ctx, req)
+	ret0, _ := ret[0].(*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateAccountTypeByID indicates an expected call of UpdateAccountTypeByID.
-func (mr *MockAccountTypeRepositoryMockRecorder) UpdateAccountTypeByID(ctx, arg any) *gomock.Call {
+// Update indicates an expected call of Update.
+func (mr *MockAccountTypeRepositoryMockRecorder) Update(ctx, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAccountTypeByID", reflect.TypeOf((*MockAccountTypeRepository)(nil).UpdateAccountTypeByID), ctx, arg)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountTypeRepository)(nil).Update), ctx, req)
 }

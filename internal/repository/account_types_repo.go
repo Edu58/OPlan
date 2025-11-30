@@ -3,39 +3,170 @@ package repository
 import (
 	"context"
 
-	db "github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/internal/database"
 	"github.com/Edu58/Oplan/internal/domain"
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 type AccountTypeRepository struct {
-	repo db.Querier
+	db database.DBTX
 }
 
-func NewAccountTypeRepository(querier domain.AccountTypeRepository) domain.AccountTypeRepository {
-	return &AccountTypeRepository{querier}
+func NewAccountTypeRepository(db database.DBTX) domain.AccountTypeRepository {
+	return &AccountTypeRepository{db}
 }
 
-func (r *AccountTypeRepository) CreateAccountType(ctx context.Context, arg db.CreateAccountTypeParams) (*db.AccountType, error) {
-	return r.repo.CreateAccountType(ctx, arg)
+func (a *AccountTypeRepository) Create(ctx context.Context, arg domain.CreateAccountTypeParams) (*domain.AccountType, error) {
+	if err := arg.Validate(); err != nil {
+		return nil, err
+	}
+
+	query := `
+	INSERT INTO account_types
+		(name, active)
+		VALUES($1, $2)
+	RETURNING id, name, active, inserted_at, updated_at
+	`
+
+	row := a.db.QueryRow(ctx, query, arg.Name, arg.Active)
+
+	var i domain.AccountType
+
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Active,
+		&i.InsertedAt,
+		&i.UpdatedAt,
+	)
+	return &i, err
 }
 
-func (r *AccountTypeRepository) DeleteAccountType(ctx context.Context, id pgtype.UUID) (*db.AccountType, error) {
-	return r.repo.DeleteAccountType(ctx, id)
+func (a *AccountTypeRepository) Delete(ctx context.Context, id uuid.UUID) error {
+	query := `
+	DELETE FROM account_types
+	WHERE id = $1
+	RETURNING id, name, active, inserted_at, updated_at
+	`
+	result, err := a.db.Exec(ctx, query, id)
+
+	if err != nil {
+		return err
+	}
+
+	if result.RowsAffected() == 0 {
+		return domain.ErrAccountTypeNotFound
+	}
+
+	return nil
 }
 
-func (r *AccountTypeRepository) GetAccountTypeById(ctx context.Context, id pgtype.UUID) (*db.AccountType, error) {
-	return r.repo.GetAccountTypeById(ctx, id)
+func (a *AccountTypeRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.AccountType, error) {
+	query := `
+	SELECT id, name, active, inserted_at, updated_at FROM account_types
+	WHERE id = $1 LIMIT 1
+	`
+	row := a.db.QueryRow(ctx, query, id)
+
+	var i domain.AccountType
+
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Active,
+		&i.InsertedAt,
+		&i.UpdatedAt,
+	)
+	return &i, err
 }
 
-func (r *AccountTypeRepository) GetAccountTypeByName(ctx context.Context, name string) (*db.AccountType, error) {
-	return r.repo.GetAccountTypeByName(ctx, name)
+func (a *AccountTypeRepository) GetByName(ctx context.Context, name string) (*domain.AccountType, error) {
+	query := `
+	SELECT id, name, active, inserted_at, updated_at FROM account_types
+	WHERE name = $1 LIMIT 1
+	`
+
+	row := a.db.QueryRow(ctx, query, name)
+
+	var i domain.AccountType
+	err := row.Scan(
+
+		&i.ID,
+		&i.Name,
+		&i.Active,
+		&i.InsertedAt,
+		&i.UpdatedAt,
+	)
+	return &i, err
 }
 
-func (r *AccountTypeRepository) ListAccountTypes(ctx context.Context) ([]*db.AccountType, error) {
-	return r.repo.ListAccountTypes(ctx)
+func (a *AccountTypeRepository) List(ctx context.Context) ([]*domain.AccountType, error) {
+	query := `
+	SELECT id, name, active, inserted_at, updated_at FROM account_types
+	ORDER BY inserted_at DESC
+	`
+	rows, err := a.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	items := []*domain.AccountType{}
+
+	for rows.Next() {
+		var i domain.AccountType
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Active,
+			&i.InsertedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
 }
 
-func (r *AccountTypeRepository) UpdateAccountTypeByID(ctx context.Context, arg db.UpdateAccountTypeByIDParams) (*db.AccountType, error) {
-	return r.repo.UpdateAccountTypeByID(ctx, arg)
+func (a *AccountTypeRepository) Update(ctx context.Context, arg domain.UpdateAccountTypeByIDParams) (*domain.AccountType, error) {
+	query := `
+	UPDATE account_types
+	SET name=$2, active=$3
+	WHERE id = $1
+	RETURNING id, name, active, inserted_at, updated_at
+	`
+
+	row := a.db.QueryRow(ctx, query, arg.ID, arg.Name, arg.Active)
+	var i domain.AccountType
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Active,
+		&i.InsertedAt,
+		&i.UpdatedAt,
+	)
+	return &i, err
+}
+
+func (a *AccountTypeRepository) Exists(ctx context.Context, name string) (bool, error) {
+	query := `
+	SELECT EXISTS (
+	    SELECT 1
+	    FROM account_types
+	    WHERE name = $1
+	)
+	`
+
+	row := a.db.QueryRow(ctx, query, name)
+
+	var exists bool
+	err := row.Scan(&exists)
+
+	return exists, err
 }

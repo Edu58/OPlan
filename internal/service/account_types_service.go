@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	db "github.com/Edu58/Oplan/internal/database/sqlc"
 	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/Edu58/Oplan/pkg/logger"
 )
@@ -14,12 +13,12 @@ type AccountTypeService struct {
 	logger logger.Logger
 }
 
-func NewAccountTypesService(repo domain.AccountTypeRepository) *AccountTypeService {
-	return &AccountTypeService{repo: repo}
+func NewAccountTypesService(repo domain.AccountTypeRepository, logger logger.Logger) *AccountTypeService {
+	return &AccountTypeService{repo: repo, logger: logger}
 }
 
-func (a *AccountTypeService) Create(ctx context.Context, params db.CreateAccountTypeParams) (*db.AccountType, error) {
-	acc_type, err := a.repo.CreateAccountType(ctx, params)
+func (a *AccountTypeService) Create(ctx context.Context, params domain.CreateAccountTypeParams) (*domain.AccountType, error) {
+	acc_type, err := a.repo.Create(ctx, params)
 
 	if err != nil {
 		a.logger.Error(fmt.Sprintf("Error creating account: %v", err))
@@ -29,8 +28,8 @@ func (a *AccountTypeService) Create(ctx context.Context, params db.CreateAccount
 	return acc_type, nil
 }
 
-func (a *AccountTypeService) List(ctx context.Context) ([]*db.AccountType, error) {
-	acc_types, err := a.repo.ListAccountTypes(ctx)
+func (a *AccountTypeService) ListAll(ctx context.Context) ([]*domain.AccountType, error) {
+	acc_types, err := a.repo.List(ctx)
 
 	if err != nil {
 		a.logger.Error(fmt.Sprintf("Error getting account types: %v", err))

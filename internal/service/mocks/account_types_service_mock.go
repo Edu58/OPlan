@@ -7,13 +7,13 @@
 //
 
 // Package mock_domain is a generated GoMock package.
-package mock_domain
+package mock_service
 
 import (
 	context "context"
 	reflect "reflect"
 
-	db "github.com/Edu58/Oplan/internal/database/sqlc"
+	domain "github.com/Edu58/Oplan/internal/domain"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,31 +42,31 @@ func (m *MockAccountTypeService) EXPECT() *MockAccountTypeServiceMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockAccountTypeService) Create(ctx context.Context, arg db.CreateAccountTypeParams) (*db.AccountType, error) {
+func (m *MockAccountTypeService) Create(ctx context.Context, req domain.CreateAccountTypeParams) (*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, arg)
-	ret0, _ := ret[0].(*db.AccountType)
+	ret := m.ctrl.Call(m, "Create", ctx, req)
+	ret0, _ := ret[0].(*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockAccountTypeServiceMockRecorder) Create(ctx, arg any) *gomock.Call {
+func (mr *MockAccountTypeServiceMockRecorder) Create(ctx, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockAccountTypeService)(nil).Create), ctx, arg)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockAccountTypeService)(nil).Create), ctx, req)
 }
 
-// List mocks base method.
-func (m *MockAccountTypeService) List(ctx context.Context) ([]*db.AccountType, error) {
+// ListAll mocks base method.
+func (m *MockAccountTypeService) ListAll(ctx context.Context) ([]*domain.AccountType, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", ctx)
-	ret0, _ := ret[0].([]*db.AccountType)
+	ret := m.ctrl.Call(m, "ListAll", ctx)
+	ret0, _ := ret[0].([]*domain.AccountType)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// List indicates an expected call of List.
-func (mr *MockAccountTypeServiceMockRecorder) List(ctx any) *gomock.Call {
+// ListAll indicates an expected call of ListAll.
+func (mr *MockAccountTypeServiceMockRecorder) ListAll(ctx any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockAccountTypeService)(nil).List), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAll", reflect.TypeOf((*MockAccountTypeService)(nil).ListAll), ctx)
 }

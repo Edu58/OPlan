@@ -9,7 +9,7 @@ import (
 
 	"github.com/Edu58/Oplan/config"
 	"github.com/Edu58/Oplan/internal/database"
-	db "github.com/Edu58/Oplan/internal/database/sqlc"
+	db "github.com/Edu58/Oplan/internal/database"
 	"github.com/Edu58/Oplan/internal/domain"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
 	"github.com/Edu58/Oplan/internal/repository"
@@ -76,13 +76,13 @@ func (app *App) InitDB() {
 
 func (app *App) InitRepositories() error {
 	app.logger.Info("Setting up repositories")
-	app.accountTypeRepo = repository.NewAccountTypeRepository(app.queries)
+	app.accountTypeRepo = repository.NewAccountTypeRepository(app.queries.DB)
 	return nil
 }
 
 func (app *App) InitServices() error {
 	app.logger.Info("Setting up services")
-	app.accountTypeService = service.NewAccountTypesService(app.accountTypeRepo)
+	app.accountTypeService = service.NewAccountTypesService(app.accountTypeRepo, app.logger)
 	return nil
 }
 
