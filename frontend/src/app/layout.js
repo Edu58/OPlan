@@ -16,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={lexend.variable}>
-      <body className={`${lexend.variable} antialiased bg-gray-500`}>
+      <body className={`${lexend.variable} antialiased bg-gray-50`}>
         <Navbar />
         {children}
       </body>
