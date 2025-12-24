@@ -139,10 +139,4 @@
         display: block !important;
         animation: slideUp 0.4s ease-out;
     }
-    .form-container {
-        display: none;
-    }
-    .form-container.active {
-        display: block !important;
-    }
 }

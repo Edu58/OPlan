@@ -22,22 +22,13 @@ templ AuthPage(title string) {
 					</div>
 					<!-- Auth Card -->
 					<div class="bg-white rounded-2xl shadow-2xl p-8 animate-bounce-in">
-						<!-- Toggle Buttons -->
-						<div class="flex bg-gray-100 rounded-xl p-1 mb-8">
-							<button id="signInTab" onclick="switchTab('signIn')" class="flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-300 bg-primary text-white">
-								Sign In
-							</button>
-							<button id="signUpTab" onclick="switchTab('signUp')" class="flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-300 text-gray-600 hover:text-gray-900">
-								Sign Up
-							</button>
-						</div>
-						if title == "Sign In" {
-							<!-- Sign in Form Container -->
-							@SignInForm()
-						} else {
-							<!-- Sign up Form Container -->
-							@SignUpForm()
-						}
+						<span id="FormContainer">
+							if title == "Sign in" {
+								@SignInForm(title)
+							} else {
+								@SignUpForm(title)
+							}
+						</span>
 					</div>
 					<!-- Terms & Privacy -->
 					<div class="text-center mt-6 text-white text-opacity-80 text-sm">
@@ -53,170 +44,228 @@ templ AuthPage(title string) {
 	}
 }
 
-templ SignInForm() {
-	<div id="signInForm" class="form-container active">
-		<!-- Step 1: Email/Phone -->
-		<div id="signInStep1" class="step-container active">
-			<h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome back!</h2>
-			<p class="text-gray-600 mb-6">Enter your email or phone number to continue</p>
-			<form id="signInForm1">
-				<div class="mb-6">
-					<label class="block text-sm font-medium text-gray-700 mb-2">Email or Phone Number</label>
-					<input
-						type="text"
-						id="signInIdentifier"
-						required
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-						placeholder="Enter email or phone number"
-					/>
-				</div>
-				<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4">
-					Continue
-				</button>
-			</form>
-			<div class="text-center">
-				<p class="text-sm text-gray-600">
-					Don't have an account?
-					<button onclick="switchTab('signUp')" class="text-primary hover:text-indigo-700 font-medium">Sign up</button>
-				</p>
+templ authTabs(title string) {
+	<!-- Toggle Buttons -->
+	<div class="flex bg-gray-100 rounded-xl p-1 mb-8">
+		<button
+			id="signInTab"
+			hx-get="/auth/signin-form"
+			hx-target="#FormContainer"
+			hx-swap="innerHTML"
+			hx-push-url="/auth/signin"
+			class={
+				"flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-300",
+				templ.KV("bg-primary text-white hover:text-gray-900", title == "Sign in"),
+				templ.KV("text-gray-600 hover:text-gray-900", title != "Sign up"),
+			}
+		>
+			Sign In
+		</button>
+		<button
+			id="signUpTab"
+			hx-get="/auth/signup-form"
+			hx-target="#FormContainer"
+			hx-swap="innerHTML"
+			hx-push-url="/auth/signup"
+			class={
+				"flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-300",
+				templ.KV("bg-primary text-white hover:text-gray-900", title == "Sign up"),
+				templ.KV("text-gray-600 hover:text-gray-900", title != "Sign up"),
+			}
+		>
+			Sign Up
+		</button>
+	</div>
+}
+
+templ SignInForm(title string) {
+	@authTabs(title)
+	<div id="error-container"></div>
+	<!-- Step 1: Email/Phone -->
+	<div id="signInStep1" class="step-container active">
+		<h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome back!</h2>
+		<p class="text-gray-600 mb-6">Enter your email or phone number to continue</p>
+		<!-- Error Container -->
+		<form
+			hx-post="/auth/signin"
+			hx-target="#FormContainer"
+			hx-target-error="#error-container"
+			hx-swap="innerHTML"
+			id="signInForm1"
+		>
+			<div class="mb-6">
+				<label class="block text-sm font-medium text-gray-700 mb-2">Email or Phone Number</label>
+				<input
+					hx-preserve
+					type="text"
+					id="signInIdentifier"
+					required
+					class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+					placeholder="Enter email or phone number"
+				/>
 			</div>
+			<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4">
+				Continue
+			</button>
+		</form>
+		<div class="text-center">
+			<p class="text-sm text-gray-600">
+				Don't have an account?
+				<button
+					hx-get="/auth/signup-form"
+					hx-target="#FormContainer"
+					hx-swap="innerHTML"
+					hx-push-url="/auth/signup"
+					class="text-primary hover:text-indigo-700 font-medium"
+				>Sign up</button>
+			</p>
 		</div>
 	</div>
 }
 
-templ SignUpForm() {
-	<div id="signUpForm" class="form-container">
-		<!-- Step 1: Basic Info -->
-		<div id="signUpStep1" class="step-container active">
-			<h2 class="text-2xl font-bold text-gray-900 mb-2">Create your account</h2>
-			<p class="text-gray-600 mb-6">Join thousands of event organizers and attendees</p>
-			<form id="signUpForm1">
-				<div class="grid grid-cols-2 gap-4 mb-4">
-					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-						<input
-							type="text"
-							id="firstName"
-							required
-							class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-							placeholder="John"
-						/>
-					</div>
-					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-						<input
-							type="text"
-							id="lastName"
-							required
-							class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-							placeholder="Doe"
-						/>
-					</div>
-				</div>
-				<div class="mb-4">
-					<label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+templ SignUpForm(title string) {
+	@authTabs(title)
+	<div id="error-container"></div>
+	<!-- Step 1: Basic Info -->
+	<div id="signUpStep1" class="step-container active">
+		<h2 class="text-2xl font-bold text-gray-900 mb-2">Create your account</h2>
+		<p class="text-gray-600 mb-6">Join thousands of event organizers and attendees</p>
+		<form
+			hx-target="#FormContainer"
+			hx-target-error="#error-container"
+			id="signUpForm1"
+		>
+			<div class="grid grid-cols-2 gap-4 mb-4">
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
 					<input
-						type="email"
-						id="signUpEmail"
+						type="text"
+						id="firstName"
 						required
 						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-						placeholder="john.doe@example.com"
+						placeholder="John"
 					/>
 				</div>
-				<div class="mb-4">
-					<label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
 					<input
-						type="tel"
-						id="signUpPhone"
+						type="text"
+						id="lastName"
 						required
 						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-						placeholder="+254 7XX XXX XXX"
+						placeholder="Doe"
 					/>
 				</div>
-				<div class="mb-6">
-					<label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-					<input
-						type="password"
-						id="signUpPassword"
-						required
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-						placeholder="Create a strong password"
-					/>
-					<p class="text-xs text-gray-500 mt-1">Minimum 8 characters with letters and numbers</p>
-				</div>
-				<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4">
-					Continue
-				</button>
-			</form>
-			<div class="text-center">
-				<p class="text-sm text-gray-600">
-					Already have an account?
-					<button onclick="switchTab('signIn')" class="text-primary hover:text-indigo-700 font-medium">Sign in</button>
-				</p>
 			</div>
+			<div class="mb-4">
+				<label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+				<input
+					type="email"
+					id="signUpEmail"
+					required
+					class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+					placeholder="john.doe@example.com"
+				/>
+			</div>
+			<div class="mb-4">
+				<label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+				<input
+					type="tel"
+					id="signUpPhone"
+					required
+					class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+					placeholder="+254 7XX XXX XXX"
+				/>
+			</div>
+			<div class="mb-6">
+				<label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+				<input
+					type="password"
+					id="signUpPassword"
+					required
+					class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+					placeholder="Create a strong password"
+				/>
+				<p class="text-xs text-gray-500 mt-1">Minimum 8 characters with letters and numbers</p>
+			</div>
+			<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4">
+				Continue
+			</button>
+		</form>
+		<div class="text-center">
+			<p class="text-sm text-gray-600">
+				Already have an account?
+				<button
+					hx-get="/auth/signin-form"
+					hx-target="#FormContainer"
+					hx-swap="innerHTML"
+					hx-push-url="/auth/signin"
+					class="text-primary hover:text-indigo-700 font-medium"
+				>Sign in</button>
+			</p>
 		</div>
-		<!-- Step 2: OTP Verification -->
-		<div id="signUpStep2" class="step-container">
-			<div class="text-center mb-6">
-				<div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-					<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-				</div>
-				<h2 class="text-2xl font-bold text-gray-900 mb-2">Verify your email</h2>
-				<p class="text-gray-600 mb-6">
-					We've sent a 6-digit code to
-					<br/>
-					<span id="signUpEmailDisplay" class="font-semibold text-gray-900"></span>
-				</p>
+	</div>
+	<!-- Step 2: OTP Verification -->
+	<div id="signUpStep2" class="step-container">
+		<div class="text-center mb-6">
+			<div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+				<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
 			</div>
-			<form id="signUpOtpForm">
-				<div class="mb-6">
-					<label class="block text-sm font-medium text-gray-700 mb-3 text-center">Enter verification code</label>
-					<div class="flex justify-center space-x-3 mb-4">
-						<input type="text" maxlength="1" class="otp-input signup-otp" data-index="0"/>
-						<input type="text" maxlength="1" class="otp-input signup-otp" data-index="1"/>
-						<input type="text" maxlength="1" class="otp-input signup-otp" data-index="2"/>
-						<input type="text" maxlength="1" class="otp-input signup-otp" data-index="3"/>
-						<input type="text" maxlength="1" class="otp-input signup-otp" data-index="4"/>
-						<input type="text" maxlength="1" class="otp-input signup-otp" data-index="5"/>
-					</div>
-				</div>
-				<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4">
-					Verify & Create Account
-				</button>
-				<div class="text-center">
-					<p class="text-sm text-gray-600 mb-2">Didn't receive the code?</p>
-					<button type="button" id="resendSignUpOtp" class="text-primary hover:text-indigo-700 font-medium text-sm">
-						Resend Code (<span id="signUpTimer">60</span>s)
-					</button>
-				</div>
-				<button type="button" id="backToSignUpStep1" class="w-full mt-4 text-gray-600 hover:text-gray-900 text-sm">
-					← Back to account details
-				</button>
-			</form>
+			<h2 class="text-2xl font-bold text-gray-900 mb-2">Verify your email</h2>
+			<p class="text-gray-600 mb-6">
+				We've sent a 6-digit code to
+				<br/>
+				<span id="signUpEmailDisplay" class="font-semibold text-gray-900"></span>
+			</p>
 		</div>
-		<!-- Step 3: Success -->
-		<div id="signUpStep3" class="step-container">
-			<div class="text-center">
-				<div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-					<svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-					</svg>
+		<form id="signUpOtpForm">
+			<div class="mb-6">
+				<label class="block text-sm font-medium text-gray-700 mb-3 text-center">Enter verification code</label>
+				<div class="flex justify-center space-x-3 mb-4">
+					<input type="text" maxlength="1" class="otp-input signup-otp" data-index="0"/>
+					<input type="text" maxlength="1" class="otp-input signup-otp" data-index="1"/>
+					<input type="text" maxlength="1" class="otp-input signup-otp" data-index="2"/>
+					<input type="text" maxlength="1" class="otp-input signup-otp" data-index="3"/>
+					<input type="text" maxlength="1" class="otp-input signup-otp" data-index="4"/>
+					<input type="text" maxlength="1" class="otp-input signup-otp" data-index="5"/>
 				</div>
-				<h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome to Oplan!</h2>
-				<p class="text-gray-600 mb-8">
-					Your account has been created successfully.
-					<br/>
-					You can now start discovering and creating amazing events.
-				</p>
-				<button onclick="window.location.href='#dashboard'" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-3">
-					Go to Dashboard
-				</button>
-				<button onclick="window.location.href='#events'" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-					Browse Events
+			</div>
+			<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4">
+				Verify & Create Account
+			</button>
+			<div class="text-center">
+				<p class="text-sm text-gray-600 mb-2">Didn't receive the code?</p>
+				<button type="button" id="resendSignUpOtp" class="text-primary hover:text-indigo-700 font-medium text-sm">
+					Resend Code (<span id="signUpTimer">60</span>s)
 				</button>
 			</div>
+			<button type="button" id="backToSignUpStep1" class="w-full mt-4 text-gray-600 hover:text-gray-900 text-sm">
+				← Back to account details
+			</button>
+		</form>
+	</div>
+	<!-- Step 3: Success -->
+	<div id="signUpStep3" class="step-container">
+		<div class="text-center">
+			<div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+				<svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+				</svg>
+			</div>
+			<h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome to Oplan!</h2>
+			<p class="text-gray-600 mb-8">
+				Your account has been created successfully.
+				<br/>
+				You can now start discovering and creating amazing events.
+			</p>
+			<button onclick="window.location.href='#dashboard'" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-3">
+				Go to Dashboard
+			</button>
+			<button onclick="window.location.href='#events'" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+				Browse Events
+			</button>
 		</div>
 	</div>
 }
@@ -265,7 +314,7 @@ templ OTPVerification(email string, authType string) {
 }
 
 templ ErrorMessage(message string) {
-	<div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 animate-slide-up">
+	<div id="error-container" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 animate-slide-up">
 		<div class="flex items-center space-x-3">
 			<svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -276,7 +325,7 @@ templ ErrorMessage(message string) {
 }
 
 templ SuccessMessage(message string) {
-	<div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 animate-slide-up">
+	<div id="error-container" class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 animate-slide-up">
 		<div class="flex items-center space-x-3">
 			<svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
