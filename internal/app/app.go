@@ -86,6 +86,11 @@ func (app *App) InitServices() error {
 
 func (app *App) InitHandlers() error {
 	app.logger.Info("Setting up http handlers")
+
+	// Serve static files
+	fs := http.FileServer(http.Dir("./web/static"))
+	app.mux.Handle("/static/", http.StripPrefix("/static", fs))
+
 	accountTypeHandler := httphandlers.NewAccountTypesHandler(app.accountTypeService)
 	accountTypeHandler.RegisterRoutes(app.mux)
 	return nil

@@ -2,10 +2,10 @@ package httphandlers
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
 	"github.com/Edu58/Oplan/internal/domain"
+	authtempl "github.com/Edu58/Oplan/internal/frontend"
 )
 
 type AccountTypeService interface {
@@ -26,14 +26,8 @@ func (a *AccountTypesHandler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 func (a *AccountTypesHandler) listAccountTypes(w http.ResponseWriter, r *http.Request) {
-	account_types, err := a.service.ListAll(r.Context())
+	// account_types, err := a.service.ListAll(r.Context())
 
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(account_types)
-
+	component := authtempl.AuthPage()
+	component.Render(context.Background(), w)
 }
