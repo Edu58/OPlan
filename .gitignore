@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.idea
 
 # Test binary, built with `go test -c`
 .test
@@ -21,9 +22,37 @@ profile.cov
 go.work
 go.work.sum
 
-# env file
-*.env
-
 # Editor/IDE
  .idea/
  .vscode/
+
+ # Node dependencies
+node_modules/
+.npm/
+
+# Build artifacts
+dist/
+tmp/
+build/
+.nuxt/
+.next/ # For Next.js projects
+.output/ # For Nuxt projects
+
+# Logs and temporary files
+npm-debug.log*
+*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+*.env
+!.env.example # Keep the example file in version control
+
+# Miscellaneous OS files
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# Optional caches
+.eslintcache
