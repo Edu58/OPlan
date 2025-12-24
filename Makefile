@@ -34,6 +34,7 @@ sqlc:
 
 templ:
 	@echo "Generating Templ templates..."
+	@templ fmt ./internal/frontend
 	@templ generate
 
 tailwind:

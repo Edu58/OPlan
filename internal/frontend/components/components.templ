@@ -1,0 +1,165 @@
+package components
+
+// Base HTML structure with children support
+templ BaseLayout(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title } - Oplan</title>
+			<link href="/static/css/output.css" rel="stylesheet"/>
+			<script src="/static/js/htmx.min.js"></script>
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
+}
+
+// Layout with Header and Footer
+templ PageLayout(title string, authenticated bool, email string) {
+	@BaseLayout(title) {
+		if authenticated {
+			@AuthHeader(email)
+		} else {
+			@Header()
+		}
+		<div class="pt-16 min-h-screen">
+			{ children... }
+		</div>
+		@Footer()
+	}
+}
+
+// Layout with just simple footer (for auth pages)
+templ AuthLayout(title string) {
+	@BaseLayout(title) {
+		<div class="min-h-screen">
+			{ children... }
+		</div>
+		@SimpleFooter()
+	}
+}
+
+// Minimal layout (no header, no footer)
+templ MinimalLayout(title string) {
+	@BaseLayout(title) {
+		{ children... }
+	}
+}
+
+// Header component (public)
+templ Header() {
+	<nav class="fixed w-full top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex justify-between items-center h-16">
+				<div class="flex items-center space-x-8">
+					<div class="flex-shrink-0">
+						<a href="/" class="text-2xl font-bold text-indigo-600">Oplan</a>
+					</div>
+					<div class="hidden md:flex items-center space-x-6">
+						<a href="/events" class="text-gray-600 hover:text-gray-900 transition-colors">Events</a>
+						<a href="/about" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+						<a href="/pricing" class="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
+						<a href="/contact" class="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+					</div>
+				</div>
+				<div class="flex items-center space-x-4">
+					<a href="/" class="text-gray-600 hover:text-gray-900 transition-colors">Sign In</a>
+					<a href="/" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors font-medium">
+						Get Started
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+}
+
+// Authenticated Header
+templ AuthHeader(email string) {
+	<nav class="fixed w-full top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex justify-between items-center h-16">
+				<div class="flex items-center space-x-8">
+					<div class="flex-shrink-0">
+						<a href="/dashboard" class="text-2xl font-bold text-indigo-600">Oplan</a>
+					</div>
+					<div class="hidden md:flex items-center space-x-6">
+						<a href="/dashboard" class="text-gray-600 hover:text-gray-900 transition-colors">Dashboard</a>
+						<a href="/events" class="text-gray-600 hover:text-gray-900 transition-colors">Events</a>
+						<a href="/my-events" class="text-gray-600 hover:text-gray-900 transition-colors">My Events</a>
+					</div>
+				</div>
+				<div class="flex items-center space-x-4">
+					<span class="text-gray-700">{ email }</span>
+					<div class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium">
+						if len(email) > 0 {
+							{ email[0:1] }
+						}
+					</div>
+					<a href="/" class="text-red-600 hover:text-red-700">Sign Out</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+}
+
+// Footer component
+templ Footer() {
+	<footer class="bg-gray-900 text-white py-16">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+				<div class="space-y-4">
+					<h3 class="text-2xl font-bold text-indigo-400">Oplan</h3>
+					<p class="text-gray-400 leading-relaxed">
+						Kenya's premier event management platform, connecting communities through memorable experiences.
+					</p>
+				</div>
+				<div>
+					<h4 class="text-lg font-semibold mb-4">Company</h4>
+					<ul class="space-y-3">
+						<li><a href="/about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+						<li><a href="/contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+						<li><a href="/blog" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+					</ul>
+				</div>
+				<div>
+					<h4 class="text-lg font-semibold mb-4">Platform</h4>
+					<ul class="space-y-3">
+						<li><a href="/create-event" class="text-gray-400 hover:text-white transition-colors">Create Event</a></li>
+						<li><a href="/events" class="text-gray-400 hover:text-white transition-colors">Browse Events</a></li>
+						<li><a href="/pricing" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+					</ul>
+				</div>
+				<div>
+					<h4 class="text-lg font-semibold mb-4">Support</h4>
+					<ul class="space-y-3">
+						<li><a href="/help" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+						<li><a href="/terms" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+						<li><a href="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+				<p class="text-gray-400 text-sm">
+					© 2024 Oplan. All rights reserved. Made with ❤️ in Kenya.
+				</p>
+				<div class="flex items-center space-x-6 mt-4 md:mt-0">
+					<span class="text-gray-400 text-sm">🇰🇪 Proudly Kenyan</span>
+				</div>
+			</div>
+		</div>
+	</footer>
+}
+
+// Simple Footer
+templ SimpleFooter() {
+	<footer class="bg-gray-900 text-white py-8">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+			<p class="text-gray-400 text-sm">
+				© 2024 Oplan. All rights reserved.
+			</p>
+		</div>
+	</footer>
+}

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Edu58/Oplan/internal/domain"
-	authtempl "github.com/Edu58/Oplan/internal/frontend"
+	templates "github.com/Edu58/Oplan/internal/frontend/templates/auth"
 )
 
 type AccountTypeService interface {
@@ -28,6 +28,6 @@ func (a *AccountTypesHandler) RegisterRoutes(mux *http.ServeMux) {
 func (a *AccountTypesHandler) listAccountTypes(w http.ResponseWriter, r *http.Request) {
 	// account_types, err := a.service.ListAll(r.Context())
 
-	component := authtempl.AuthPage()
+	component := templates.AuthPage("Sign In")
 	component.Render(context.Background(), w)
 }
