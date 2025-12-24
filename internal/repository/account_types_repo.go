@@ -3,16 +3,16 @@ package repository
 import (
 	"context"
 
-	"github.com/Edu58/Oplan/internal/database"
 	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type AccountTypeRepository struct {
-	db database.DBTX
+	db *pgxpool.Pool
 }
 
-func NewAccountTypeRepository(db database.DBTX) domain.AccountTypeRepository {
+func NewAccountTypeRepository(db *pgxpool.Pool) *AccountTypeRepository {
 	return &AccountTypeRepository{db}
 }
 
@@ -124,6 +124,7 @@ func (a *AccountTypeRepository) List(ctx context.Context) ([]*domain.AccountType
 		); err != nil {
 			return nil, err
 		}
+
 		items = append(items, &i)
 	}
 

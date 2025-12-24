@@ -8,12 +8,17 @@ import (
 	"github.com/Edu58/Oplan/pkg/logger"
 )
 
+type AccountTypeRepository interface {
+	Create(ctx context.Context, req domain.CreateAccountTypeParams) (*domain.AccountType, error)
+	List(ctx context.Context) ([]*domain.AccountType, error)
+}
+
 type AccountTypeService struct {
-	repo   domain.AccountTypeRepository
+	repo   AccountTypeRepository
 	logger logger.Logger
 }
 
-func NewAccountTypesService(repo domain.AccountTypeRepository, logger logger.Logger) *AccountTypeService {
+func NewAccountTypesService(repo AccountTypeRepository, logger logger.Logger) *AccountTypeService {
 	return &AccountTypeService{repo: repo, logger: logger}
 }
 

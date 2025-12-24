@@ -1,17 +1,23 @@
 package httphandlers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
 	"github.com/Edu58/Oplan/internal/domain"
 )
 
-type AccountTypesHandler struct {
-	service domain.AccountTypeService
+type AccountTypeService interface {
+	Create(ctx context.Context, params domain.CreateAccountTypeParams) (*domain.AccountType, error)
+	ListAll(ctx context.Context) ([]*domain.AccountType, error)
 }
 
-func NewAccountTypesHandler(service domain.AccountTypeService) *AccountTypesHandler {
+type AccountTypesHandler struct {
+	service AccountTypeService
+}
+
+func NewAccountTypesHandler(service AccountTypeService) *AccountTypesHandler {
 	return &AccountTypesHandler{service: service}
 }
 

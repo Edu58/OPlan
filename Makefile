@@ -10,7 +10,7 @@ test-unit:
 	go test -short -v -cover ./...
 
 server:
-	go run ./cmd/api/main.go
+	go run ./cmd/web/main.go
 
 race:
 	go test -race ./...

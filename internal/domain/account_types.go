@@ -61,25 +61,25 @@ type AccountTypeService interface {
 	// GetByID retrieves an account type by ID
 	// GetByID(ctx context.Context, id string) (*AccountType, error)
 
-	// GetByName retrieves an account type by name
+	// // GetByName retrieves an account type by name
 	// GetByName(ctx context.Context, name string) (*AccountType, error)
 
-	// ListActive returns only active account types
+	// // ListActive returns only active account types
 	// ListActive(ctx context.Context) ([]*AccountType, error)
 
 	// ListAll returns all account types
 	ListAll(ctx context.Context) ([]*AccountType, error)
 
-	// Update modifies an existing account type
+	// // Update modifies an existing account type
 	// Update(ctx context.Context, req UpdateAccountTypeByIDParams) (*AccountType, error)
 
-	// Deactivate soft-deletes an account type
+	// // Deactivate soft-deletes an account type
 	// Deactivate(ctx context.Context, id string) error
 
-	// Activate re-activates a deactivated account type
+	// // Activate re-activates a deactivated account type
 	// Activate(ctx context.Context, id string) error
 
-	// Delete permanently removes an account type (use with caution)
+	// // Delete permanently removes an account type (use with caution)
 	// Delete(ctx context.Context, id string) error
 }
 

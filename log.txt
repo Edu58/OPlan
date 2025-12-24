@@ -1,0 +1,7 @@
+{"level":"info","time":1766563059,"message":"Initializing Database"}
+{"level":"info","time":1766563059,"message":"Running Database migrations"}
+{"level":"info","time":1766563059,"message":"Setting up repositories"}
+{"level":"info","time":1766563059,"message":"Setting up services"}
+{"level":"info","time":1766563059,"message":"Setting up http handlers"}
+{"level":"info","HOST":"localhost","PORT":"6010","time":1766563059,"message":"Starting server"}
+{"level":"warn","time":1766563086,"message":"Received shutdown signal"}

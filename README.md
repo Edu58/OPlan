@@ -15,3 +15,4 @@ Database Queries (db.Querier - sqlc generated)
     ↓ executes
 Database (pgxpool.Pool)
 ```
+![Database Structure](./drawSQL.png "DB Diagram")

@@ -9,12 +9,12 @@ import (
 
 	"github.com/Edu58/Oplan/config"
 	"github.com/Edu58/Oplan/internal/database"
-	db "github.com/Edu58/Oplan/internal/database"
 	"github.com/Edu58/Oplan/internal/domain"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
 	"github.com/Edu58/Oplan/internal/repository"
 	"github.com/Edu58/Oplan/internal/service"
 	"github.com/Edu58/Oplan/pkg/logger"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type AppInterface interface {
@@ -29,8 +29,7 @@ type AppInterface interface {
 
 type App struct {
 	config             *config.Config
-	queries            *db.Queries
-	pgxPool            db.DBTX
+	pgxPool            *pgxpool.Pool
 	server             *http.Server
 	mux                *http.ServeMux
 	accountTypeRepo    domain.AccountTypeRepository
@@ -71,12 +70,11 @@ func (app *App) InitDB() {
 	}
 
 	app.pgxPool = pgxPool
-	app.queries = db.New(pgxPool)
 }
 
 func (app *App) InitRepositories() error {
 	app.logger.Info("Setting up repositories")
-	app.accountTypeRepo = repository.NewAccountTypeRepository(app.queries.DB)
+	app.accountTypeRepo = repository.NewAccountTypeRepository(app.pgxPool)
 	return nil
 }
 
