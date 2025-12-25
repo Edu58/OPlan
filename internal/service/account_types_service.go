@@ -9,6 +9,7 @@ import (
 )
 
 type AccountTypeRepository interface {
+	GetByName(ctx context.Context, name string) (*domain.AccountType, error)
 	Create(ctx context.Context, req domain.CreateAccountTypeParams) (*domain.AccountType, error)
 	List(ctx context.Context) ([]*domain.AccountType, error)
 }
@@ -42,4 +43,8 @@ func (a *AccountTypeService) ListAll(ctx context.Context) ([]*domain.AccountType
 	}
 
 	return acc_types, nil
+}
+
+func (a *AccountTypeService) GetByName(ctx context.Context, name string) (*domain.AccountType, error) {
+	return a.repo.GetByName(ctx, name)
 }

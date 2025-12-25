@@ -62,7 +62,7 @@ type AccountTypeService interface {
 	// GetByID(ctx context.Context, id string) (*AccountType, error)
 
 	// // GetByName retrieves an account type by name
-	// GetByName(ctx context.Context, name string) (*AccountType, error)
+	GetByName(ctx context.Context, name string) (*AccountType, error)
 
 	// // ListActive returns only active account types
 	// ListActive(ctx context.Context) ([]*AccountType, error)

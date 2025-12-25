@@ -28,6 +28,6 @@ func (a *AccountTypesHandler) RegisterRoutes(mux *http.ServeMux) {
 func (a *AccountTypesHandler) listAccountTypes(w http.ResponseWriter, r *http.Request) {
 	// account_types, err := a.service.ListAll(r.Context())
 
-	component := templates.AuthPage("Sign In")
+	component := templates.AuthPage("Sign In", "")
 	component.Render(context.Background(), w)
 }

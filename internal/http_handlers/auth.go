@@ -3,56 +3,132 @@ package httphandlers
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/Edu58/Oplan/internal/domain"
 	templates "github.com/Edu58/Oplan/internal/frontend/templates/auth"
 	"github.com/google/uuid"
 )
 
+type AuthAccountTypeService interface {
+	GetByName(ctx context.Context, name string) (*domain.AccountType, error)
+}
+
 type SessionService interface {
 	GetSessionById(ctx context.Context, id uuid.UUID) (*domain.Session, error)
 	CreateSession(ctx context.Context, params domain.CreateSessionParams) (*domain.Session, error)
 }
 
-type SessionsHandler struct {
-	service SessionService
+type UserService interface {
+	CreateUser(ctx context.Context, req domain.CreateUserParams) (*domain.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
+	GetUserByMSISDN(ctx context.Context, msisdn string) (*domain.User, error)
 }
 
-func NewSessionHandler(service SessionService) *SessionsHandler {
-	return &SessionsHandler{service}
+type SessionsHandler struct {
+	account_type_service AuthAccountTypeService
+	session_service      SessionService
+	user_service         UserService
+}
+
+func NewSessionHandler(session_service SessionService, user_service UserService, account_type_service AuthAccountTypeService) *SessionsHandler {
+	return &SessionsHandler{account_type_service, session_service, user_service}
 }
 
 func (s *SessionsHandler) RegisterRoutes(mux *http.ServeMux) {
 	mux.Handle("/auth/signin", http.HandlerFunc(s.signin))
 	mux.Handle("/auth/signup", http.HandlerFunc(s.signup))
-	mux.Handle("/auth/signin-form", http.HandlerFunc(s.signinForm))
-	mux.Handle("/auth/signup-form", http.HandlerFunc(s.signupForm))
+	mux.Handle("/auth/verify-otp", http.HandlerFunc(s.verifyOTP))
 }
 
 func (s *SessionsHandler) signin(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method == http.MethodPost {
-		w.WriteHeader(400)
-		component := templates.ErrorMessage("Not valid")
-		component.Render(context.Background(), w)
-		return
-	} else {
-		component := templates.AuthPage("Sign in")
+		if err := r.ParseForm(); err != nil {
+			w.WriteHeader(400)
+			component := templates.ErrorMessage("Invalid")
+			component.Render(context.Background(), w)
+			return
+		}
+
+		fieldValue := r.FormValue("email")
+
+		var user *domain.User
+		var err error
+
+		if strings.Contains(fieldValue, "@") {
+			user, err = s.user_service.GetUserByEmail(r.Context(), fieldValue)
+		} else {
+			user, err = s.user_service.GetUserByMSISDN(r.Context(), fieldValue)
+		}
+
+		if err != nil {
+			w.WriteHeader(404)
+			component := templates.ErrorMessage("User NOT found")
+			component.Render(context.Background(), w)
+			return
+		}
+
+		w.Header().Set("HX-Push-Url", "/auth/verify-otp")
+
+		component := templates.OTPVerification(user.Email, "email")
 		component.Render(context.Background(), w)
 		return
 	}
+
+	component := templates.AuthPage("Sign in", "")
+	component.Render(context.Background(), w)
 }
 
 func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
-	component := templates.AuthPage("Sign up")
+	if r.Method == http.MethodPost {
+		if err := r.ParseForm(); err != nil {
+			w.WriteHeader(400)
+			component := templates.ErrorMessage("Invalid")
+			component.Render(context.Background(), w)
+			return
+		}
+
+		account_type, err := s.account_type_service.GetByName(r.Context(), "admin")
+
+		if err != nil {
+			w.WriteHeader(404)
+			component := templates.ErrorMessage("Account type NOT found")
+			component.Render(context.Background(), w)
+			return
+		}
+
+		params := domain.CreateUserParams{
+			Email:         r.PostForm.Get("email"),
+			Username:      r.PostForm.Get("username"),
+			FirstName:     r.PostForm.Get("email"),
+			LastName:      r.PostForm.Get("email"),
+			Password:      r.PostForm.Get("password"),
+			MSISDN:        r.PostForm.Get("msisdn"),
+			AccountTypeId: account_type.ID,
+		}
+
+		user, err := s.user_service.CreateUser(r.Context(), params)
+
+		if err != nil {
+			w.WriteHeader(400)
+			component := templates.ErrorMessage("Invalid")
+			component.Render(context.Background(), w)
+			return
+		}
+
+		w.Header().Set("HX-Push-Url", "/auth/verify-otp")
+
+		component := templates.OTPVerification(user.Email, "email")
+		component.Render(context.Background(), w)
+		return
+	}
+
+	component := templates.AuthPage("Sign up", "")
 	component.Render(context.Background(), w)
 }
 
-func (s *SessionsHandler) signinForm(w http.ResponseWriter, r *http.Request) {
-	component := templates.SignInForm("Sign in")
-	component.Render(context.Background(), w)
-}
-
-func (s *SessionsHandler) signupForm(w http.ResponseWriter, r *http.Request) {
-	component := templates.SignUpForm("Sign up")
+func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
+	component := templates.AuthPage("OTP", "")
 	component.Render(context.Background(), w)
 }

@@ -32,7 +32,9 @@ type App struct {
 	pgxPool            *pgxpool.Pool
 	server             *http.Server
 	mux                *http.ServeMux
+	userRepo           domain.UserRepository
 	sessionRepo        domain.SessionsRepository
+	userService        domain.UserService
 	sessionService     domain.SessionsService
 	accountTypeRepo    domain.AccountTypeRepository
 	accountTypeService domain.AccountTypeService
@@ -77,6 +79,7 @@ func (app *App) InitDB() {
 func (app *App) InitRepositories() error {
 	app.logger.Info("Setting up repositories")
 
+	app.userRepo = repository.NewUserRepository(app.pgxPool)
 	app.sessionRepo = repository.NewSessionRepository(app.pgxPool)
 	app.accountTypeRepo = repository.NewAccountTypeRepository(app.pgxPool)
 	return nil
@@ -86,6 +89,7 @@ func (app *App) InitServices() error {
 	app.logger.Info("Setting up services")
 
 	app.sessionService = service.NewSessionService(app.sessionRepo, app.logger)
+	app.userService = service.NewUserService(app.userRepo, app.logger)
 	app.accountTypeService = service.NewAccountTypesService(app.accountTypeRepo, app.logger)
 	return nil
 }
@@ -97,7 +101,7 @@ func (app *App) InitHandlers() error {
 	fs := http.FileServer(http.Dir("./web/static"))
 	app.mux.Handle("/static/", http.StripPrefix("/static", fs))
 
-	sessionsHandler := httphandlers.NewSessionHandler(app.sessionService)
+	sessionsHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.accountTypeService)
 	sessionsHandler.RegisterRoutes(app.mux)
 
 	accountTypeHandler := httphandlers.NewAccountTypesHandler(app.accountTypeService)
