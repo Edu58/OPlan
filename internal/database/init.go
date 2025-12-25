@@ -3,12 +3,16 @@ package database
 import (
 	"context"
 	"errors"
+	"log"
+	"time"
 
 	"github.com/Edu58/Oplan/config"
+	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -54,4 +58,42 @@ func runMigrations(config *config.Config) error {
 	}
 
 	return nil
+}
+
+func RunSeeds(db *pgxpool.Pool, logger logger.Logger) {
+	accountTypes := []domain.AccountType{
+		{
+			Name:   "admin",
+			Active: true,
+		},
+		{
+			Name:   "user",
+			Active: true,
+		},
+	}
+
+	query := `
+		INSERT INTO account_types (name, active)
+		VALUES ($1, $2)
+		ON CONFLICT (name) DO NOTHING
+	`
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
+
+	var acc domain.AccountType
+
+	for _, a := range accountTypes {
+		row := db.QueryRow(ctx, query, a.Name, a.Active)
+		if err := row.Scan(&acc.ID, &acc.Name); err != nil {
+			if err == pgx.ErrNoRows {
+				logger.WithField("Name", a.Name).Info("Skipped Account Type")
+			} else {
+				log.Panicf("Error running seeds: %v", err)
+				logger.WithField("Error", err.Error()).Fatal("Error running seeds")
+			}
+		}
+
+		logger.WithField("Name", a.Name).Info("Seeded Account Type")
+	}
 }

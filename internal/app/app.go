@@ -73,6 +73,8 @@ func (app *App) InitDB() {
 		return
 	}
 
+	database.RunSeeds(pgxPool, app.logger)
+
 	app.pgxPool = pgxPool
 }
 
@@ -101,7 +103,7 @@ func (app *App) InitHandlers() error {
 	fs := http.FileServer(http.Dir("./web/static"))
 	app.mux.Handle("/static/", http.StripPrefix("/static", fs))
 
-	sessionsHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.accountTypeService)
+	sessionsHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.accountTypeService, app.logger)
 	sessionsHandler.RegisterRoutes(app.mux)
 
 	accountTypeHandler := httphandlers.NewAccountTypesHandler(app.accountTypeService)

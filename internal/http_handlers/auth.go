@@ -7,6 +7,7 @@ import (
 
 	"github.com/Edu58/Oplan/internal/domain"
 	templates "github.com/Edu58/Oplan/internal/frontend/templates/auth"
+	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/google/uuid"
 )
 
@@ -29,10 +30,11 @@ type SessionsHandler struct {
 	account_type_service AuthAccountTypeService
 	session_service      SessionService
 	user_service         UserService
+	logger               logger.Logger
 }
 
-func NewSessionHandler(session_service SessionService, user_service UserService, account_type_service AuthAccountTypeService) *SessionsHandler {
-	return &SessionsHandler{account_type_service, session_service, user_service}
+func NewSessionHandler(session_service SessionService, user_service UserService, account_type_service AuthAccountTypeService, logger logger.Logger) *SessionsHandler {
+	return &SessionsHandler{account_type_service, session_service, user_service, logger}
 }
 
 func (s *SessionsHandler) RegisterRoutes(mux *http.ServeMux) {
@@ -83,15 +85,18 @@ func (s *SessionsHandler) signin(w http.ResponseWriter, r *http.Request) {
 func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
+			s.logger.Err(err)
+
 			w.WriteHeader(400)
 			component := templates.ErrorMessage("Invalid")
 			component.Render(context.Background(), w)
 			return
 		}
 
-		account_type, err := s.account_type_service.GetByName(r.Context(), "admin")
+		account_type, err := s.account_type_service.GetByName(r.Context(), "user")
 
 		if err != nil {
+
 			w.WriteHeader(404)
 			component := templates.ErrorMessage("Account type NOT found")
 			component.Render(context.Background(), w)
@@ -111,11 +116,16 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 		user, err := s.user_service.CreateUser(r.Context(), params)
 
 		if err != nil {
+
+			s.logger.Error(err.Error())
+
 			w.WriteHeader(400)
 			component := templates.ErrorMessage("Invalid")
 			component.Render(context.Background(), w)
 			return
 		}
+
+		s.logger.WithField("Email", user.Email).Info("Account created successfully")
 
 		w.Header().Set("HX-Push-Url", "/auth/verify-otp")
 

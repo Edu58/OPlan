@@ -20,7 +20,7 @@ func (u *UserRepository) Create(ctx context.Context, params domain.CreateUserPar
 	query := `
 	INSERT INTO users
 		(email, username, first_name, last_name, password, msisdn, dob, email_verified, msisdn_verified, active, account_type_id)
-		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 	RETURNING *
 	`
 
