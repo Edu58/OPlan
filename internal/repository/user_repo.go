@@ -19,24 +19,22 @@ func NewUserRepository(db *pgxpool.Pool) *UserRepository {
 func (u *UserRepository) Create(ctx context.Context, params domain.CreateUserParams) (*domain.User, error) {
 	query := `
 	INSERT INTO users
-		(email, username, first_name, last_name, password, msisdn, dob, email_verified, msisdn_verified, active, account_type_id)
-		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+		(email, first_name, last_name, password, msisdn, email_verified, msisdn_verified, active, account_type_id)
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
 	RETURNING *
 	`
 
-	row := u.db.QueryRow(ctx, query, params.Email, params.Username, params.FirstName, params.LastName, params.Password, params.MSISDN, params.Dob, params.EmailVerified, params.MsisdnVerified, params.Active, params.AccountTypeId)
+	row := u.db.QueryRow(ctx, query, params.Email, params.FirstName, params.LastName, params.Password, params.MSISDN, params.EmailVerified, params.MsisdnVerified, params.Active, params.AccountTypeId)
 
 	var i domain.User
 
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
-		&i.Username,
 		&i.FirstName,
 		&i.LastName,
 		&i.Password,
 		&i.MSISDN,
-		&i.Dob,
 		&i.EmailVerified,
 		&i.MsisdnVerified,
 		&i.Active,
@@ -44,6 +42,11 @@ func (u *UserRepository) Create(ctx context.Context, params domain.CreateUserPar
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -59,12 +62,10 @@ func (u *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Use
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
-		&i.Username,
 		&i.FirstName,
 		&i.LastName,
 		&i.Password,
 		&i.MSISDN,
-		&i.Dob,
 		&i.EmailVerified,
 		&i.MsisdnVerified,
 		&i.Active,
@@ -72,6 +73,11 @@ func (u *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Use
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -87,12 +93,10 @@ func (u *UserRepository) GetByEmail(ctx context.Context, email string) (*domain.
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
-		&i.Username,
 		&i.FirstName,
 		&i.LastName,
 		&i.Password,
 		&i.MSISDN,
-		&i.Dob,
 		&i.EmailVerified,
 		&i.MsisdnVerified,
 		&i.Active,
@@ -100,6 +104,11 @@ func (u *UserRepository) GetByEmail(ctx context.Context, email string) (*domain.
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -115,12 +124,10 @@ func (u *UserRepository) GetByMSISDN(ctx context.Context, msisdn string) (*domai
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
-		&i.Username,
 		&i.FirstName,
 		&i.LastName,
 		&i.Password,
 		&i.MSISDN,
-		&i.Dob,
 		&i.EmailVerified,
 		&i.MsisdnVerified,
 		&i.Active,
@@ -128,6 +135,11 @@ func (u *UserRepository) GetByMSISDN(ctx context.Context, msisdn string) (*domai
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -143,12 +155,10 @@ func (u *UserRepository) GetByEmailorMSISDN(ctx context.Context, params domain.G
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
-		&i.Username,
 		&i.FirstName,
 		&i.LastName,
 		&i.Password,
 		&i.MSISDN,
-		&i.Dob,
 		&i.EmailVerified,
 		&i.MsisdnVerified,
 		&i.Active,
@@ -156,5 +166,10 @@ func (u *UserRepository) GetByEmailorMSISDN(ctx context.Context, params domain.G
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }

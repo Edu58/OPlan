@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"regexp"
 	"syscall"
 
 	"github.com/Edu58/Oplan/config"
@@ -16,6 +17,9 @@ import (
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+// Pre-compile the regex (only once)
+var msisdnRegex = regexp.MustCompile(`^\+\d{1,3}\d{9,}$`)
 
 type AppInterface interface {
 	InitApp() error
@@ -132,3 +136,14 @@ func (app *App) Shutdown(ctx context.Context, waitForShutdownCompletion chan str
 	}
 	waitForShutdownCompletion <- struct{}{}
 }
+
+// func registerValidators(validate *validator.Validate) {
+// 	validate.RegisterValidation("regexp", func(fl validator.FieldLevel) bool {
+// 		re := regexp.MustCompile(fl.Param())
+// 		return re.MatchString(fl.Field().String())
+// 	})
+
+// 	validate.RegisterValidation("msisdn", func(fl validator.FieldLevel) bool {
+// 		return msisdnRegex.MatchString(fl.Field().String())
+// 	})
+// }

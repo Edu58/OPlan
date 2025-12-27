@@ -3,7 +3,6 @@ package httphandlers
 import (
 	"context"
 	"net/http"
-	"strings"
 
 	"github.com/Edu58/Oplan/internal/domain"
 	templates "github.com/Edu58/Oplan/internal/frontend/templates/auth"
@@ -44,7 +43,6 @@ func (s *SessionsHandler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 func (s *SessionsHandler) signin(w http.ResponseWriter, r *http.Request) {
-
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
 			w.WriteHeader(400)
@@ -55,14 +53,14 @@ func (s *SessionsHandler) signin(w http.ResponseWriter, r *http.Request) {
 
 		fieldValue := r.FormValue("email")
 
-		var user *domain.User
-		var err error
-
-		if strings.Contains(fieldValue, "@") {
-			user, err = s.user_service.GetUserByEmail(r.Context(), fieldValue)
-		} else {
-			user, err = s.user_service.GetUserByMSISDN(r.Context(), fieldValue)
+		if err := domain.ValidateEmail(fieldValue); err != nil {
+			w.WriteHeader(400)
+			component := templates.ErrorMessage("Email is invalid. Verify and try again")
+			component.Render(context.Background(), w)
+			return
 		}
+
+		user, err := s.user_service.GetUserByEmail(r.Context(), fieldValue)
 
 		if err != nil {
 			w.WriteHeader(404)
@@ -96,7 +94,7 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 		account_type, err := s.account_type_service.GetByName(r.Context(), "user")
 
 		if err != nil {
-
+			s.logger.Error(err.Error())
 			w.WriteHeader(404)
 			component := templates.ErrorMessage("Account type NOT found")
 			component.Render(context.Background(), w)
@@ -105,9 +103,8 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 
 		params := domain.CreateUserParams{
 			Email:         r.PostForm.Get("email"),
-			Username:      r.PostForm.Get("username"),
-			FirstName:     r.PostForm.Get("email"),
-			LastName:      r.PostForm.Get("email"),
+			FirstName:     r.PostForm.Get("firstName"),
+			LastName:      r.PostForm.Get("lastName"),
 			Password:      r.PostForm.Get("password"),
 			MSISDN:        r.PostForm.Get("msisdn"),
 			AccountTypeId: account_type.ID,
@@ -116,11 +113,9 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 		user, err := s.user_service.CreateUser(r.Context(), params)
 
 		if err != nil {
-
 			s.logger.Error(err.Error())
-
 			w.WriteHeader(400)
-			component := templates.ErrorMessage("Invalid")
+			component := templates.ErrorMessage(err.Error())
 			component.Render(context.Background(), w)
 			return
 		}

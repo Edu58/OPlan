@@ -6,5 +6,5 @@ CREATE TABLE "sessions" (
     expires_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE UNIQUE INDEX sessions_session_id_idx ON sessions (session_id);
+CREATE UNIQUE INDEX sessions_user_id_session_id_idx ON sessions (user_id, session_id);
 CREATE INDEX sessions_client_ip_idx ON sessions (client_ip);

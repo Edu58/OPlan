@@ -31,6 +31,10 @@ func (s *SessionRepository) GetSessionById(ctx context.Context, id uuid.UUID) (*
 		&i.IsBlocked,
 		&i.ExpiresAt,
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -49,6 +53,10 @@ func (s *SessionRepository) GetBySessionId(ctx context.Context, session_id strin
 		&i.IsBlocked,
 		&i.ExpiresAt,
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -75,6 +83,10 @@ func (s *SessionRepository) CreateSession(ctx context.Context, params domain.Cre
 		&i.IsBlocked,
 		&i.ExpiresAt,
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -97,5 +109,6 @@ func (s *SessionRepository) DeleteSession(ctx context.Context, id uuid.UUID) err
 		&i.IsBlocked,
 		&i.ExpiresAt,
 	)
+
 	return err
 }

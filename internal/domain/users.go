@@ -2,20 +2,21 @@ package domain
 
 import (
 	"context"
+	"regexp"
 	"time"
 
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
 )
 
 type User struct {
 	ID             uuid.UUID `json:"id"`
-	Email          string    `json:"email" validate:"required,email"`
-	Username       string    `json:"username" validate:"required,gte=3,lte=130"`
-	FirstName      string    `json:"first_name" validate:"required"`
-	LastName       string    `json:"last_name" validate:"required"`
-	Password       string    `json:"password" validate:"required"`
-	MSISDN         string    `json:"msisdn" validate:"required,mobile"`
-	Dob            time.Time `json:"dob" validate:"required,date"`
+	Email          string    `json:"email"`
+	FirstName      string    `json:"first_name"`
+	LastName       string    `json:"last_name"`
+	Password       string    `json:"password"`
+	MSISDN         string    `json:"msisdn"`
 	EmailVerified  bool      `json:"email_verified"`
 	MsisdnVerified bool      `json:"msisdn_verified"`
 	Active         bool      `json:"active"`
@@ -26,12 +27,10 @@ type User struct {
 
 type CreateUserParams struct {
 	Email          string    `json:"email"`
-	Username       string    `json:"username"`
 	FirstName      string    `json:"first_name"`
 	LastName       string    `json:"last_name"`
 	Password       string    `json:"password"`
 	MSISDN         string    `json:"msisdn"`
-	Dob            time.Time `json:"dob"`
 	EmailVerified  bool      `json:"email_verified"`
 	MsisdnVerified bool      `json:"msisdn_verified"`
 	Active         bool      `json:"active"`
@@ -67,4 +66,19 @@ type UserRepository interface {
 	GetByID(ctx context.Context, id uuid.UUID) (*User, error)
 	GetByEmail(ctx context.Context, email string) (*User, error)
 	GetByMSISDN(ctx context.Context, msisdn string) (*User, error)
+}
+
+func (u CreateUserParams) Validate() error {
+	return validation.ValidateStruct(&u,
+		validation.Field(&u.Email, validation.Required, is.Email, is.LowerCase),
+		validation.Field(&u.FirstName, validation.Required, validation.Length(3, 255), is.Alphanumeric),
+		validation.Field(&u.LastName, validation.Required, validation.Length(3, 255), is.Alphanumeric),
+		validation.Field(&u.Password, validation.Required),
+		validation.Field(&u.AccountTypeId, validation.Required, is.UUID),
+		validation.Field(&u.MSISDN, validation.When(u.MSISDN != "", validation.Match(regexp.MustCompile(`^\+\d{1,3}\d{9}$`)))),
+	)
+}
+
+func ValidateEmail(email string) error {
+	return validation.Validate(email, is.Email)
 }

@@ -85,7 +85,7 @@ func (l *ZeroLogger) Warn(msg string) {
 }
 
 func (l *ZeroLogger) Err(err error) {
-	l.Logger.Err(err)
+	l.Logger.Err(err).Msg(err.Error())
 }
 
 func (l *ZeroLogger) Error(msg string) {

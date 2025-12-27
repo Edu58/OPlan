@@ -39,6 +39,11 @@ func (a *AccountTypeRepository) Create(ctx context.Context, arg domain.CreateAcc
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -77,6 +82,11 @@ func (a *AccountTypeRepository) GetByID(ctx context.Context, id uuid.UUID) (*dom
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -97,6 +107,11 @@ func (a *AccountTypeRepository) GetByName(ctx context.Context, name string) (*do
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
@@ -152,6 +167,11 @@ func (a *AccountTypeRepository) Update(ctx context.Context, arg domain.UpdateAcc
 		&i.InsertedAt,
 		&i.UpdatedAt,
 	)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &i, err
 }
 
