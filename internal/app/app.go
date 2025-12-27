@@ -5,44 +5,38 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"regexp"
 	"syscall"
 
 	"github.com/Edu58/Oplan/config"
+	"github.com/Edu58/Oplan/internal"
 	"github.com/Edu58/Oplan/internal/database"
-	"github.com/Edu58/Oplan/internal/domain"
+	"github.com/Edu58/Oplan/internal/database/sqlc"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
-	"github.com/Edu58/Oplan/internal/repository"
-	"github.com/Edu58/Oplan/internal/service"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // Pre-compile the regex (only once)
-var msisdnRegex = regexp.MustCompile(`^\+\d{1,3}\d{9,}$`)
+// var msisdnRegex = regexp.MustCompile(`^\+\d{1,3}\d{9,}$`)
 
 type AppInterface interface {
 	InitApp() error
-	InitDB()
-	InitHandlers() error
-	InitRepositories() error
-	InitServices() error
+	InitDB() error
+	InitServices()
+	InitHandlers()
 	Shutdown(ctx context.Context, waitForShutdownCompletion chan struct{})
 	Start() error
 }
 
 type App struct {
-	config             *config.Config
-	pgxPool            *pgxpool.Pool
-	server             *http.Server
-	mux                *http.ServeMux
-	userRepo           domain.UserRepository
-	sessionRepo        domain.SessionsRepository
-	userService        domain.UserService
-	sessionService     domain.SessionsService
-	accountTypeRepo    domain.AccountTypeRepository
-	accountTypeService domain.AccountTypeService
-	logger             logger.Logger
+	config          *config.Config
+	pgxPool         *pgxpool.Pool
+	server          *http.Server
+	mux             *http.ServeMux
+	store           *sqlc.Queries
+	session_service *internal.SessionService
+	user_service    *internal.UserService
+	logger          logger.Logger
 }
 
 func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
@@ -62,58 +56,35 @@ func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
 
 func (app *App) InitApp() error {
 	app.InitDB()
-	app.InitRepositories()
 	app.InitServices()
 	app.InitHandlers()
 
 	return nil
 }
 
-func (app *App) InitDB() {
+func (app *App) InitDB() error {
 	pgxPool, err := database.InitDB(context.Background(), app.config, app.logger)
 
 	if err != nil {
 		app.logger.Err(err)
-		return
+		return err
 	}
-
-	database.RunSeeds(pgxPool, app.logger)
-
 	app.pgxPool = pgxPool
-}
+	app.store = sqlc.New(pgxPool)
 
-func (app *App) InitRepositories() error {
-	app.logger.Info("Setting up repositories")
-
-	app.userRepo = repository.NewUserRepository(app.pgxPool)
-	app.sessionRepo = repository.NewSessionRepository(app.pgxPool)
-	app.accountTypeRepo = repository.NewAccountTypeRepository(app.pgxPool)
 	return nil
 }
 
-func (app *App) InitServices() error {
-	app.logger.Info("Setting up services")
-
-	app.sessionService = service.NewSessionService(app.sessionRepo, app.logger)
-	app.userService = service.NewUserService(app.userRepo, app.logger)
-	app.accountTypeService = service.NewAccountTypesService(app.accountTypeRepo, app.logger)
-	return nil
+func (app *App) InitServices() {
+	app.session_service = internal.NewSessionService(app.store, app.logger)
+	app.user_service = internal.NewUserService(app.store, app.logger)
 }
 
-func (app *App) InitHandlers() error {
-	app.logger.Info("Setting up http handlers")
+func (app *App) InitHandlers() {
+	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
-	// Serve static files
-	fs := http.FileServer(http.Dir("./web/static"))
-	app.mux.Handle("/static/", http.StripPrefix("/static", fs))
-
-	sessionsHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.accountTypeService, app.logger)
-	sessionsHandler.RegisterRoutes(app.mux)
-
-	accountTypeHandler := httphandlers.NewAccountTypesHandler(app.accountTypeService)
-	accountTypeHandler.RegisterRoutes(app.mux)
-
-	return nil
+	auth_handler := httphandlers.NewSessionHandler(app.session_service, app.user_service, app.logger)
+	auth_handler.RegisterRoutes(app.mux)
 }
 
 func (app *App) Start() error {

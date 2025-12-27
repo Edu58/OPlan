@@ -4,36 +4,31 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/Edu58/Oplan/internal/domain"
+	"github.com/Edu58/Oplan/internal/database/sqlc"
 	templates "github.com/Edu58/Oplan/internal/frontend/templates/auth"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/google/uuid"
 )
 
-type AuthAccountTypeService interface {
-	GetByName(ctx context.Context, name string) (*domain.AccountType, error)
-}
-
 type SessionService interface {
-	GetSessionById(ctx context.Context, id uuid.UUID) (*domain.Session, error)
-	CreateSession(ctx context.Context, params domain.CreateSessionParams) (*domain.Session, error)
+	GetSessionBySessionId(ctx context.Context, session_id uuid.UUID) (sqlc.Session, error)
+	CreateSession(ctx context.Context, arg sqlc.CreateSessionParams) (sqlc.Session, error)
 }
 
 type UserService interface {
-	CreateUser(ctx context.Context, req domain.CreateUserParams) (*domain.User, error)
-	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
-	GetUserByMSISDN(ctx context.Context, msisdn string) (*domain.User, error)
+	CreateUser(ctx context.Context, params sqlc.CreateUserParams) (sqlc.User, error)
+	GetUserByID(ctx context.Context, id uuid.UUID) (sqlc.User, error)
+	GetUserByEmail(ctx context.Context, email string) (sqlc.User, error)
 }
 
 type SessionsHandler struct {
-	account_type_service AuthAccountTypeService
-	session_service      SessionService
-	user_service         UserService
-	logger               logger.Logger
+	session_service SessionService
+	user_service    UserService
+	logger          logger.Logger
 }
 
-func NewSessionHandler(session_service SessionService, user_service UserService, account_type_service AuthAccountTypeService, logger logger.Logger) *SessionsHandler {
-	return &SessionsHandler{account_type_service, session_service, user_service, logger}
+func NewSessionHandler(session_service SessionService, user_service UserService, logger logger.Logger) *SessionsHandler {
+	return &SessionsHandler{session_service, user_service, logger}
 }
 
 func (s *SessionsHandler) RegisterRoutes(mux *http.ServeMux) {
@@ -52,13 +47,6 @@ func (s *SessionsHandler) signin(w http.ResponseWriter, r *http.Request) {
 		}
 
 		fieldValue := r.FormValue("email")
-
-		if err := domain.ValidateEmail(fieldValue); err != nil {
-			w.WriteHeader(400)
-			component := templates.ErrorMessage("Email is invalid. Verify and try again")
-			component.Render(context.Background(), w)
-			return
-		}
 
 		user, err := s.user_service.GetUserByEmail(r.Context(), fieldValue)
 
@@ -91,23 +79,13 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		account_type, err := s.account_type_service.GetByName(r.Context(), "user")
+		lastName := r.PostForm.Get("lastName")
 
-		if err != nil {
-			s.logger.Error(err.Error())
-			w.WriteHeader(404)
-			component := templates.ErrorMessage("Account type NOT found")
-			component.Render(context.Background(), w)
-			return
-		}
-
-		params := domain.CreateUserParams{
-			Email:         r.PostForm.Get("email"),
-			FirstName:     r.PostForm.Get("firstName"),
-			LastName:      r.PostForm.Get("lastName"),
-			Password:      r.PostForm.Get("password"),
-			MSISDN:        r.PostForm.Get("msisdn"),
-			AccountTypeId: account_type.ID,
+		params := sqlc.CreateUserParams{
+			Email:     r.PostForm.Get("email"),
+			FirstName: r.PostForm.Get("firstName"),
+			LastName:  &lastName,
+			Password:  r.PostForm.Get("password"),
 		}
 
 		user, err := s.user_service.CreateUser(r.Context(), params)

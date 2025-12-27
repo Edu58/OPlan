@@ -19,8 +19,6 @@ CREATE TABLE IF NOT EXISTS users (
     msisdn_verified BOOLEAN DEFAULT false,
     active BOOLEAN DEFAULT false,
 
-    account_type_id UUID REFERENCES account_types(id) ON DELETE RESTRICT,
-
     inserted_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
