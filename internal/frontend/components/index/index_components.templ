@@ -1,0 +1,446 @@
+package components
+
+templ Search() {
+	<!-- Hero Section -->
+	<section class="gradient-bg pt-24 pb-16">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="text-center text-white">
+				<h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
+					Discover Amazing
+					<span class="block text-yellow-300">Events Near You</span>
+				</h1>
+				<p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto animate-slide-up">
+					Connect with your community through extraordinary experiences. From tech meetups to cultural
+					festivals.
+				</p>
+				<!-- Search Bar -->
+				<div class="max-w-4xl mx-auto bg-white rounded-2xl p-2 shadow-2xl animate-slide-up">
+					<div class="flex flex-col md:flex-row gap-2">
+						<div class="flex-1 relative">
+							<input
+								type="text"
+								placeholder="Search events..."
+								class="w-full px-6 py-4 rounded-xl border-0 focus:ring-2 focus:ring-primary text-gray-900 placeholder-gray-500"
+							/>
+							<svg
+								class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+								></path>
+							</svg>
+						</div>
+						<div class="flex gap-2">
+							<select
+								class="px-6 py-4 rounded-xl border-0 focus:ring-2 focus:ring-primary text-gray-900 bg-gray-50"
+							>
+								<option>All Categories</option>
+								<option>Technology</option>
+								<option>Business</option>
+								<option>Arts & Culture</option>
+								<option>Sports</option>
+								<option>Education</option>
+							</select>
+							<button
+								class="bg-primary text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-colors font-medium"
+							>
+								Search
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}
+
+templ FiltersAndSort() {
+	<section class="py-8 bg-white border-b border-gray-200 sticky top-16 z-40">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex flex-wrap items-center justify-between gap-4">
+				<div class="flex flex-wrap items-center gap-3">
+					<span class="text-gray-700 font-medium">Filter by:</span>
+					<button
+						class=" active px-4 py-2 rounded-full border-2 border-primary bg-primary text-white font-medium transition-all"
+					>
+						All Events
+					</button>
+					<button
+						class=" px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-all"
+					>
+						This Week
+					</button>
+					<button
+						class=" px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-all"
+					>
+						Free Events
+					</button>
+					<button
+						class=" px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-all"
+					>
+						Virtual
+					</button>
+					<button
+						class=" px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-all"
+					>
+						In-Person
+					</button>
+				</div>
+				<div class="flex items-center gap-3">
+					<span class="text-gray-700 font-medium">Sort by:</span>
+					<select
+						class="px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary"
+					>
+						<option>Date (Nearest)</option>
+						<option>Popularity</option>
+						<option>Price (Low to High)</option>
+						<option>Price (High to Low)</option>
+						<option>A-Z</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</section>
+}
+
+templ Events() {
+	<!-- Events Grid -->
+	<section class="py-12">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="mb-8">
+				<h2 class="text-3xl font-bold text-gray-900 mb-2">Upcoming Events</h2>
+				<p class="text-gray-600">Found 24 events in Nairobi</p>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				<!-- Event Card 1 - Tech Conference -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+					<div class="relative">
+						<div class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+							<div class="text-center text-white">
+								<div
+									class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3"
+								>
+									<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+										<path
+											d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+										></path>
+									</svg>
+								</div>
+								<h3 class="text-lg font-bold">TC</h3>
+							</div>
+						</div>
+						<div class="absolute top-4 left-4">
+							<span
+								class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+							>Public</span>
+						</div>
+						<div class="absolute top-4 right-4">
+							<button
+								class="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors"
+							>
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+									></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div class="p-6">
+						<div class="flex items-center justify-between mb-3">
+							<span
+								class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+							>Technology</span>
+							<div class="flex items-center text-gray-500 text-sm">
+								<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+									></path>
+								</svg>
+								245 attending
+							</div>
+						</div>
+						<h3 class="text-xl font-bold text-gray-900 mb-2">Tech Conference 2025</h3>
+						<p class="text-gray-600 mb-4 line-clamp-2">
+							Join industry leaders for a day of innovation,
+							networking, and insights into the future of technology. Featuring keynote speakers from top
+							tech companies.
+						</p>
+						<div class="space-y-3 mb-4">
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+									></path>
+								</svg>
+								<span class="text-sm">March 15, 2025 • 9:00 AM - 6:00 PM</span>
+							</div>
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+									></path>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+									></path>
+								</svg>
+								<span class="text-sm">Nairobi Convention Center, Nairobi</span>
+							</div>
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+									></path>
+								</svg>
+								<span class="text-sm font-semibold text-green-600">KSh 2,500</span>
+							</div>
+						</div>
+						<div class="mb-4">
+							<p class="text-xs text-gray-500 mb-2">Event Rules:</p>
+							<ul class="text-xs text-gray-600 space-y-1">
+								<li>• Professional attire required</li>
+								<li>• No outside food or drinks</li>
+								<li>• ID required for entry</li>
+							</ul>
+						</div>
+						<button
+							class="w-full bg-primary text-white py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium"
+						>
+							Register Now
+						</button>
+					</div>
+				</div>
+				<!-- Event Card 2 - Marketing Workshop -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+					<div class="relative">
+						<div class="h-48 bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center">
+							<div class="text-center text-white">
+								<div
+									class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3"
+								>
+									<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+										<path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+									</svg>
+								</div>
+								<h3 class="text-lg font-bold">MW</h3>
+							</div>
+						</div>
+						<div class="absolute top-4 left-4">
+							<span
+								class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+							>Private</span>
+						</div>
+						<div class="absolute top-4 right-4">
+							<button
+								class="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors"
+							>
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+									></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div class="p-6">
+						<div class="flex items-center justify-between mb-3">
+							<span
+								class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium"
+							>Business</span>
+							<div class="flex items-center text-gray-500 text-sm">
+								<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+									></path>
+								</svg>
+								50 spots left
+							</div>
+						</div>
+						<h3 class="text-xl font-bold text-gray-900 mb-2">Digital Marketing Masterclass</h3>
+						<p class="text-gray-600 mb-4 line-clamp-2">
+							Master the art of digital marketing with hands-on
+							workshops covering SEO, social media, content marketing, and paid advertising strategies.
+						</p>
+						<div class="space-y-3 mb-4">
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+									></path>
+								</svg>
+								<span class="text-sm">March 22, 2025 • 10:00 AM - 4:00 PM</span>
+							</div>
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+									></path>
+								</svg>
+								<span class="text-sm">Virtual Event (Zoom)</span>
+							</div>
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+									></path>
+								</svg>
+								<span class="text-sm font-semibold text-green-600">KSh 1,800</span>
+							</div>
+						</div>
+						<div class="mb-4">
+							<p class="text-xs text-gray-500 mb-2">Event Rules:</p>
+							<ul class="text-xs text-gray-600 space-y-1">
+								<li>• Laptop required for exercises</li>
+								<li>• Camera must be on during sessions</li>
+								<li>• Invitation link sent 24h before</li>
+							</ul>
+						</div>
+						<button
+							class="w-full bg-primary text-white py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium"
+						>
+							Request Invitation
+						</button>
+					</div>
+				</div>
+				<!-- Event Card 3 - Startup Meetup -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+					<div class="relative">
+						<div class="h-48 bg-gradient-to-r from-green-500 to-teal-600 flex items-center justify-center">
+							<div class="text-center text-white">
+								<div
+									class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3"
+								>
+									<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+										<path
+											d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+										></path>
+									</svg>
+								</div>
+								<h3 class="text-lg font-bold">SF</h3>
+							</div>
+						</div>
+						<div class="absolute top-4 left-4">
+							<span
+								class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+							>Public</span>
+						</div>
+						<div class="absolute top-4 right-4">
+							<button
+								class="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-red-500"
+							>
+								<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+									<path
+										d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+									></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div class="p-6">
+						<div class="flex items-center justify-between mb-3">
+							<span
+								class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium"
+							>Networking</span>
+							<div class="flex items-center text-gray-500 text-sm">
+								<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+									></path>
+								</svg>
+								89 attending
+							</div>
+						</div>
+						<h3 class="text-xl font-bold text-gray-900 mb-2">Startup Founders Meetup</h3>
+						<p class="text-gray-600 mb-4 line-clamp-2">
+							Connect with fellow entrepreneurs, share experiences,
+							and build meaningful relationships in Kenya's thriving startup ecosystem.
+						</p>
+						<div class="space-y-3 mb-4">
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+									></path>
+								</svg>
+								<span class="text-sm">April 5, 2025 • 6:00 PM - 9:00 PM</span>
+							</div>
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+									></path>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+									></path>
+								</svg>
+								<span class="text-sm">iHub Nairobi, Ngong Road</span>
+							</div>
+							<div class="flex items-center text-gray-600">
+								<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+									></path>
+								</svg>
+								<span class="text-sm font-semibold text-green-600">Free</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}

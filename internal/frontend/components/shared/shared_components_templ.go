@@ -37,7 +37,7 @@ func BaseLayout(title string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/components.templ`, Line: 10, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/shared/shared_components.templ`, Line: 10, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -260,7 +260,7 @@ func Header() templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<nav class=\"fixed w-full top-0 z-50 bg-white shadow-sm border-b border-gray-200\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-8\"><div class=\"flex-shrink-0\"><a href=\"/\" class=\"text-2xl font-bold text-indigo-600\">Oplan</a></div><div class=\"hidden md:flex items-center space-x-6\"><a href=\"/events\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Events</a> <a href=\"/about\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">About</a> <a href=\"/pricing\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Pricing</a> <a href=\"/contact\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Contact</a></div></div><div class=\"flex items-center space-x-4\"><a href=\"/\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Sign In</a> <a href=\"/\" class=\"bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors font-medium\">Get Started</a></div></div></div></nav>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<nav class=\"fixed w-full top-0 z-50 bg-white shadow-sm border-b border-gray-200\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-8\"><div class=\"flex-shrink-0\"><a href=\"/\" class=\"text-2xl font-bold text-indigo-600\">Oplan</a></div><div class=\"hidden md:flex items-center space-x-6\"><a href=\"/events\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Events</a> <a href=\"/about\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">About</a> <a href=\"/pricing\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Pricing</a> <a href=\"/contact\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Contact</a></div></div><div class=\"flex items-center space-x-4\"><a href=\"/auth/signin\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Sign In</a> <a href=\"/auth/signup\" class=\"bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors font-medium\">Get Started</a></div></div></div></nav>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -290,14 +290,14 @@ func AuthHeader(email string) templ.Component {
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<nav class=\"fixed w-full top-0 z-50 bg-white shadow-sm border-b border-gray-200\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-8\"><div class=\"flex-shrink-0\"><a href=\"/dashboard\" class=\"text-2xl font-bold text-indigo-600\">Oplan</a></div><div class=\"hidden md:flex items-center space-x-6\"><a href=\"/dashboard\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Dashboard</a> <a href=\"/events\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Events</a> <a href=\"/my-events\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">My Events</a></div></div><div class=\"flex items-center space-x-4\"><span class=\"text-gray-700\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<nav class=\"fixed w-full top-0 z-50 bg-white shadow-sm border-b border-gray-200\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-8\"><div class=\"flex-shrink-0\"><a href=\"/auth/signin\" class=\"text-2xl font-bold text-indigo-600\">Oplan</a></div><div class=\"hidden md:flex items-center space-x-6\"><a href=\"/dashboard\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Dashboard</a> <a href=\"/events\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">Events</a> <a href=\"/my-events\" class=\"text-gray-600 hover:text-gray-900 transition-colors\">My Events</a></div></div><div class=\"flex items-center space-x-4\"><span class=\"text-gray-700\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/components.templ`, Line: 97, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/shared/shared_components.templ`, Line: 97, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -311,14 +311,14 @@ func AuthHeader(email string) templ.Component {
 			var templ_7745c5c3_Var12 string
 			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(email[0:1])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/components.templ`, Line: 100, Col: 19}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/shared/shared_components.templ`, Line: 100, Col: 19}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><a href=\"/\" class=\"text-red-600 hover:text-red-700\">Sign Out</a></div></div></div></nav>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><a href=\"/auth/signout\" class=\"text-red-600 hover:text-red-700\">Sign Out</a></div></div></div></nav>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -379,6 +379,90 @@ func SimpleFooter() templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<footer class=\"bg-gray-900 text-white py-8\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center\"><p class=\"text-gray-400 text-sm\">© 2024 Oplan. All rights reserved.</p></div></footer>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func ErrorMessage(message string) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var15 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var15 == nil {
+			templ_7745c5c3_Var15 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div id=\"error-container\" class=\"bg-red-50 border border-red-200 rounded-lg p-4 mb-4 animate-slide-up\"><div class=\"flex items-center space-x-3\"><svg class=\"w-5 h-5 text-red-500 flex-shrink-0\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg> <span class=\"text-red-800\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var16 string
+		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(message)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/shared/shared_components.templ`, Line: 175, Col: 39}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</span></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func SuccessMessage(message string) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var17 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var17 == nil {
+			templ_7745c5c3_Var17 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<div id=\"error-container\" class=\"bg-green-50 border border-green-200 rounded-lg p-4 mb-4 animate-slide-up\"><div class=\"flex items-center space-x-3\"><svg class=\"w-5 h-5 text-green-500 flex-shrink-0\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg> <span class=\"text-green-800\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var18 string
+		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(message)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/shared/shared_components.templ`, Line: 186, Col: 41}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</span></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

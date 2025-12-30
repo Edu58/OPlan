@@ -58,9 +58,29 @@
 }
 
 @layer components {
+    /* Homepage */
     .gradient-bg {
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     }
+
+    .card-hover {
+        transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.1),
+            0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .blur-backdrop {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+    }
+    /*Homepage */
+
+    /* Login */
     .auth-container {
         min-height: 100vh;
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -139,4 +159,36 @@
         display: block !important;
         animation: slideUp 0.4s ease-out;
     }
+    /* Login */
+
+    /* Event Detail */
+    .blur-backdrop {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+    }
+
+    .leaflet-container {
+        height: 100%;
+        width: 100%;
+    }
+
+    .event-hero {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    }
+
+    .floating-card {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .section-enter {
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.6s ease-out;
+    }
+
+    .section-enter.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    /* Event Detail */
 }

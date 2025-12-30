@@ -4,15 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/Edu58/Oplan/internal/domain"
-	"github.com/Edu58/Oplan/pkg/crypto"
-	"github.com/Edu58/Oplan/shared/generators"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/Edu58/Oplan/internal/domain"
+	"github.com/Edu58/Oplan/pkg/crypto"
+	"github.com/Edu58/Oplan/shared/generators"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+
 	"github.com/Edu58/Oplan/internal/database/sqlc"
+	components "github.com/Edu58/Oplan/internal/frontend/components/shared"
 	templates "github.com/Edu58/Oplan/internal/frontend/templates/auth"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/google/uuid"
@@ -21,6 +23,7 @@ import (
 type SessionService interface {
 	GetSessionBySessionId(ctx context.Context, sessionId uuid.UUID) (sqlc.Session, error)
 	CreateSession(ctx context.Context, arg sqlc.CreateSessionParams) (sqlc.Session, error)
+	DeleteSession(ctx context.Context, sessionID uuid.UUID) error
 }
 
 type UserService interface {
@@ -51,17 +54,18 @@ func (s *SessionsHandler) RegisterRoutes(mux *http.ServeMux) {
 	mux.Handle("/auth/signin", http.HandlerFunc(s.signIn))
 	mux.Handle("/auth/signup", http.HandlerFunc(s.signup))
 	mux.Handle("/auth/verify-otp", http.HandlerFunc(s.verifyOTP))
+	mux.Handle("/auth/signout", http.HandlerFunc(s.signout))
 }
 
 func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
 			w.WriteHeader(400)
-			component := templates.ErrorMessage("Invalid")
+			component := components.ErrorMessage("Invalid")
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 			}
 
 			return
@@ -73,11 +77,11 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			w.WriteHeader(404)
-			component := templates.ErrorMessage(err.Error())
+			component := components.ErrorMessage(err.Error())
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -88,11 +92,11 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			w.WriteHeader(404)
-			component := templates.ErrorMessage("User NOT found")
+			component := components.ErrorMessage("User NOT found")
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -105,7 +109,7 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			s.logger.Err(err)
-			http.Error(w, fmt.Sprint("error sending otp"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error sending otp"), http.StatusInternalServerError)
 			return
 		}
 
@@ -128,7 +132,7 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 		err = component.Render(context.Background(), w)
 
 		if err != nil {
-			http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 			return
 		}
 
@@ -139,22 +143,21 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 	err := component.Render(context.Background(), w)
 
 	if err != nil {
-		http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 		return
 	}
 
-	return
 }
 
 func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
 			w.WriteHeader(400)
-			component := templates.ErrorMessage("error processing request")
+			component := components.ErrorMessage("error processing request")
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -183,11 +186,11 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 			}
 
 			w.WriteHeader(400)
-			component := templates.ErrorMessage(errMsg)
+			component := components.ErrorMessage(errMsg)
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -201,7 +204,7 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 		err = generateOTP(r.Context(), s.otpService, user.Email, &otpExpiry)
 
 		if err != nil {
-			http.Error(w, fmt.Sprint("error sending otp"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error sending otp"), http.StatusInternalServerError)
 			return
 		}
 
@@ -224,7 +227,7 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 		err = component.Render(context.Background(), w)
 
 		if err != nil {
-			http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 			return
 		}
 
@@ -235,22 +238,20 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 	err := component.Render(context.Background(), w)
 
 	if err != nil {
-		http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 		return
 	}
-
-	return
 }
 
 func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
 			w.WriteHeader(400)
-			component := templates.ErrorMessage("Invalid OTP")
+			component := components.ErrorMessage("Invalid OTP")
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -260,14 +261,14 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 		authCookie, err := r.Cookie("auth")
 
 		if err != nil {
-			http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 			return
 		}
 
 		otp, err := s.otpService.GetOTP(r.Context(), authCookie.Value)
 
 		if err != nil {
-			http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 			return
 		}
 
@@ -284,11 +285,11 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			w.WriteHeader(400)
-			component := templates.ErrorMessage(err.Error())
+			component := components.ErrorMessage(err.Error())
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -301,11 +302,11 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 
 		if time.Now().After(*otp.ExpiresAt) || otpHash != otp.Value {
 			w.WriteHeader(400)
-			component := templates.ErrorMessage("Invalid OTP")
+			component := components.ErrorMessage("Invalid OTP")
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -316,11 +317,11 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			w.WriteHeader(404)
-			component := templates.ErrorMessage("User NOT found")
+			component := components.ErrorMessage("User NOT found")
 			err = component.Render(context.Background(), w)
 
 			if err != nil {
-				http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 				return
 			}
 
@@ -340,7 +341,7 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			s.logger.Err(err)
-			http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 			return
 		}
 
@@ -363,9 +364,10 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 			Expires:  sessExpiry,
 		})
 
-		s.logger.Info("Logging successful")
+		s.logger.WithField("Email", user.Email).
+			Info("User logged in successfully")
 
-		w.Header().Set("HX-Redirect", "https://google.com")
+		w.Header().Set("HX-Redirect", "/")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
@@ -374,11 +376,47 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 	err := component.Render(context.Background(), w)
 
 	if err != nil {
-		http.Error(w, fmt.Sprint("error processing request"), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
 		return
 	}
-	
-	return
+
+}
+
+func (s *SessionsHandler) signout(w http.ResponseWriter, r *http.Request) {
+	authCookie, err := r.Cookie("auth")
+
+	if err != nil {
+		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
+		return
+	}
+
+	sess, err := s.sessionService.GetSessionBySessionId(r.Context(), uuid.MustParse(authCookie.Value))
+
+	if err != nil {
+		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
+		return
+	}
+
+	err = s.sessionService.DeleteSession(r.Context(), sess.SessionID)
+
+	if err != nil {
+		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth",
+		Value:    "",
+		MaxAge:   -1,
+		Path:     "/",
+		HttpOnly: true,
+	})
+
+	s.logger.WithField("Email", sess.UserID).
+		Info("User logged out successfully")
+
+	w.Header().Set("HX-Redirect", "/")
+	w.WriteHeader(http.StatusOK)
 }
 
 func generateOTP(ctx context.Context, otpService OTPService, email string, expiry *time.Time) (err error) {

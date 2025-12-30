@@ -90,6 +90,9 @@ func (app *App) InitServices() {
 func (app *App) InitHandlers() {
 	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
+	indexHandler := httphandlers.NewIndexHandler(app.logger)
+	indexHandler.RegisterRoutes(app.mux)
+
 	authHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.otpService, app.logger)
 	authHandler.RegisterRoutes(app.mux)
 }

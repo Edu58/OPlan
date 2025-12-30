@@ -1,0 +1,12 @@
+package templates
+
+import index_components "github.com/Edu58/Oplan/internal/frontend/components/index"
+import shared_components "github.com/Edu58/Oplan/internal/frontend/components/shared"
+
+templ Index(title string, authenticated bool, email string) {
+	@shared_components.PageLayout(title, authenticated, email) {
+		@index_components.Search()
+		@index_components.FiltersAndSort()
+		@index_components.Events()
+	}
+}

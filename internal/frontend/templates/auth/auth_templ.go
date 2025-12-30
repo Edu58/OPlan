@@ -8,7 +8,7 @@ package templates
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import components "github.com/Edu58/Oplan/internal/frontend/components"
+import components "github.com/Edu58/Oplan/internal/frontend/components/shared"
 
 func AuthPage(title string, email string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -207,132 +207,6 @@ func OTPVerification(email string, authType string) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div id=\"signInStep2\"><div class=\"text-center mb-6\"><div class=\"w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4\"><svg class=\"w-8 h-8 text-green-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg></div><h2 class=\"text-2xl font-bold text-gray-900 mb-2\">Verify your identity</h2><p id=\"otp-instructions\" class=\"text-gray-600 mb-6\">We've sent a 6-digit code to<br><span id=\"signInContactDisplay\" class=\"font-semibold text-gray-900\"></span></p></div><form id=\"signInOtpForm\" hx-post=\"/auth/verify-otp\" hx-target=\"#AuthCard\" hx-target-error=\"#otp-instructions\"><div class=\"mb-6\"><label class=\"block text-sm font-medium text-gray-700 mb-3 text-center\">Enter verification code</label><div class=\"flex justify-center space-x-3 mb-4\"><input name=\"otp1\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"0\"> <input name=\"otp2\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"1\"> <input name=\"otp3\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"2\"> <input name=\"otp4\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"3\"> <input name=\"otp5\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"4\"> <input name=\"otp6\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"5\"></div></div><button type=\"submit\" class=\"w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4\">Verify & Sign In</button><div class=\"text-center\"><p class=\"text-sm text-gray-600 mb-2\">Didn't receive the code?</p><button type=\"button\" id=\"resendSignInOtp\" class=\"text-primary hover:text-indigo-700 font-medium text-sm\">Resend Code (<span id=\"signInTimer\">60</span>s)</button></div><button type=\"button\" id=\"backToSignInStep1\" class=\"w-full mt-4 text-gray-600 hover:text-gray-900 text-sm\">← Back to email/phone</button></form></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func ErrorMessage(message string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var10 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var10 == nil {
-			templ_7745c5c3_Var10 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div id=\"error-container\" class=\"bg-red-50 border border-red-200 rounded-lg p-4 mb-4 animate-slide-up\"><div class=\"flex items-center space-x-3\"><svg class=\"w-5 h-5 text-red-500 flex-shrink-0\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg> <span class=\"text-red-800\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var11 string
-		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(message)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 250, Col: 39}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</span></div></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func SuccessMessage(message string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var12 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var12 == nil {
-			templ_7745c5c3_Var12 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<div id=\"error-container\" class=\"bg-green-50 border border-green-200 rounded-lg p-4 mb-4 animate-slide-up\"><div class=\"flex items-center space-x-3\"><svg class=\"w-5 h-5 text-green-500 flex-shrink-0\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg> <span class=\"text-green-800\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(message)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 261, Col: 41}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</span></div></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func Dashboard(email string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var14 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var14 == nil {
-			templ_7745c5c3_Var14 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Dashboard - Oplan</title><link href=\"/static/css/output.css\" rel=\"stylesheet\"></head><body class=\"bg-gray-50\"><div class=\"min-h-screen\"><!-- Header --><nav class=\"bg-white shadow-sm\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><h1 class=\"text-2xl font-bold text-indigo-600\">Oplan</h1><div class=\"flex items-center space-x-4\"><span class=\"text-gray-700\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var15 string
-		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(email)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 283, Col: 43}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</span> <a href=\"/\" class=\"text-red-600 hover:text-red-700\">Sign Out</a></div></div></div></nav><!-- Content --><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12\"><div class=\"bg-white rounded-xl shadow-sm p-8\"><h2 class=\"text-3xl font-bold text-gray-900 mb-4\">Welcome to Oplan Dashboard! 🎉</h2><p class=\"text-lg text-gray-600 mb-6\">You've successfully signed in. Your account is now active.</p><div class=\"bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-6\"><h3 class=\"text-xl font-semibold text-gray-900 mb-3\">What's Next?</h3><ul class=\"space-y-2 text-gray-700\"><li class=\"flex items-center space-x-2\"><svg class=\"w-5 h-5 text-green-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5 13l4 4L19 7\"></path></svg> <span>Create your first event</span></li><li class=\"flex items-center space-x-2\"><svg class=\"w-5 h-5 text-green-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5 13l4 4L19 7\"></path></svg> <span>Customize your profile</span></li><li class=\"flex items-center space-x-2\"><svg class=\"w-5 h-5 text-green-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5 13l4 4L19 7\"></path></svg> <span>Explore events in your area</span></li></ul></div></div></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

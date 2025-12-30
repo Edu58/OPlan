@@ -12,6 +12,7 @@ import (
 type SessionRepository interface {
 	GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (sqlc.Session, error)
 	CreateSession(ctx context.Context, arg sqlc.CreateSessionParams) (sqlc.Session, error)
+	DeleteSession(ctx context.Context, sessionID uuid.UUID) error
 }
 
 type SessionService struct {
@@ -43,4 +44,15 @@ func (s *SessionService) GetSessionBySessionId(ctx context.Context, sessionId uu
 	}
 
 	return sess, nil
+}
+
+func (s *SessionService) DeleteSession(ctx context.Context, sessionID uuid.UUID) error {
+	err := s.repo.DeleteSession(ctx, sessionID)
+
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error deleting session: %v", err))
+		return err
+	}
+
+	return nil
 }

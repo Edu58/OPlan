@@ -1,0 +1,262 @@
+package components
+
+templ EventHeroSection() {
+	<!-- Event Hero Section -->
+	<section class="event-hero pt-24 pb-16 text-white relative overflow-hidden">
+		<div class="absolute inset-0">
+			<div class="absolute top-20 left-10 w-4 h-4 bg-yellow-300 rounded-full animate-pulse-slow"></div>
+			<div class="absolute top-40 right-20 w-6 h-6 bg-white bg-opacity-20 rounded-full animate-pulse-slow" style="animation-delay: 1s;"></div>
+			<div class="absolute bottom-20 left-1/4 w-3 h-3 bg-yellow-300 rounded-full animate-pulse-slow" style="animation-delay: 2s;"></div>
+		</div>
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+				<div class="animate-fade-in">
+					<div class="flex items-center space-x-4 mb-6">
+						<span class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium">Public Event</span>
+						<span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">Technology</span>
+					</div>
+					<h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+						Tech Conference
+						<span class="block text-yellow-300">2025</span>
+					</h1>
+					<p class="text-xl mb-8 opacity-90 leading-relaxed">
+						Join industry leaders for a day of innovation, networking, and insights into the future of technology.
+						Featuring keynote speakers from top tech companies and hands-on workshops.
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4">
+						<button class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-xl hover:bg-yellow-300 transition-colors font-bold text-lg shadow-lg">
+							Register Now - KSh 2,500
+						</button>
+						<button class="border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-gray-900 transition-colors font-medium">
+							<svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+							</svg>
+							Save Event
+						</button>
+					</div>
+				</div>
+				<div class="floating-card">
+					<div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 border border-white border-opacity-20">
+						<h3 class="text-2xl font-bold mb-6">Event Details</h3>
+						<div class="space-y-4">
+							<div class="flex items-center space-x-4">
+								<div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+									</svg>
+								</div>
+								<div>
+									<p class="font-semibold">March 15, 2025</p>
+									<p class="opacity-80">9:00 AM - 6:00 PM</p>
+								</div>
+							</div>
+							<div class="flex items-center space-x-4">
+								<div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+									</svg>
+								</div>
+								<div>
+									<p class="font-semibold">Nairobi Convention Center</p>
+									<p class="opacity-80">Nairobi, Kenya</p>
+								</div>
+							</div>
+							<div class="flex items-center space-x-4">
+								<div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+									</svg>
+								</div>
+								<div>
+									<p class="font-semibold">245 Registered</p>
+									<p class="opacity-80">155 spots remaining</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}
+
+templ EventAboutSection() {
+	<!-- About Section -->
+	<section class="section-enter visible">
+		<div class="bg-white rounded-2xl shadow-lg p-8">
+			<h2 class="text-3xl font-bold text-gray-900 mb-6">About This Event</h2>
+			<div class="prose prose-lg max-w-none text-gray-700">
+				<p class="mb-6">
+					The Tech Conference 2025 is Kenya's premier technology event, bringing together innovators,
+					entrepreneurs, developers, and tech enthusiasts from across East Africa. This year's theme
+					"Building the Future" focuses on emerging technologies that will shape the next decade.
+				</p>
+				<p class="mb-6">
+					Join us for an inspiring day featuring keynote presentations from industry leaders,
+					interactive workshops, panel discussions, and unparalleled networking opportunities.
+					Whether you're a startup founder, seasoned developer, or tech curious, this event
+					offers valuable insights and connections.
+				</p>
+				<p>
+					Don't miss this opportunity to be part of Kenya's thriving tech ecosystem and
+					connect with like-minded professionals who are passionate about innovation and technology.
+				</p>
+			</div>
+		</div>
+	</section>
+}
+
+templ EventScheduleSection() {
+	<!-- Schedule Section -->
+	<section class="section-enter visible">
+		<div class="bg-white rounded-2xl shadow-lg p-8">
+			<h2 class="text-3xl font-bold text-gray-900 mb-8">Event Schedule</h2>
+			<div class="space-y-6">
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-gray-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">9:00</div>
+						<div class="text-sm text-gray-500">AM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Registration & Welcome Coffee</h3>
+						<p class="text-gray-600">Network with fellow attendees and grab some refreshments</p>
+					</div>
+				</div>
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-blue-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">10:00</div>
+						<div class="text-sm text-gray-500">AM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Keynote: The Future of AI in Africa</h3>
+						<p class="text-gray-600">Speaker: Dr. Sarah Kimani, AI Research Director at Google</p>
+					</div>
+				</div>
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-gray-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">11:30</div>
+						<div class="text-sm text-gray-500">AM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Panel: Fintech Revolution in Kenya</h3>
+						<p class="text-gray-600">Industry leaders discuss mobile money, blockchain, and financial inclusion</p>
+					</div>
+				</div>
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-green-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">1:00</div>
+						<div class="text-sm text-gray-500">PM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Networking Lunch</h3>
+						<p class="text-gray-600">Enjoy local cuisine while connecting with other participants</p>
+					</div>
+				</div>
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-purple-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">2:30</div>
+						<div class="text-sm text-gray-500">PM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Workshop: Building with React & Node.js</h3>
+						<p class="text-gray-600">Hands-on coding session (bring your laptop)</p>
+					</div>
+				</div>
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-yellow-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">4:00</div>
+						<div class="text-sm text-gray-500">PM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Startup Pitch Competition</h3>
+						<p class="text-gray-600">5 startups compete for KSh 100,000 prize</p>
+					</div>
+				</div>
+				<div class="flex items-start space-x-4 p-4 rounded-xl bg-gray-50">
+					<div class="text-center min-w-[80px]">
+						<div class="text-lg font-bold text-primary">5:30</div>
+						<div class="text-sm text-gray-500">PM</div>
+					</div>
+					<div class="flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1">Closing Remarks & Networking</h3>
+						<p class="text-gray-600">Final thoughts and continued networking with drinks</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}
+
+templ EventLocationSection() {
+	<!-- Location & Map Section -->
+	<section class="section-enter visible">
+		<div class="bg-white rounded-2xl shadow-lg p-8">
+			<h2 class="text-3xl font-bold text-gray-900 mb-6">Location & Directions</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+				<div>
+					<h3 class="text-xl font-semibold text-gray-900 mb-4">Venue Details</h3>
+					<div class="space-y-3">
+						<div class="flex items-start space-x-3">
+							<svg class="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+							</svg>
+							<div>
+								<p class="font-medium text-gray-900">Nairobi Convention Center</p>
+								<p class="text-gray-600">Main Auditorium, Level 2</p>
+							</div>
+						</div>
+						<div class="flex items-start space-x-3">
+							<svg class="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+							</svg>
+							<div>
+								<p class="font-medium text-gray-900">Address</p>
+								<p class="text-gray-600">Uhuru Highway, Nairobi, Kenya</p>
+							</div>
+						</div>
+						<div class="flex items-start space-x-3">
+							<svg class="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+							</svg>
+							<div>
+								<p class="font-medium text-gray-900">Public Transport</p>
+								<p class="text-gray-600">Take Bus Route 102 or matatu to CBD</p>
+							</div>
+						</div>
+						<div class="flex items-start space-x-3">
+							<svg class="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3a2 2 0 002 2h4a2 2 0 002-2v-3"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9l10.5-3 1.5 6-10.5 3z"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12l10.5-3 1.5 6L8 18l-2-6z"></path>
+							</svg>
+							<div>
+								<p class="font-medium text-gray-900">Parking</p>
+								<p class="text-gray-600">Free parking available on-site</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<h3 class="text-xl font-semibold text-gray-900 mb-4">Getting There</h3>
+					<div class="space-y-3 text-sm text-gray-600">
+						<p><strong>From JKIA:</strong> Take Airport Express Bus or taxi (30-45 minutes)</p>
+						<p><strong>From Westlands:</strong> Use Uhuru Highway towards CBD (15 minutes)</p>
+						<p><strong>From Karen:</strong> Take Langata Road to Uhuru Highway (25 minutes)</p>
+						<p><strong>Uber/Bolt:</strong> Search for "Nairobi Convention Center"</p>
+					</div>
+					<div class="mt-6">
+						<button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium">
+							Get Directions
+						</button>
+					</div>
+				</div>
+			</div>
+			<!-- Map -->
+			<div class="h-96 rounded-xl overflow-hidden shadow-inner border-2 border-gray-100">
+				<div id="map" class="w-full h-full"></div>
+			</div>
+		</div>
+	</section>
+}
