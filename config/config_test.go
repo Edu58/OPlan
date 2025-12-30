@@ -50,8 +50,8 @@ func TestLoadConfig(t *testing.T) {
 
 		assert.Equal(t, "localhost", config.HOST)
 		assert.Equal(t, "6000", config.PORT)
-		assert.Equal(t, "postgres://test_postgres_dsn", config.DSN_URL)
-		assert.Equal(t, "", config.DSN_OPTIONS)
-		assert.Equal(t, "file://test_migration_url", config.MIGRATIONS_URL)
+		assert.Equal(t, "postgres://test_postgres_dsn", config.DsnUrl)
+		assert.Equal(t, "", config.DsnOptions)
+		assert.Equal(t, "file://test_migration_url", config.MigrationsUrl)
 	})
 }

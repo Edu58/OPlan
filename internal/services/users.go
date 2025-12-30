@@ -1,4 +1,4 @@
-package internal
+package services
 
 import (
 	"context"
@@ -35,22 +35,22 @@ func (u *UserService) CreateUser(ctx context.Context, params sqlc.CreateUserPara
 	user, err := u.repo.GetUserByEmail(ctx, params.Email)
 
 	if user.Active != nil {
-		return sqlc.User{}, fmt.Errorf("User with email '%s' already exists", params.Email)
+		return sqlc.User{}, fmt.Errorf("user with email '%s' already exists", params.Email)
 	}
 
-	if err != nil && err == pgx.ErrNoRows {
+	if err != nil && errors.Is(err, pgx.ErrNoRows) {
 		newUser, err := u.repo.CreateUser(ctx, params)
 
 		if err != nil {
-			u.logger.Err(fmt.Errorf("Error creating user: %v", err))
-			return sqlc.User{}, errors.New("Error creating user. Verify details and try again")
+			u.logger.Err(fmt.Errorf("error creating user: %v", err))
+			return sqlc.User{}, errors.New("error creating user. Verify details and try again")
 		}
 
 		return newUser, err
 	}
 
-	u.logger.Err(fmt.Errorf("Error during email lookup: %v", err))
-	return sqlc.User{}, fmt.Errorf("Error verifying email. Verify details and try again")
+	u.logger.Err(fmt.Errorf("error during email lookup: %v", err))
+	return sqlc.User{}, fmt.Errorf("error verifying email. Verify details and try again")
 }
 
 func (u *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (sqlc.User, error) {

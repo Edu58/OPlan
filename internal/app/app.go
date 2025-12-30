@@ -8,10 +8,10 @@ import (
 	"syscall"
 
 	"github.com/Edu58/Oplan/config"
-	"github.com/Edu58/Oplan/internal"
 	"github.com/Edu58/Oplan/internal/database"
 	"github.com/Edu58/Oplan/internal/database/sqlc"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
+	"github.com/Edu58/Oplan/internal/services"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -29,14 +29,14 @@ type AppInterface interface {
 }
 
 type App struct {
-	config          *config.Config
-	pgxPool         *pgxpool.Pool
-	server          *http.Server
-	mux             *http.ServeMux
-	store           *sqlc.Queries
-	session_service *internal.SessionService
-	user_service    *internal.UserService
-	logger          logger.Logger
+	config         *config.Config
+	pgxPool        *pgxpool.Pool
+	server         *http.Server
+	mux            *http.ServeMux
+	store          *sqlc.Queries
+	sessionService *services.SessionService
+	userService    *services.UserService
+	logger         logger.Logger
 }
 
 func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
@@ -55,7 +55,12 @@ func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
 }
 
 func (app *App) InitApp() error {
-	app.InitDB()
+	err := app.InitDB()
+
+	if err != nil {
+		return err
+	}
+
 	app.InitServices()
 	app.InitHandlers()
 
@@ -76,15 +81,15 @@ func (app *App) InitDB() error {
 }
 
 func (app *App) InitServices() {
-	app.session_service = internal.NewSessionService(app.store, app.logger)
-	app.user_service = internal.NewUserService(app.store, app.logger)
+	app.sessionService = services.NewSessionService(app.store, app.logger)
+	app.userService = services.NewUserService(app.store, app.logger)
 }
 
 func (app *App) InitHandlers() {
 	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
-	auth_handler := httphandlers.NewSessionHandler(app.session_service, app.user_service, app.logger)
-	auth_handler.RegisterRoutes(app.mux)
+	authHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.logger)
+	authHandler.RegisterRoutes(app.mux)
 }
 
 func (app *App) Start() error {
@@ -96,9 +101,9 @@ func (app *App) Start() error {
 }
 
 func (app *App) Shutdown(ctx context.Context, waitForShutdownCompletion chan struct{}) {
-	sigch := make(chan os.Signal, 1)
-	signal.Notify(sigch, syscall.SIGINT, syscall.SIGTERM)
-	_ = <-sigch
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+	_ = <-signalChan
 
 	app.logger.Warn("Received shutdown signal")
 

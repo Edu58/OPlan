@@ -1,4 +1,4 @@
-package internal
+package services
 
 import (
 	"context"
@@ -34,8 +34,8 @@ func (s *SessionService) CreateSession(ctx context.Context, params sqlc.CreateSe
 	return sess, nil
 }
 
-func (s *SessionService) GetSessionBySessionId(ctx context.Context, session_id uuid.UUID) (sqlc.Session, error) {
-	sess, err := s.repo.GetSessionBySessionId(ctx, session_id.String())
+func (s *SessionService) GetSessionBySessionId(ctx context.Context, sessionId uuid.UUID) (sqlc.Session, error) {
+	sess, err := s.repo.GetSessionBySessionId(ctx, sessionId.String())
 
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error getting account types: %v", err))

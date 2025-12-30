@@ -5,13 +5,13 @@ import (
 )
 
 type Config struct {
-	HOST           string `mapstructure:"host"`
-	PORT           string `mapstructure:"port"`
-	DSN_URL        string `mapstructure:"dsn_url"`
-	LOGGER_LEVEL   string `mapstructuture:"logger_level"`
-	LOGGER_PATH    string `mapstructuture:"string"`
-	DSN_OPTIONS    string `mapstructure:"dsn_options"`
-	MIGRATIONS_URL string `mapstructure:"migrations_url"`
+	HOST          string `mapstructure:"host"`
+	PORT          string `mapstructure:"port"`
+	DsnUrl        string `mapstructure:"dsn_url"`
+	LoggerLevel   string `mapstructure:"logger_level"`
+	LoggerPath    string `mapstructure:"logger_path"`
+	DsnOptions    string `mapstructure:"dsn_options"`
+	MigrationsUrl string `mapstructure:"migrations_url"`
 }
 
 func LoadConfig(dir string, configName string, configType string) (config Config, err error) {

@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	var logger_path *os.File
+	var loggerPath *os.File
 	appConfig, err := config.LoadConfig(".", "app", "env")
 
 	if err != nil {
@@ -20,10 +20,10 @@ func main() {
 		return
 	}
 
-	if appConfig.LOGGER_PATH == "" {
-		logger_path = os.Stdout
+	if appConfig.LoggerPath == "" {
+		loggerPath = os.Stdout
 	} else {
-		log_file, err := os.OpenFile(appConfig.LOGGER_PATH,
+		logFile, err := os.OpenFile(appConfig.LoggerPath,
 			os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 			0o644,
 		)
@@ -33,28 +33,28 @@ func main() {
 			return
 		}
 
-		logger_path = log_file
+		loggerPath = logFile
 	}
 
-	logger := logger.NewLoggerWithLevel(appConfig.LOGGER_LEVEL, logger_path)
+	customLogger := logger.NewLoggerWithLevel(appConfig.LoggerLevel, loggerPath)
 
-	app, err := app.NewApp(&appConfig, logger)
+	myApp, err := app.NewApp(&appConfig, customLogger)
 
 	if err != nil {
 		log.Fatalf("Could create app with err: %v", err)
 	}
 
-	if err := app.InitApp(); err != nil {
+	if err := myApp.InitApp(); err != nil {
 		log.Fatalf("Error initializing app: %v", err)
 	}
 
 	waitForShutdownCompletion := make(chan struct{})
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	// Graceful Shutdown
-	go app.Shutdown(ctx, waitForShutdownCompletion)
+	go myApp.Shutdown(ctx, waitForShutdownCompletion)
 	defer cancel()
 
-	if err := app.Start(); err != nil {
+	if err := myApp.Start(); err != nil {
 		log.Fatal(err)
 	}
 

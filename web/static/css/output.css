@@ -59,6 +59,8 @@
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -660,6 +662,14 @@
     --tw-duration: 300ms;
     transition-duration: 300ms;
   }
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
+  }
+  .ease-out {
+    --tw-ease: var(--ease-out);
+    transition-timing-function: var(--ease-out);
+  }
   .hover\:bg-indigo-700 {
     &:hover {
       @media (hover: hover) {
@@ -978,6 +988,10 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1060,6 +1074,7 @@
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
       --tw-duration: initial;
+      --tw-ease: initial;
     }
   }
 }

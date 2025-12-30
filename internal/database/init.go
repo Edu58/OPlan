@@ -15,7 +15,7 @@ import (
 func InitDB(context context.Context, config *config.Config, logger logger.Logger) (*pgxpool.Pool, error) {
 	logger.Info("Initializing Database")
 
-	cfg, err := pgxpool.ParseConfig(config.DSN_URL)
+	cfg, err := pgxpool.ParseConfig(config.DsnUrl)
 
 	if err != nil {
 		logger.Err(err)
@@ -43,7 +43,7 @@ func InitDB(context context.Context, config *config.Config, logger logger.Logger
 }
 
 func runMigrations(config *config.Config) error {
-	m, err := migrate.New(config.MIGRATIONS_URL, config.DSN_URL)
+	m, err := migrate.New(config.MigrationsUrl, config.DsnUrl)
 
 	if err != nil {
 		return err

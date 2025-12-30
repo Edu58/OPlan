@@ -13,7 +13,7 @@ import (
 func TestRunMigrationsInvalidConfig(t *testing.T) {
 
 	config := config.Config{
-		MIGRATIONS_URL: "invalid migrations filepath",
+		MigrationsUrl: "invalid migrations filepath",
 	}
 
 	err := runMigrations(&config)
@@ -25,7 +25,7 @@ func TestInitDBInvalidConfig(t *testing.T) {
 	test_logger := logger.NewLogger(&buf)
 
 	config := config.Config{
-		DSN_URL: "invalid dsn",
+		DsnUrl: "invalid dsn",
 	}
 
 	pool, err := InitDB(context.Background(), &config, test_logger)
