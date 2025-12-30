@@ -1,13 +1,3 @@
-CREATE TABLE IF NOT EXISTS account_types (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    active BOOLEAN DEFAULT FALSE,
-    inserted_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE UNIQUE INDEX account_types_name_idx ON account_types (name);
-
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
     email VARCHAR(255) NOT NULL,

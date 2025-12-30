@@ -206,7 +206,7 @@ func OTPVerification(email string, authType string) templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div id=\"signInStep2\"><div class=\"text-center mb-6\"><div class=\"w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4\"><svg class=\"w-8 h-8 text-green-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg></div><h2 class=\"text-2xl font-bold text-gray-900 mb-2\">Verify your identity</h2><p class=\"text-gray-600 mb-6\">We've sent a 6-digit code to<br><span id=\"signInContactDisplay\" class=\"font-semibold text-gray-900\"></span></p></div><form id=\"signInOtpForm\"><div class=\"mb-6\"><label class=\"block text-sm font-medium text-gray-700 mb-3 text-center\">Enter verification code</label><div class=\"flex justify-center space-x-3 mb-4\"><input type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"0\"> <input type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"1\"> <input type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"2\"> <input type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"3\"> <input type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"4\"> <input type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"5\"></div></div><button type=\"submit\" class=\"w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4\">Verify & Sign In</button><div class=\"text-center\"><p class=\"text-sm text-gray-600 mb-2\">Didn't receive the code?</p><button type=\"button\" id=\"resendSignInOtp\" class=\"text-primary hover:text-indigo-700 font-medium text-sm\">Resend Code (<span id=\"signInTimer\">60</span>s)</button></div><button type=\"button\" id=\"backToSignInStep1\" class=\"w-full mt-4 text-gray-600 hover:text-gray-900 text-sm\">← Back to email/phone</button></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div id=\"signInStep2\"><div class=\"text-center mb-6\"><div class=\"w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4\"><svg class=\"w-8 h-8 text-green-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg></div><h2 class=\"text-2xl font-bold text-gray-900 mb-2\">Verify your identity</h2><p id=\"otp-instructions\" class=\"text-gray-600 mb-6\">We've sent a 6-digit code to<br><span id=\"signInContactDisplay\" class=\"font-semibold text-gray-900\"></span></p></div><form id=\"signInOtpForm\" hx-post=\"/auth/verify-otp\" hx-target=\"#AuthCard\" hx-target-error=\"#otp-instructions\"><div class=\"mb-6\"><label class=\"block text-sm font-medium text-gray-700 mb-3 text-center\">Enter verification code</label><div class=\"flex justify-center space-x-3 mb-4\"><input name=\"otp1\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"0\"> <input name=\"otp2\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"1\"> <input name=\"otp3\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"2\"> <input name=\"otp4\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"3\"> <input name=\"otp5\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"4\"> <input name=\"otp6\" type=\"text\" maxlength=\"1\" class=\"otp-input signin-otp\" data-index=\"5\"></div></div><button type=\"submit\" class=\"w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium mb-4\">Verify & Sign In</button><div class=\"text-center\"><p class=\"text-sm text-gray-600 mb-2\">Didn't receive the code?</p><button type=\"button\" id=\"resendSignInOtp\" class=\"text-primary hover:text-indigo-700 font-medium text-sm\">Resend Code (<span id=\"signInTimer\">60</span>s)</button></div><button type=\"button\" id=\"backToSignInStep1\" class=\"w-full mt-4 text-gray-600 hover:text-gray-900 text-sm\">← Back to email/phone</button></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -242,7 +242,7 @@ func ErrorMessage(message string) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(message)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 245, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 250, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -284,7 +284,7 @@ func SuccessMessage(message string) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(message)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 256, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 261, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -326,7 +326,7 @@ func Dashboard(email string) templ.Component {
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 278, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/templates/auth/auth.templ`, Line: 283, Col: 43}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {

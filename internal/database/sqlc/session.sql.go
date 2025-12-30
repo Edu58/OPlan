@@ -21,13 +21,16 @@ INSERT INTO sessions (
     expires_at
 ) VALUES (
   $1, $2, $3, $4, $5
-) RETURNING user_id, session_id, client_ip, is_blocked, expires_at
+) ON CONFLICT (user_id, session_id)
+    DO UPDATE SET session_id = EXCLUDED.session_id,
+                  expires_at = EXCLUDED.expires_at
+  RETURNING user_id, session_id, client_ip, is_blocked, expires_at
 `
 
 type CreateSessionParams struct {
 	UserID    uuid.UUID  `json:"user_id"`
-	SessionID string     `json:"session_id"`
-	ClientIp  string     `json:"client_ip"`
+	SessionID uuid.UUID  `json:"session_id"`
+	ClientIp  *string    `json:"client_ip"`
 	IsBlocked bool       `json:"is_blocked"`
 	ExpiresAt *time.Time `json:"expires_at"`
 }
@@ -56,7 +59,7 @@ DELETE FROM sessions
 WHERE session_id = $1
 `
 
-func (q *Queries) DeleteSession(ctx context.Context, sessionID string) error {
+func (q *Queries) DeleteSession(ctx context.Context, sessionID uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteSession, sessionID)
 	return err
 }
@@ -66,7 +69,7 @@ SELECT user_id, session_id, client_ip, is_blocked, expires_at FROM sessions
 WHERE session_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetSessionBySessionId(ctx context.Context, sessionID string) (Session, error) {
+func (q *Queries) GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (Session, error) {
 	row := q.db.QueryRow(ctx, getSessionBySessionId, sessionID)
 	var i Session
 	err := row.Scan(
@@ -106,8 +109,8 @@ RETURNING user_id, session_id, client_ip, is_blocked, expires_at
 `
 
 type UpdateSessionIsBlockedParams struct {
-	SessionID string `json:"session_id"`
-	IsBlocked bool   `json:"is_blocked"`
+	SessionID uuid.UUID `json:"session_id"`
+	IsBlocked bool      `json:"is_blocked"`
 }
 
 func (q *Queries) UpdateSessionIsBlocked(ctx context.Context, arg UpdateSessionIsBlockedParams) (Session, error) {

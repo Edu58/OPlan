@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
 	"github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -27,10 +27,10 @@ func NewUserService(repo UserRepository, logger logger.Logger) *UserService {
 }
 
 func (u *UserService) CreateUser(ctx context.Context, params sqlc.CreateUserParams) (sqlc.User, error) {
-	// if err := domain.Validate(req); err != nil {
-	// 	u.logger.Err(err)
-	// 	return nil, err
-	// }
+	if err := domain.ValidateCreateUser(params); err != nil {
+		u.logger.Err(err)
+		return sqlc.User{}, err
+	}
 
 	user, err := u.repo.GetUserByEmail(ctx, params.Email)
 
@@ -39,6 +39,13 @@ func (u *UserService) CreateUser(ctx context.Context, params sqlc.CreateUserPara
 	}
 
 	if err != nil && errors.Is(err, pgx.ErrNoRows) {
+		hashedPassword, err := domain.HashPassword(params.Password)
+
+		if err != nil {
+			return user, err
+		}
+
+		params.Password = hashedPassword
 		newUser, err := u.repo.CreateUser(ctx, params)
 
 		if err != nil {

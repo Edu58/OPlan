@@ -36,6 +36,7 @@ type App struct {
 	store          *sqlc.Queries
 	sessionService *services.SessionService
 	userService    *services.UserService
+	otpService     *services.OTPService
 	logger         logger.Logger
 }
 
@@ -83,12 +84,13 @@ func (app *App) InitDB() error {
 func (app *App) InitServices() {
 	app.sessionService = services.NewSessionService(app.store, app.logger)
 	app.userService = services.NewUserService(app.store, app.logger)
+	app.otpService = services.NewOTPHandler(app.store, app.logger)
 }
 
 func (app *App) InitHandlers() {
 	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
-	authHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.logger)
+	authHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.otpService, app.logger)
 	authHandler.RegisterRoutes(app.mux)
 }
 

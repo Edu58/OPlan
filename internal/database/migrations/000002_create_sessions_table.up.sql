@@ -1,7 +1,7 @@
 CREATE TABLE "sessions" (
     user_id uuid PRIMARY KEY REFERENCES users (id),
-    session_id VARCHAR(255) NOT NULL,
-    client_ip varchar NOT NULL,
+    session_id uuid DEFAULT gen_random_uuid(),
+    client_ip varchar(255),
     is_blocked boolean NOT NULL DEFAULT false,
     expires_at TIMESTAMPTZ DEFAULT NOW()
 );

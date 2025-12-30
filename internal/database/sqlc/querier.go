@@ -11,17 +11,21 @@ import (
 )
 
 type Querier interface {
+	CreateOTP(ctx context.Context, arg CreateOTPParams) (OtpStore, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
-	DeleteSession(ctx context.Context, sessionID string) error
+	DeleteOTP(ctx context.Context, identifier string) error
+	DeleteSession(ctx context.Context, sessionID uuid.UUID) error
 	DeleteUser(ctx context.Context, id uuid.UUID) error
-	GetSessionBySessionId(ctx context.Context, sessionID string) (Session, error)
+	GetOTP(ctx context.Context, identifier string) (OtpStore, error)
+	GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (Session, error)
 	GetSessionByUserId(ctx context.Context, userID uuid.UUID) (Session, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByEmailForUpdate(ctx context.Context, email string) (User, error)
 	GetUserById(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByIdForUpdate(ctx context.Context, id uuid.UUID) (User, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateOTP(ctx context.Context, arg UpdateOTPParams) (OtpStore, error)
 	UpdateSessionIsBlocked(ctx context.Context, arg UpdateSessionIsBlockedParams) (Session, error)
 	UpdateUserEmail(ctx context.Context, arg UpdateUserEmailParams) (User, error)
 }

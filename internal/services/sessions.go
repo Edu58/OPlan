@@ -10,7 +10,7 @@ import (
 )
 
 type SessionRepository interface {
-	GetSessionBySessionId(ctx context.Context, sessionID string) (sqlc.Session, error)
+	GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (sqlc.Session, error)
 	CreateSession(ctx context.Context, arg sqlc.CreateSessionParams) (sqlc.Session, error)
 }
 
@@ -35,7 +35,7 @@ func (s *SessionService) CreateSession(ctx context.Context, params sqlc.CreateSe
 }
 
 func (s *SessionService) GetSessionBySessionId(ctx context.Context, sessionId uuid.UUID) (sqlc.Session, error) {
-	sess, err := s.repo.GetSessionBySessionId(ctx, sessionId.String())
+	sess, err := s.repo.GetSessionBySessionId(ctx, sessionId)
 
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error getting account types: %v", err))

@@ -7,7 +7,10 @@ INSERT INTO sessions (
     expires_at
 ) VALUES (
   $1, $2, $3, $4, $5
-) RETURNING *;
+) ON CONFLICT (user_id, session_id)
+    DO UPDATE SET session_id = EXCLUDED.session_id,
+                  expires_at = EXCLUDED.expires_at
+  RETURNING *;
 
 -- name: GetSessionByUserId :one
 SELECT * FROM sessions

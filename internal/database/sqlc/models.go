@@ -10,18 +10,17 @@ import (
 	"github.com/google/uuid"
 )
 
-type AccountType struct {
+type OtpStore struct {
 	ID         uuid.UUID  `json:"id"`
-	Name       string     `json:"name"`
-	Active     *bool      `json:"active"`
-	InsertedAt *time.Time `json:"inserted_at"`
-	UpdatedAt  *time.Time `json:"updated_at"`
+	Identifier string     `json:"identifier"`
+	Value      string     `json:"value"`
+	ExpiresAt  *time.Time `json:"expires_at"`
 }
 
 type Session struct {
 	UserID    uuid.UUID  `json:"user_id"`
-	SessionID string     `json:"session_id"`
-	ClientIp  string     `json:"client_ip"`
+	SessionID uuid.UUID  `json:"session_id"`
+	ClientIp  *string    `json:"client_ip"`
 	IsBlocked bool       `json:"is_blocked"`
 	ExpiresAt *time.Time `json:"expires_at"`
 }
