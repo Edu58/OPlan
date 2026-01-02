@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+    --font-display: "Mono", sans-serif;
     --color-primary: #6366f1;
     --color-secondary: #8b5cf6;
 
@@ -57,7 +58,7 @@
     }
 }
 
-@layer components {
+@layer utilities {
     /* Homepage */
     .gradient-bg {
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -125,18 +126,7 @@
         right: 30%;
         animation-delay: 6s;
     }
-    @keyframes float {
-        0%,
-        100% {
-            transform: translateY(0px) rotate(0deg);
-        }
-        33% {
-            transform: translateY(-20px) rotate(120deg);
-        }
-        66% {
-            transform: translateY(10px) rotate(240deg);
-        }
-    }
+
     .otp-input {
         width: 50px;
         height: 50px;
