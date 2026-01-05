@@ -6,9 +6,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/Edu58/Oplan/config"
 	"github.com/Edu58/Oplan/internal/database"
+	"github.com/Edu58/Oplan/internal/database/seeds"
 	"github.com/Edu58/Oplan/internal/database/sqlc"
 	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
 	"github.com/Edu58/Oplan/internal/services"
@@ -29,15 +31,17 @@ type AppInterface interface {
 }
 
 type App struct {
-	config         *config.Config
-	pgxPool        *pgxpool.Pool
-	server         *http.Server
-	mux            *http.ServeMux
-	store          *sqlc.Queries
-	sessionService *services.SessionService
-	userService    *services.UserService
-	otpService     *services.OTPService
-	logger         logger.Logger
+	config           *config.Config
+	pgxPool          *pgxpool.Pool
+	server           *http.Server
+	mux              *http.ServeMux
+	store            *sqlc.Queries
+	sessionService   *services.SessionService
+	userService      *services.UserService
+	otpService       *services.OTPService
+	eventTypeService *services.EventTypeService
+	eventService     *services.EventService
+	logger           logger.Logger
 }
 
 func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
@@ -69,14 +73,23 @@ func (app *App) InitApp() error {
 }
 
 func (app *App) InitDB() error {
-	pgxPool, err := database.InitDB(context.Background(), app.config, app.logger)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
+	pgxPool, err := database.InitDB(ctx, app.config, app.logger)
 	if err != nil {
 		app.logger.Err(err)
 		return err
 	}
+
 	app.pgxPool = pgxPool
 	app.store = sqlc.New(pgxPool)
+
+	// Run seeds
+	// Use background context (no timeout) for seeding
+	if err := seeds.Run(context.Background(), app.store); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -85,12 +98,14 @@ func (app *App) InitServices() {
 	app.sessionService = services.NewSessionService(app.store, app.logger)
 	app.userService = services.NewUserService(app.store, app.logger)
 	app.otpService = services.NewOTPHandler(app.store, app.logger)
+	app.eventService = services.NewEventService(app.store, app.logger)
+	app.eventTypeService = services.NewEventTypeService(app.store, app.logger)
 }
 
 func (app *App) InitHandlers() {
 	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
-	indexHandler := httphandlers.NewIndexHandler(app.logger)
+	indexHandler := httphandlers.NewIndexHandler(app.eventService, app.eventTypeService, app.logger)
 	indexHandler.RegisterRoutes(app.mux)
 
 	authHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.otpService, app.logger)
@@ -117,14 +132,3 @@ func (app *App) Shutdown(ctx context.Context, waitForShutdownCompletion chan str
 	}
 	waitForShutdownCompletion <- struct{}{}
 }
-
-// func registerValidators(validate *validator.Validate) {
-// 	validate.RegisterValidation("regexp", func(fl validator.FieldLevel) bool {
-// 		re := regexp.MustCompile(fl.Param())
-// 		return re.MatchString(fl.Field().String())
-// 	})
-
-// 	validate.RegisterValidation("msisdn", func(fl validator.FieldLevel) bool {
-// 		return msisdnRegex.MatchString(fl.Field().String())
-// 	})
-// }

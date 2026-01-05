@@ -8,16 +8,13 @@ package sqlc
 import (
 	"context"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 const createOTP = `-- name: CreateOTP :one
-INSERT INTO otp_store (id,
-                       identifier,
+INSERT INTO otp_store (identifier,
                        value,
                        expires_at)
-VALUES ($1, $2, $3, $4)
+VALUES ($1, $2, $3)
 ON CONFLICT (identifier)
     DO UPDATE SET value      = EXCLUDED.value,
                   expires_at = EXCLUDED.expires_at
@@ -25,19 +22,13 @@ RETURNING id, identifier, value, expires_at
 `
 
 type CreateOTPParams struct {
-	ID         uuid.UUID  `json:"id"`
 	Identifier string     `json:"identifier"`
 	Value      string     `json:"value"`
 	ExpiresAt  *time.Time `json:"expires_at"`
 }
 
 func (q *Queries) CreateOTP(ctx context.Context, arg CreateOTPParams) (OtpStore, error) {
-	row := q.db.QueryRow(ctx, createOTP,
-		arg.ID,
-		arg.Identifier,
-		arg.Value,
-		arg.ExpiresAt,
-	)
+	row := q.db.QueryRow(ctx, createOTP, arg.Identifier, arg.Value, arg.ExpiresAt)
 	var i OtpStore
 	err := row.Scan(
 		&i.ID,

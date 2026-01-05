@@ -2,12 +2,13 @@ package domain
 
 import (
 	"context"
+
 	"github.com/Edu58/Oplan/pkg/crypto"
+	"github.com/google/uuid"
 
 	"github.com/Edu58/Oplan/internal/database/sqlc"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
-	"github.com/google/uuid"
 )
 
 type UserOTP struct {
@@ -19,18 +20,10 @@ type UserOTP struct {
 	OTP6 string
 }
 
-type UserService interface {
-	CreateUser(ctx context.Context, req sqlc.CreateUserParams) (sqlc.User, error)
-	GetUserByID(ctx context.Context, id uuid.UUID) (sqlc.User, error)
-	GetUserByEmail(ctx context.Context, email string) (sqlc.User, error)
-	GetUserByMSISDN(ctx context.Context, msisdn string) (sqlc.User, error)
-}
-
 type UserRepository interface {
-	Create(ctx context.Context, req sqlc.CreateUserParams) (sqlc.User, error)
-	GetByID(ctx context.Context, id uuid.UUID) (sqlc.User, error)
-	GetByEmail(ctx context.Context, email string) (sqlc.User, error)
-	GetByMSISDN(ctx context.Context, msisdn string) (sqlc.User, error)
+	CreateUser(ctx context.Context, arg sqlc.CreateUserParams) (sqlc.User, error)
+	GetUserById(ctx context.Context, id uuid.UUID) (sqlc.User, error)
+	GetUserByEmail(ctx context.Context, email string) (sqlc.User, error)
 }
 
 func ValidateCreateUser(u sqlc.CreateUserParams) error {

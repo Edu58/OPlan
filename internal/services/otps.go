@@ -2,23 +2,18 @@ package services
 
 import (
 	"context"
+
 	"github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/Edu58/Oplan/pkg/logger"
 )
 
-type OTPRepository interface {
-	CreateOTP(ctx context.Context, arg sqlc.CreateOTPParams) (sqlc.OtpStore, error)
-	GetOTP(ctx context.Context, identifier string) (sqlc.OtpStore, error)
-	UpdateOTP(ctx context.Context, arg sqlc.UpdateOTPParams) (sqlc.OtpStore, error)
-	DeleteOTP(ctx context.Context, identifier string) error
-}
-
 type OTPService struct {
-	repo   OTPRepository
+	repo   domain.OTPRepository
 	logger logger.Logger
 }
 
-func NewOTPHandler(repo OTPRepository, logger logger.Logger) *OTPService {
+func NewOTPHandler(repo domain.OTPRepository, logger logger.Logger) *OTPService {
 	return &OTPService{repo, logger}
 }
 

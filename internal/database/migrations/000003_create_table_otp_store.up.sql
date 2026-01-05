@@ -1,6 +1,6 @@
 CREATE TABLE "otp_store"
 (
-    id         uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
     identifier VARCHAR(255) NOT NULL,
     value      VARCHAR(255) NOT NULL,
     expires_at TIMESTAMPTZ DEFAULT NOW()

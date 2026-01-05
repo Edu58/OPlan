@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/Edu58/Oplan/internal/database/sqlc"
 	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/Edu58/Oplan/pkg/logger"
@@ -11,18 +12,12 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-type UserRepository interface {
-	CreateUser(ctx context.Context, arg sqlc.CreateUserParams) (sqlc.User, error)
-	GetUserById(ctx context.Context, id uuid.UUID) (sqlc.User, error)
-	GetUserByEmail(ctx context.Context, email string) (sqlc.User, error)
-}
-
 type UserService struct {
-	repo   UserRepository
+	repo   domain.UserRepository
 	logger logger.Logger
 }
 
-func NewUserService(repo UserRepository, logger logger.Logger) *UserService {
+func NewUserService(repo domain.UserRepository, logger logger.Logger) *UserService {
 	return &UserService{repo, logger}
 }
 

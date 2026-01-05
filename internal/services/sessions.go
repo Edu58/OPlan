@@ -5,22 +5,17 @@ import (
 	"fmt"
 
 	"github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/internal/domain"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/google/uuid"
 )
 
-type SessionRepository interface {
-	GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (sqlc.Session, error)
-	CreateSession(ctx context.Context, arg sqlc.CreateSessionParams) (sqlc.Session, error)
-	DeleteSession(ctx context.Context, sessionID uuid.UUID) error
-}
-
 type SessionService struct {
-	repo   SessionRepository
+	repo   domain.SessionRepository
 	logger logger.Logger
 }
 
-func NewSessionService(repo SessionRepository, logger logger.Logger) *SessionService {
+func NewSessionService(repo domain.SessionRepository, logger logger.Logger) *SessionService {
 	return &SessionService{repo: repo, logger: logger}
 }
 

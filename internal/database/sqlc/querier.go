@@ -11,12 +11,20 @@ import (
 )
 
 type Querier interface {
+	CreateEvent(ctx context.Context, arg CreateEventParams) (Event, error)
+	CreateEventType(ctx context.Context, arg CreateEventTypeParams) (EventType, error)
 	CreateOTP(ctx context.Context, arg CreateOTPParams) (OtpStore, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteEventById(ctx context.Context, id uuid.UUID) error
+	DeleteEventType(ctx context.Context, id uuid.UUID) error
 	DeleteOTP(ctx context.Context, identifier string) error
 	DeleteSession(ctx context.Context, sessionID uuid.UUID) error
 	DeleteUser(ctx context.Context, id uuid.UUID) error
+	GetEventById(ctx context.Context, id uuid.UUID) (Event, error)
+	GetEventByName(ctx context.Context, name string) (Event, error)
+	GetEventTypeById(ctx context.Context, id uuid.UUID) (EventType, error)
+	GetEventTypeByName(ctx context.Context, name string) (EventType, error)
 	GetOTP(ctx context.Context, identifier string) (OtpStore, error)
 	GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (Session, error)
 	GetSessionByUserId(ctx context.Context, userID uuid.UUID) (Session, error)
@@ -24,7 +32,11 @@ type Querier interface {
 	GetUserByEmailForUpdate(ctx context.Context, email string) (User, error)
 	GetUserById(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByIdForUpdate(ctx context.Context, id uuid.UUID) (User, error)
+	ListEventTypes(ctx context.Context) ([]EventType, error)
+	ListEvents(ctx context.Context, arg ListEventsParams) ([]ListEventsRow, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateEventById(ctx context.Context, arg UpdateEventByIdParams) (Event, error)
+	UpdateEventTypeById(ctx context.Context, arg UpdateEventTypeByIdParams) (EventType, error)
 	UpdateOTP(ctx context.Context, arg UpdateOTPParams) (OtpStore, error)
 	UpdateSessionIsBlocked(ctx context.Context, arg UpdateSessionIsBlockedParams) (Session, error)
 	UpdateUserEmail(ctx context.Context, arg UpdateUserEmailParams) (User, error)

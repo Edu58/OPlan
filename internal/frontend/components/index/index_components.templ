@@ -1,6 +1,8 @@
 package components
 
-templ Search() {
+import "github.com/Edu58/Oplan/internal/database/sqlc"
+
+templ Search(event_types []sqlc.EventType) {
 	<!-- Hero Section -->
 	<section class="gradient-bg pt-24 pb-16">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,11 +43,9 @@ templ Search() {
 								class="px-6 py-4 rounded-xl border-0 focus:ring-2 focus:ring-primary text-gray-900 bg-gray-50"
 							>
 								<option>All Categories</option>
-								<option>Technology</option>
-								<option>Business</option>
-								<option>Arts & Culture</option>
-								<option>Sports</option>
-								<option>Education</option>
+								for _, event_type := range event_types {
+									<option>{ event_type.Name }</option>
+								}
 							</select>
 							<button
 								class="bg-primary text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-colors font-medium"
@@ -109,7 +109,7 @@ templ FiltersAndSort() {
 	</section>
 }
 
-templ Events() {
+templ Events(events []sqlc.ListEventsRow) {
 	<!-- Events Grid -->
 	<section class="py-12">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

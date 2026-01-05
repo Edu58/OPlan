@@ -57,3 +57,5 @@ Thumbs.db # Windows
 # Optional caches
 .eslintcache
 
+# File storage path
+files/

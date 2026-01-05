@@ -1,9 +1,8 @@
 -- name: CreateOTP :one
-INSERT INTO otp_store (id,
-                       identifier,
+INSERT INTO otp_store (identifier,
                        value,
                        expires_at)
-VALUES ($1, $2, $3, $4)
+VALUES ($1, $2, $3)
 ON CONFLICT (identifier)
     DO UPDATE SET value      = EXCLUDED.value,
                   expires_at = EXCLUDED.expires_at
