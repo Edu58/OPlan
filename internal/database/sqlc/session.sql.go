@@ -100,6 +100,45 @@ func (q *Queries) GetSessionByUserId(ctx context.Context, userID uuid.UUID) (Ses
 	return i, err
 }
 
+const getSessionWithUserBySessionId = `-- name: GetSessionWithUserBySessionId :one
+SELECT sessions.user_id, sessions.session_id, sessions.client_ip, sessions.is_blocked, sessions.expires_at, users.id, users.email, users.first_name, users.last_name, users.password, users.msisdn, users.email_verified, users.msisdn_verified, users.active, users.inserted_at, users.updated_at FROM sessions
+JOIN users ON users.id = sessions.user_id
+WHERE session_id = $1 LIMIT 1
+`
+
+type GetSessionWithUserBySessionIdRow struct {
+	UserID    uuid.UUID  `json:"user_id"`
+	SessionID uuid.UUID  `json:"session_id"`
+	ClientIp  *string    `json:"client_ip"`
+	IsBlocked bool       `json:"is_blocked"`
+	ExpiresAt *time.Time `json:"expires_at"`
+	User      User       `json:"user"`
+}
+
+func (q *Queries) GetSessionWithUserBySessionId(ctx context.Context, sessionID uuid.UUID) (GetSessionWithUserBySessionIdRow, error) {
+	row := q.db.QueryRow(ctx, getSessionWithUserBySessionId, sessionID)
+	var i GetSessionWithUserBySessionIdRow
+	err := row.Scan(
+		&i.UserID,
+		&i.SessionID,
+		&i.ClientIp,
+		&i.IsBlocked,
+		&i.ExpiresAt,
+		&i.User.ID,
+		&i.User.Email,
+		&i.User.FirstName,
+		&i.User.LastName,
+		&i.User.Password,
+		&i.User.Msisdn,
+		&i.User.EmailVerified,
+		&i.User.MsisdnVerified,
+		&i.User.Active,
+		&i.User.InsertedAt,
+		&i.User.UpdatedAt,
+	)
+	return i, err
+}
+
 const updateSessionIsBlocked = `-- name: UpdateSessionIsBlocked :one
 UPDATE sessions
 SET

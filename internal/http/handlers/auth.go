@@ -1,4 +1,4 @@
-package httphandlers
+package handlers
 
 import (
 	"context"
@@ -20,33 +20,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type SessionService interface {
-	GetSessionBySessionId(ctx context.Context, sessionId uuid.UUID) (sqlc.Session, error)
-	CreateSession(ctx context.Context, arg sqlc.CreateSessionParams) (sqlc.Session, error)
-	DeleteSession(ctx context.Context, sessionID uuid.UUID) error
-}
-
-type UserService interface {
-	CreateUser(ctx context.Context, params sqlc.CreateUserParams) (sqlc.User, error)
-	GetUserByID(ctx context.Context, id uuid.UUID) (sqlc.User, error)
-	GetUserByEmail(ctx context.Context, email string) (sqlc.User, error)
-}
-
-type OTPService interface {
-	CreateOTP(ctx context.Context, arg sqlc.CreateOTPParams) (sqlc.OtpStore, error)
-	GetOTP(ctx context.Context, identifier string) (sqlc.OtpStore, error)
-	UpdateOTP(ctx context.Context, arg sqlc.UpdateOTPParams) (sqlc.OtpStore, error)
-	DeleteOTP(ctx context.Context, identifier string) error
-}
-
 type SessionsHandler struct {
-	sessionService SessionService
-	userService    UserService
-	otpService     OTPService
+	sessionService domain.SessionService
+	userService    domain.UserService
+	otpService     domain.OTPService
 	logger         logger.Logger
 }
 
-func NewSessionHandler(sessionService SessionService, userService UserService, otpService OTPService, logger logger.Logger) *SessionsHandler {
+func NewSessionHandler(sessionService domain.SessionService, userService domain.UserService, otpService domain.OTPService, logger logger.Logger) *SessionsHandler {
 	return &SessionsHandler{sessionService, userService, otpService, logger}
 }
 
@@ -383,7 +364,7 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *SessionsHandler) signout(w http.ResponseWriter, r *http.Request) {
-	authCookie, err := r.Cookie("auth")
+	authCookie, err := r.Cookie("oplan_knob")
 
 	if err != nil {
 		http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
@@ -412,14 +393,13 @@ func (s *SessionsHandler) signout(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 	})
 
-	s.logger.WithField("Email", sess.UserID).
+	s.logger.WithField("Session ID", sess.UserID).
 		Info("User logged out successfully")
 
-	w.Header().Set("HX-Redirect", "/")
-	w.WriteHeader(http.StatusOK)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func generateOTP(ctx context.Context, otpService OTPService, email string, expiry *time.Time) (err error) {
+func generateOTP(ctx context.Context, otpService domain.OTPService, email string, expiry *time.Time) (err error) {
 	otp, err := generators.GenerateCode(6)
 	fmt.Printf("GENERATED OTP %s", otp)
 

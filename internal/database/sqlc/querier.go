@@ -28,6 +28,7 @@ type Querier interface {
 	GetOTP(ctx context.Context, identifier string) (OtpStore, error)
 	GetSessionBySessionId(ctx context.Context, sessionID uuid.UUID) (Session, error)
 	GetSessionByUserId(ctx context.Context, userID uuid.UUID) (Session, error)
+	GetSessionWithUserBySessionId(ctx context.Context, sessionID uuid.UUID) (GetSessionWithUserBySessionIdRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByEmailForUpdate(ctx context.Context, email string) (User, error)
 	GetUserById(ctx context.Context, id uuid.UUID) (User, error)

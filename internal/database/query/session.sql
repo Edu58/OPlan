@@ -20,6 +20,11 @@ WHERE user_id = $1 LIMIT 1;
 SELECT * FROM sessions
 WHERE session_id = $1 LIMIT 1;
 
+-- name: GetSessionWithUserBySessionId :one
+SELECT sessions.*, sqlc.embed(users) FROM sessions
+JOIN users ON users.id = sessions.user_id
+WHERE session_id = $1 LIMIT 1;
+
 -- name: UpdateSessionIsBlocked :one
 UPDATE sessions
 SET

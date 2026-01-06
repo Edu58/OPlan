@@ -13,7 +13,8 @@ import (
 	"github.com/Edu58/Oplan/internal/database"
 	"github.com/Edu58/Oplan/internal/database/seeds"
 	"github.com/Edu58/Oplan/internal/database/sqlc"
-	httphandlers "github.com/Edu58/Oplan/internal/http_handlers"
+	"github.com/Edu58/Oplan/internal/http/handlers"
+	"github.com/Edu58/Oplan/internal/http/middleware"
 	"github.com/Edu58/Oplan/internal/services"
 	"github.com/Edu58/Oplan/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -40,13 +41,18 @@ func NewApp(config *config.Config, logger logger.Logger) (*App, error) {
 	mux := http.NewServeMux()
 	addr := config.HOST + ":" + config.PORT
 
+	// All requests go through the middleware chain
+	handler := middleware.Chain(
+		middleware.WithValue("authenticated", false),
+	)(mux)
+
 	return &App{
 		mux:    mux,
 		config: config,
 		logger: logger,
 		server: &http.Server{
 			Addr:    addr,
-			Handler: mux,
+			Handler: handler,
 		},
 	}, nil
 }
@@ -91,10 +97,10 @@ func (app *App) InitServices() {
 func (app *App) InitHandlers() {
 	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
-	indexHandler := httphandlers.NewIndexHandler(app.eventService, app.eventTypeService, app.logger)
+	indexHandler := handlers.NewIndexHandler(app.eventService, app.eventTypeService, app.sessionService, app.logger)
 	indexHandler.RegisterRoutes(app.mux)
 
-	authHandler := httphandlers.NewSessionHandler(app.sessionService, app.userService, app.otpService, app.logger)
+	authHandler := handlers.NewSessionHandler(app.sessionService, app.userService, app.otpService, app.logger)
 	authHandler.RegisterRoutes(app.mux)
 }
 

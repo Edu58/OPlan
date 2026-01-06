@@ -20,9 +20,9 @@ templ BaseLayout(title string) {
 }
 
 // Layout with Header and Footer
-templ PageLayout(title string, authenticated bool, email string) {
+templ PageLayout(title string, email string) {
 	@BaseLayout(title) {
-		if authenticated {
+		if email != "" {
 			@AuthHeader(email)
 		} else {
 			@Header()

@@ -60,7 +60,7 @@ func BaseLayout(title string) templ.Component {
 }
 
 // Layout with Header and Footer
-func PageLayout(title string, authenticated bool, email string) templ.Component {
+func PageLayout(title string, email string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -93,7 +93,7 @@ func PageLayout(title string, authenticated bool, email string) templ.Component 
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			if authenticated {
+			if email != "" {
 				templ_7745c5c3_Err = AuthHeader(email).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err

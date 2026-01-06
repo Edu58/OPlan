@@ -41,6 +41,17 @@ func (s *SessionService) GetSessionBySessionId(ctx context.Context, sessionId uu
 	return sess, nil
 }
 
+func (s *SessionService) GetSessionWithUserBySessionId(ctx context.Context, sessionID uuid.UUID) (sqlc.GetSessionWithUserBySessionIdRow, error) {
+	sess, err := s.repo.GetSessionWithUserBySessionId(ctx, sessionID)
+
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error getting user session: %v", err))
+		return sqlc.GetSessionWithUserBySessionIdRow{}, err
+	}
+
+	return sess, nil
+}
+
 func (s *SessionService) DeleteSession(ctx context.Context, sessionID uuid.UUID) error {
 	err := s.repo.DeleteSession(ctx, sessionID)
 

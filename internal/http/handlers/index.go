@@ -1,4 +1,4 @@
-package httphandlers
+package handlers
 
 import (
 	"context"
@@ -21,10 +21,11 @@ type IndexHandler struct {
 	logger           logger.Logger
 	eventService     domain.EventService
 	eventTypeService domain.EventTypesService
+	sessionService   domain.SessionService
 }
 
-func NewIndexHandler(eventService domain.EventService, eventTypeService domain.EventTypesService, logger logger.Logger) *IndexHandler {
-	return &IndexHandler{logger, eventService, eventTypeService}
+func NewIndexHandler(eventService domain.EventService, eventTypeService domain.EventTypesService, sessionService domain.SessionService, logger logger.Logger) *IndexHandler {
+	return &IndexHandler{logger, eventService, eventTypeService, sessionService}
 }
 
 // Registers all index page routes to the server mx
@@ -41,7 +42,9 @@ func (s *IndexHandler) index(w http.ResponseWriter, r *http.Request) {
 
 	events, _ := s.eventService.ListEvents(r.Context(), sqlc.ListEventsParams{Limit: int32(page), Offset: int32(pageSize)})
 
-	component := templates.Index("Oplan", false, "", &events, &event_types)
+	email, _ := r.Context().Value("userEmail").(string)
+
+	component := templates.Index("Oplan", email, &events, &event_types)
 	err := component.Render(context.Background(), w)
 
 	if err != nil {
