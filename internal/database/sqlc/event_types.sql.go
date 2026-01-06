@@ -7,7 +7,6 @@ package sqlc
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -16,30 +15,20 @@ const createEventType = `-- name: CreateEventType :one
 INSERT INTO event_types (
     name,
     description,
-    active,
-    inserted_at,
-    updated_at
+    active
 ) VALUES (
-  $1, $2, $3, $4, $5
+  $1, $2, $3
 ) RETURNING id, name, description, active, inserted_at, updated_at
 `
 
 type CreateEventTypeParams struct {
-	Name        string     `json:"name"`
-	Description *string    `json:"description"`
-	Active      *bool      `json:"active"`
-	InsertedAt  *time.Time `json:"inserted_at"`
-	UpdatedAt   *time.Time `json:"updated_at"`
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
+	Active      *bool   `json:"active"`
 }
 
 func (q *Queries) CreateEventType(ctx context.Context, arg CreateEventTypeParams) (EventType, error) {
-	row := q.db.QueryRow(ctx, createEventType,
-		arg.Name,
-		arg.Description,
-		arg.Active,
-		arg.InsertedAt,
-		arg.UpdatedAt,
-	)
+	row := q.db.QueryRow(ctx, createEventType, arg.Name, arg.Description, arg.Active)
 	var i EventType
 	err := row.Scan(
 		&i.ID,

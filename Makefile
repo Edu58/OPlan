@@ -53,7 +53,7 @@ build: templ
 		@echo "Build complete! Binary: bin/oplan"
 
 # Run development server with hot reload
-dev: templ tailwind
+dev:
 	@echo "Starting development server..."
 	@air
 
@@ -61,6 +61,11 @@ dev: templ tailwind
 run: templ tailwind
 	@echo "Running application..."
 	@go run cmd/web/main.go
+
+# Run database seeds
+seed:
+	@echo "Running database seeds..."
+	@go run cmd/web/main.go -seed=true -seed-type=all
 
 # Production start
 prod: build

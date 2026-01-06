@@ -6,6 +6,7 @@ LIMIT $1 OFFSET $2;
 -- name: CreateEvent :one
 INSERT INTO events (
     name,
+    description,
     from_time,
     to_time,
     capacity,
@@ -15,11 +16,9 @@ INSERT INTO events (
     age_restriction,
     public,
     require_ticket,
-    event_type_id,
-    inserted_at,
-    updated_at
+    event_type_id
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
 ) RETURNING *;
 
 -- name: GetEventById :one
@@ -36,16 +35,17 @@ LIMIT 1;
 UPDATE events
 SET
 name = $2,
-from_time = $3,
-to_time = $4,
-capacity = $5,
-policies_and_rules = $6,
-min_age = $7,
-max_age = $8,
-age_restriction = $9,
-public = $10,
-require_ticket = $11,
-event_type_id = $11
+description = $3,
+from_time = $4,
+to_time = $5,
+capacity = $6,
+policies_and_rules = $7,
+min_age = $8,
+max_age = $9,
+age_restriction = $10,
+public = $11,
+require_ticket = $12,
+event_type_id = $13
 WHERE id = $1
 RETURNING *;
 

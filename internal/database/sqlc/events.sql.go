@@ -15,6 +15,7 @@ import (
 const createEvent = `-- name: CreateEvent :one
 INSERT INTO events (
     name,
+    description,
     from_time,
     to_time,
     capacity,
@@ -24,33 +25,31 @@ INSERT INTO events (
     age_restriction,
     public,
     require_ticket,
-    event_type_id,
-    inserted_at,
-    updated_at
+    event_type_id
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
 ) RETURNING id, name, description, from_time, to_time, capacity, policies_and_rules, min_age, max_age, age_restriction, public, require_ticket, event_type_id, inserted_at, updated_at
 `
 
 type CreateEventParams struct {
-	Name             string     `json:"name"`
-	FromTime         time.Time  `json:"from_time"`
-	ToTime           time.Time  `json:"to_time"`
-	Capacity         int32      `json:"capacity"`
-	PoliciesAndRules *string    `json:"policies_and_rules"`
-	MinAge           int32      `json:"min_age"`
-	MaxAge           *int32     `json:"max_age"`
-	AgeRestriction   *bool      `json:"age_restriction"`
-	Public           *bool      `json:"public"`
-	RequireTicket    *bool      `json:"require_ticket"`
-	EventTypeID      uuid.UUID  `json:"event_type_id"`
-	InsertedAt       *time.Time `json:"inserted_at"`
-	UpdatedAt        *time.Time `json:"updated_at"`
+	Name             string    `json:"name"`
+	Description      *string   `json:"description"`
+	FromTime         time.Time `json:"from_time"`
+	ToTime           time.Time `json:"to_time"`
+	Capacity         int32     `json:"capacity"`
+	PoliciesAndRules *string   `json:"policies_and_rules"`
+	MinAge           int32     `json:"min_age"`
+	MaxAge           *int32    `json:"max_age"`
+	AgeRestriction   *bool     `json:"age_restriction"`
+	Public           *bool     `json:"public"`
+	RequireTicket    *bool     `json:"require_ticket"`
+	EventTypeID      uuid.UUID `json:"event_type_id"`
 }
 
 func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event, error) {
 	row := q.db.QueryRow(ctx, createEvent,
 		arg.Name,
+		arg.Description,
 		arg.FromTime,
 		arg.ToTime,
 		arg.Capacity,
@@ -61,8 +60,6 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 		arg.Public,
 		arg.RequireTicket,
 		arg.EventTypeID,
-		arg.InsertedAt,
-		arg.UpdatedAt,
 	)
 	var i Event
 	err := row.Scan(
@@ -229,16 +226,17 @@ const updateEventById = `-- name: UpdateEventById :one
 UPDATE events
 SET
 name = $2,
-from_time = $3,
-to_time = $4,
-capacity = $5,
-policies_and_rules = $6,
-min_age = $7,
-max_age = $8,
-age_restriction = $9,
-public = $10,
-require_ticket = $11,
-event_type_id = $11
+description = $3,
+from_time = $4,
+to_time = $5,
+capacity = $6,
+policies_and_rules = $7,
+min_age = $8,
+max_age = $9,
+age_restriction = $10,
+public = $11,
+require_ticket = $12,
+event_type_id = $13
 WHERE id = $1
 RETURNING id, name, description, from_time, to_time, capacity, policies_and_rules, min_age, max_age, age_restriction, public, require_ticket, event_type_id, inserted_at, updated_at
 `
@@ -246,6 +244,7 @@ RETURNING id, name, description, from_time, to_time, capacity, policies_and_rule
 type UpdateEventByIdParams struct {
 	ID               uuid.UUID `json:"id"`
 	Name             string    `json:"name"`
+	Description      *string   `json:"description"`
 	FromTime         time.Time `json:"from_time"`
 	ToTime           time.Time `json:"to_time"`
 	Capacity         int32     `json:"capacity"`
@@ -255,12 +254,14 @@ type UpdateEventByIdParams struct {
 	AgeRestriction   *bool     `json:"age_restriction"`
 	Public           *bool     `json:"public"`
 	RequireTicket    *bool     `json:"require_ticket"`
+	EventTypeID      uuid.UUID `json:"event_type_id"`
 }
 
 func (q *Queries) UpdateEventById(ctx context.Context, arg UpdateEventByIdParams) (Event, error) {
 	row := q.db.QueryRow(ctx, updateEventById,
 		arg.ID,
 		arg.Name,
+		arg.Description,
 		arg.FromTime,
 		arg.ToTime,
 		arg.Capacity,
@@ -270,6 +271,7 @@ func (q *Queries) UpdateEventById(ctx context.Context, arg UpdateEventByIdParams
 		arg.AgeRestriction,
 		arg.Public,
 		arg.RequireTicket,
+		arg.EventTypeID,
 	)
 	var i Event
 	err := row.Scan(

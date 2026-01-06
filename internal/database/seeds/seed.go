@@ -7,14 +7,28 @@ import (
 	"github.com/Edu58/Oplan/internal/database/sqlc"
 )
 
-func Run(ctx context.Context, queries *sqlc.Queries) error {
-	if err := seedUsers(ctx, queries); err != nil {
-		return fmt.Errorf("seed users: %w", err)
-	}
+// Run seeds based on type
+func Seed(ctx context.Context, queries *sqlc.Queries, seedType string) error {
+	switch seedType {
+	case "all":
+		if err := seedUsers(ctx, queries); err != nil {
+			return fmt.Errorf("seed users: %w", err)
+		}
 
-	if err := seedEventTypes(ctx, queries); err != nil {
-		return fmt.Errorf("seed event types: %w", err)
-	}
+		if err := seedEventTypes(ctx, queries); err != nil {
+			return fmt.Errorf("seed event types: %w", err)
+		}
 
-	return nil
+		if err := seedEvents(ctx, queries); err != nil {
+			return fmt.Errorf("seed events: %w", err)
+		}
+
+		return nil
+	case "users":
+		return seedUsers(ctx, queries)
+	case "events":
+		return seedUsers(ctx, queries)
+	default:
+		return fmt.Errorf("unknown seed type: %s", seedType)
+	}
 }

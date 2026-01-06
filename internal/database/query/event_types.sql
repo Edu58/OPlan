@@ -6,11 +6,9 @@ WHERE active;
 INSERT INTO event_types (
     name,
     description,
-    active,
-    inserted_at,
-    updated_at
+    active
 ) VALUES (
-  $1, $2, $3, $4, $5
+  $1, $2, $3
 ) RETURNING *;
 
 -- name: GetEventTypeById :one

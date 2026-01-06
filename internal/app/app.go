@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -21,15 +22,6 @@ import (
 // Pre-compile the regex (only once)
 // var msisdnRegex = regexp.MustCompile(`^\+\d{1,3}\d{9,}$`)
 
-type AppInterface interface {
-	InitApp() error
-	InitDB() error
-	InitServices()
-	InitHandlers()
-	Shutdown(ctx context.Context, waitForShutdownCompletion chan struct{})
-	Start() error
-}
-
 type App struct {
 	config           *config.Config
 	pgxPool          *pgxpool.Pool
@@ -44,7 +36,7 @@ type App struct {
 	logger           logger.Logger
 }
 
-func NewApp(config *config.Config, logger logger.Logger) (AppInterface, error) {
+func NewApp(config *config.Config, logger logger.Logger) (*App, error) {
 	mux := http.NewServeMux()
 	addr := config.HOST + ":" + config.PORT
 
@@ -85,12 +77,6 @@ func (app *App) InitDB() error {
 	app.pgxPool = pgxPool
 	app.store = sqlc.New(pgxPool)
 
-	// Run seeds
-	// Use background context (no timeout) for seeding
-	if err := seeds.Run(context.Background(), app.store); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -112,7 +98,37 @@ func (app *App) InitHandlers() {
 	authHandler.RegisterRoutes(app.mux)
 }
 
-func (app *App) Start() error {
+func (app *App) RunHTTP() {
+	if err := app.InitApp(); err != nil {
+		log.Fatalf("Error initializing app: %v", err)
+	}
+
+	waitForShutdownCompletion := make(chan struct{})
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+
+	// Graceful Shutdown
+	go app.ShutdownHTTP(ctx, waitForShutdownCompletion)
+	defer cancel()
+
+	if err := app.StartHTTP(); err != nil {
+		log.Fatal(err)
+	}
+
+	<-waitForShutdownCompletion
+}
+
+// Run database seeds
+func (app *App) RunSeeds(ctx context.Context, seedType string) error {
+	err := app.InitDB()
+
+	if err != nil {
+		return err
+	}
+
+	return seeds.Seed(ctx, app.store, seedType)
+}
+
+func (app *App) StartHTTP() error {
 	app.logger.WithField("HOST", app.config.HOST).
 		WithField("PORT", app.config.PORT).
 		Info("Starting server")
@@ -120,7 +136,7 @@ func (app *App) Start() error {
 	return app.server.ListenAndServe()
 }
 
-func (app *App) Shutdown(ctx context.Context, waitForShutdownCompletion chan struct{}) {
+func (app *App) ShutdownHTTP(ctx context.Context, waitForShutdownCompletion chan struct{}) {
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 	_ = <-signalChan

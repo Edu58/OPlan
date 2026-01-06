@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"os"
-	"time"
 
 	"github.com/Edu58/Oplan/config"
 	"github.com/Edu58/Oplan/internal/app"
@@ -12,12 +12,16 @@ import (
 )
 
 func main() {
+	seedDB := flag.Bool("seed", false, "Run database seeds")
+	seedType := flag.String("seed-type", "all", "Type of seed to run: (users, events, event_types)")
+
+	flag.Parse()
+
 	var loggerPath *os.File
 	appConfig, err := config.LoadConfig(".", "app", "env")
 
 	if err != nil {
 		log.Fatalf("Could not load config with err: %v", err)
-		return
 	}
 
 	if appConfig.LoggerPath == "" {
@@ -30,7 +34,6 @@ func main() {
 
 		if err != nil {
 			log.Fatalf("Could not create log file: %v", err)
-			return
 		}
 
 		loggerPath = logFile
@@ -44,19 +47,16 @@ func main() {
 		log.Fatalf("Could create app with err: %v", err)
 	}
 
-	if err := myApp.InitApp(); err != nil {
-		log.Fatalf("Error initializing app: %v", err)
+	if *seedDB {
+		// Use background context (no timeout) for seeding
+		if err := myApp.RunSeeds(context.Background(), *seedType); err != nil {
+			customLogger.WithField("MSG", "error running database seeds").Err(err)
+			return
+		}
+
+		customLogger.Info("Database seeded successfuly")
+		return
 	}
 
-	waitForShutdownCompletion := make(chan struct{})
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	// Graceful Shutdown
-	go myApp.Shutdown(ctx, waitForShutdownCompletion)
-	defer cancel()
-
-	if err := myApp.Start(); err != nil {
-		log.Fatal(err)
-	}
-
-	<-waitForShutdownCompletion
+	myApp.RunHTTP()
 }
