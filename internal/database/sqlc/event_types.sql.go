@@ -24,7 +24,7 @@ INSERT INTO event_types (
 type CreateEventTypeParams struct {
 	Name        string  `json:"name"`
 	Description *string `json:"description"`
-	Active      *bool   `json:"active"`
+	Active      bool    `json:"active"`
 }
 
 func (q *Queries) CreateEventType(ctx context.Context, arg CreateEventTypeParams) (EventType, error) {

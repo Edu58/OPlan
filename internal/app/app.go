@@ -123,7 +123,7 @@ func (app *App) RunHTTP() {
 	<-waitForShutdownCompletion
 }
 
-// Run database seeds
+// RunSeeds Run database seeds
 func (app *App) RunSeeds(ctx context.Context, seedType string) error {
 	err := app.InitDB()
 

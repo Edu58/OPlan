@@ -39,9 +39,9 @@ type CreateUserParams struct {
 	LastName       *string `json:"last_name"`
 	Password       string  `json:"password"`
 	Msisdn         *string `json:"msisdn"`
-	EmailVerified  *bool   `json:"email_verified"`
-	MsisdnVerified *bool   `json:"msisdn_verified"`
-	Active         *bool   `json:"active"`
+	EmailVerified  bool    `json:"email_verified"`
+	MsisdnVerified bool    `json:"msisdn_verified"`
+	Active         bool    `json:"active"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {

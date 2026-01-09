@@ -26,8 +26,10 @@ func Seed(ctx context.Context, queries *sqlc.Queries, seedType string) error {
 		return nil
 	case "users":
 		return seedUsers(ctx, queries)
+	case "events-types":
+		return seedEventTypes(ctx, queries)
 	case "events":
-		return seedUsers(ctx, queries)
+		return seedEvents(ctx, queries)
 	default:
 		return fmt.Errorf("unknown seed type: %s", seedType)
 	}

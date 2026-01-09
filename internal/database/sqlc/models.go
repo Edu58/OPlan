@@ -11,37 +11,37 @@ import (
 )
 
 type Event struct {
-	ID               uuid.UUID  `json:"id"`
-	Name             string     `json:"name"`
-	Description      *string    `json:"description"`
-	FromTime         time.Time  `json:"from_time"`
-	ToTime           time.Time  `json:"to_time"`
-	Capacity         int32      `json:"capacity"`
-	PoliciesAndRules *string    `json:"policies_and_rules"`
-	MinAge           int32      `json:"min_age"`
-	MaxAge           *int32     `json:"max_age"`
-	AgeRestriction   *bool      `json:"age_restriction"`
-	Public           *bool      `json:"public"`
-	RequireTicket    *bool      `json:"require_ticket"`
-	EventTypeID      uuid.UUID  `json:"event_type_id"`
-	InsertedAt       *time.Time `json:"inserted_at"`
-	UpdatedAt        *time.Time `json:"updated_at"`
+	ID               uuid.UUID `json:"id"`
+	Name             string    `json:"name"`
+	Description      *string   `json:"description"`
+	FromTime         time.Time `json:"from_time"`
+	ToTime           time.Time `json:"to_time"`
+	Capacity         int32     `json:"capacity"`
+	PoliciesAndRules *string   `json:"policies_and_rules"`
+	MinAge           int32     `json:"min_age"`
+	MaxAge           *int32    `json:"max_age"`
+	AgeRestriction   bool      `json:"age_restriction"`
+	Public           bool      `json:"public"`
+	RequireTicket    bool      `json:"require_ticket"`
+	EventTypeID      uuid.UUID `json:"event_type_id"`
+	InsertedAt       time.Time `json:"inserted_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
 }
 
 type EventType struct {
-	ID          uuid.UUID  `json:"id"`
-	Name        string     `json:"name"`
-	Description *string    `json:"description"`
-	Active      *bool      `json:"active"`
-	InsertedAt  *time.Time `json:"inserted_at"`
-	UpdatedAt   *time.Time `json:"updated_at"`
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Description *string   `json:"description"`
+	Active      bool      `json:"active"`
+	InsertedAt  time.Time `json:"inserted_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type OtpStore struct {
-	ID         uuid.UUID  `json:"id"`
-	Identifier string     `json:"identifier"`
-	Value      string     `json:"value"`
-	ExpiresAt  *time.Time `json:"expires_at"`
+	ID         uuid.UUID `json:"id"`
+	Identifier string    `json:"identifier"`
+	Value      string    `json:"value"`
+	ExpiresAt  time.Time `json:"expires_at"`
 }
 
 type Session struct {
@@ -53,15 +53,15 @@ type Session struct {
 }
 
 type User struct {
-	ID             uuid.UUID  `json:"id"`
-	Email          string     `json:"email"`
-	FirstName      string     `json:"first_name"`
-	LastName       *string    `json:"last_name"`
-	Password       string     `json:"password"`
-	Msisdn         *string    `json:"msisdn"`
-	EmailVerified  *bool      `json:"email_verified"`
-	MsisdnVerified *bool      `json:"msisdn_verified"`
-	Active         *bool      `json:"active"`
-	InsertedAt     *time.Time `json:"inserted_at"`
-	UpdatedAt      *time.Time `json:"updated_at"`
+	ID             uuid.UUID `json:"id"`
+	Email          string    `json:"email"`
+	FirstName      string    `json:"first_name"`
+	LastName       *string   `json:"last_name"`
+	Password       string    `json:"password"`
+	Msisdn         *string   `json:"msisdn"`
+	EmailVerified  bool      `json:"email_verified"`
+	MsisdnVerified bool      `json:"msisdn_verified"`
+	Active         bool      `json:"active"`
+	InsertedAt     time.Time `json:"inserted_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
 }

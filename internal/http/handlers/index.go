@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	DefaultEventsPageNum  = 1
+	DefaultEventsPageNum  = 0
 	DefaultEventsPageSize = 15
 )
 
@@ -38,13 +38,13 @@ func (s *IndexHandler) index(w http.ResponseWriter, r *http.Request) {
 	page := parseIntQuery(r, "page", DefaultEventsPageNum, 1)
 	pageSize := parseIntQuery(r, "page_size", DefaultEventsPageSize, 1)
 
-	event_types, _ := s.eventTypeService.ListEventTypes(r.Context())
+	eventTypes, _ := s.eventTypeService.ListEventTypes(r.Context())
 
-	events, _ := s.eventService.ListEvents(r.Context(), sqlc.ListEventsParams{Limit: int32(page), Offset: int32(pageSize)})
+	events, _ := s.eventService.ListEvents(r.Context(), sqlc.ListEventsParams{Limit: int32(pageSize), Offset: int32(page)})
 
 	email, _ := r.Context().Value("userEmail").(string)
 
-	component := templates.Index("Oplan", email, &events, &event_types)
+	component := templates.Index("Oplan", email, events, eventTypes)
 	err := component.Render(context.Background(), w)
 
 	if err != nil {
@@ -56,7 +56,7 @@ func (s *IndexHandler) index(w http.ResponseWriter, r *http.Request) {
 // Helper function (add to your handler struct or utils package)
 func parseIntQuery(r *http.Request, key string, defaultVal, min int) int {
 	value := r.URL.Query().Get(key)
-	if value == "" {
+	if value == "" || value == "1" {
 		return defaultVal
 	}
 

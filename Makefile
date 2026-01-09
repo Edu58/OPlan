@@ -65,7 +65,7 @@ run: templ tailwind
 # Run database seeds
 seed:
 	@echo "Running database seeds..."
-	@go run cmd/web/main.go -seed=true -seed-type=all
+	@go run cmd/web/main.go -seed=true -seed-type=$(type)
 
 # Production start
 prod: build

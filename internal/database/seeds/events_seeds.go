@@ -9,7 +9,6 @@ import (
 )
 
 func seedEvents(ctx context.Context, queries *sqlc.Queries) error {
-	public := false
 	maxAge := gofakeit.Int32()
 	description := gofakeit.ProductDescription()
 	policies := `Event Rules:
@@ -29,10 +28,11 @@ func seedEvents(ctx context.Context, queries *sqlc.Queries) error {
 			Description:      &description,
 			FromTime:         gofakeit.FutureDate(),
 			ToTime:           gofakeit.FutureDate(),
-			Capacity:         gofakeit.Int32(),
+			Capacity:         int32(gofakeit.Int8()),
 			PoliciesAndRules: &policies,
-			MinAge:           gofakeit.Int32(),
+			MinAge:           int32(gofakeit.Int8()),
 			MaxAge:           &maxAge,
+			Public:           gofakeit.Bool(),
 			EventTypeID:      eventType.ID,
 		},
 		{
@@ -40,10 +40,10 @@ func seedEvents(ctx context.Context, queries *sqlc.Queries) error {
 			Description:      &description,
 			FromTime:         gofakeit.FutureDate(),
 			ToTime:           gofakeit.FutureDate(),
-			Capacity:         gofakeit.Int32(),
+			Capacity:         int32(gofakeit.Int8()),
 			PoliciesAndRules: &policies,
-			Public:           &public,
-			MinAge:           gofakeit.Int32(),
+			Public:           gofakeit.Bool(),
+			MinAge:           int32(gofakeit.Int8()),
 			MaxAge:           &maxAge,
 			EventTypeID:      eventType.ID,
 		},
@@ -52,9 +52,10 @@ func seedEvents(ctx context.Context, queries *sqlc.Queries) error {
 			Description:      &description,
 			FromTime:         gofakeit.FutureDate(),
 			ToTime:           gofakeit.FutureDate(),
-			Capacity:         gofakeit.Int32(),
+			Capacity:         int32(gofakeit.Int8()),
 			PoliciesAndRules: &policies,
-			MinAge:           gofakeit.Int32(),
+			Public:           gofakeit.Bool(),
+			MinAge:           int32(gofakeit.Int8()),
 			MaxAge:           &maxAge,
 			EventTypeID:      eventType.ID,
 		},

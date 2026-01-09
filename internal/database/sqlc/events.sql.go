@@ -40,9 +40,9 @@ type CreateEventParams struct {
 	PoliciesAndRules *string   `json:"policies_and_rules"`
 	MinAge           int32     `json:"min_age"`
 	MaxAge           *int32    `json:"max_age"`
-	AgeRestriction   *bool     `json:"age_restriction"`
-	Public           *bool     `json:"public"`
-	RequireTicket    *bool     `json:"require_ticket"`
+	AgeRestriction   bool      `json:"age_restriction"`
+	Public           bool      `json:"public"`
+	RequireTicket    bool      `json:"require_ticket"`
 	EventTypeID      uuid.UUID `json:"event_type_id"`
 }
 
@@ -162,22 +162,22 @@ type ListEventsParams struct {
 }
 
 type ListEventsRow struct {
-	ID               uuid.UUID  `json:"id"`
-	Name             string     `json:"name"`
-	Description      *string    `json:"description"`
-	FromTime         time.Time  `json:"from_time"`
-	ToTime           time.Time  `json:"to_time"`
-	Capacity         int32      `json:"capacity"`
-	PoliciesAndRules *string    `json:"policies_and_rules"`
-	MinAge           int32      `json:"min_age"`
-	MaxAge           *int32     `json:"max_age"`
-	AgeRestriction   *bool      `json:"age_restriction"`
-	Public           *bool      `json:"public"`
-	RequireTicket    *bool      `json:"require_ticket"`
-	EventTypeID      uuid.UUID  `json:"event_type_id"`
-	InsertedAt       *time.Time `json:"inserted_at"`
-	UpdatedAt        *time.Time `json:"updated_at"`
-	EventType        EventType  `json:"event_type"`
+	ID               uuid.UUID `json:"id"`
+	Name             string    `json:"name"`
+	Description      *string   `json:"description"`
+	FromTime         time.Time `json:"from_time"`
+	ToTime           time.Time `json:"to_time"`
+	Capacity         int32     `json:"capacity"`
+	PoliciesAndRules *string   `json:"policies_and_rules"`
+	MinAge           int32     `json:"min_age"`
+	MaxAge           *int32    `json:"max_age"`
+	AgeRestriction   bool      `json:"age_restriction"`
+	Public           bool      `json:"public"`
+	RequireTicket    bool      `json:"require_ticket"`
+	EventTypeID      uuid.UUID `json:"event_type_id"`
+	InsertedAt       time.Time `json:"inserted_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+	EventType        EventType `json:"event_type"`
 }
 
 func (q *Queries) ListEvents(ctx context.Context, arg ListEventsParams) ([]ListEventsRow, error) {
@@ -251,9 +251,9 @@ type UpdateEventByIdParams struct {
 	PoliciesAndRules *string   `json:"policies_and_rules"`
 	MinAge           int32     `json:"min_age"`
 	MaxAge           *int32    `json:"max_age"`
-	AgeRestriction   *bool     `json:"age_restriction"`
-	Public           *bool     `json:"public"`
-	RequireTicket    *bool     `json:"require_ticket"`
+	AgeRestriction   bool      `json:"age_restriction"`
+	Public           bool      `json:"public"`
+	RequireTicket    bool      `json:"require_ticket"`
 	EventTypeID      uuid.UUID `json:"event_type_id"`
 }
 

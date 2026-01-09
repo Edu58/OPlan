@@ -8,7 +8,10 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/Edu58/Oplan/internal/database/sqlc"
+import (
+	"github.com/Edu58/Oplan/internal/database/sqlc"
+	"github.com/Edu58/Oplan/pkg/time"
+)
 
 func Search(event_types []sqlc.EventType) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -43,7 +46,7 @@ func Search(event_types []sqlc.EventType) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(event_type.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 47, Col: 34}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 50, Col: 34}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -112,7 +115,142 @@ func Events(events []sqlc.ListEventsRow) templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<!-- Events Grid --><section class=\"py-12\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"mb-8\"><h2 class=\"text-3xl font-bold text-gray-900 mb-2\">Upcoming Events</h2><p class=\"text-gray-600\">Found 24 events in Nairobi</p></div><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8\"><!-- Event Card 1 - Tech Conference --><div class=\"bg-white rounded-2xl shadow-lg overflow-hidden card-hover\"><div class=\"relative\"><div class=\"h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center\"><div class=\"text-center text-white\"><div class=\"w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3\"><svg class=\"w-8 h-8\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z\"></path></svg></div><h3 class=\"text-lg font-bold\">TC</h3></div></div><div class=\"absolute top-4 left-4\"><span class=\"bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium\">Public</span></div><div class=\"absolute top-4 right-4\"><button class=\"w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z\"></path></svg></button></div></div><div class=\"p-6\"><div class=\"flex items-center justify-between mb-3\"><span class=\"bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium\">Technology</span><div class=\"flex items-center text-gray-500 text-sm\"><svg class=\"w-4 h-4 mr-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z\"></path></svg> 245 attending</div></div><h3 class=\"text-xl font-bold text-gray-900 mb-2\">Tech Conference 2025</h3><p class=\"text-gray-600 mb-4 line-clamp-2\">Join industry leaders for a day of innovation, networking, and insights into the future of technology. Featuring keynote speakers from top tech companies.</p><div class=\"space-y-3 mb-4\"><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg> <span class=\"text-sm\">March 15, 2025 • 9:00 AM - 6:00 PM</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"></path> <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"></path></svg> <span class=\"text-sm\">Nairobi Convention Center, Nairobi</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1\"></path></svg> <span class=\"text-sm font-semibold text-green-600\">KSh 2,500</span></div></div><div class=\"mb-4\"><p class=\"text-xs text-gray-500 mb-2\">Event Rules:</p><ul class=\"text-xs text-gray-600 space-y-1\"><li>• Professional attire required</li><li>• No outside food or drinks</li><li>• ID required for entry</li></ul></div><button class=\"w-full bg-primary text-white py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium\">Register Now</button></div></div><!-- Event Card 2 - Marketing Workshop --><div class=\"bg-white rounded-2xl shadow-lg overflow-hidden card-hover\"><div class=\"relative\"><div class=\"h-48 bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center\"><div class=\"text-center text-white\"><div class=\"w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3\"><svg class=\"w-8 h-8\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M13 10V3L4 14h7v7l9-11h-7z\"></path></svg></div><h3 class=\"text-lg font-bold\">MW</h3></div></div><div class=\"absolute top-4 left-4\"><span class=\"bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium\">Private</span></div><div class=\"absolute top-4 right-4\"><button class=\"w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z\"></path></svg></button></div></div><div class=\"p-6\"><div class=\"flex items-center justify-between mb-3\"><span class=\"bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium\">Business</span><div class=\"flex items-center text-gray-500 text-sm\"><svg class=\"w-4 h-4 mr-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z\"></path></svg> 50 spots left</div></div><h3 class=\"text-xl font-bold text-gray-900 mb-2\">Digital Marketing Masterclass</h3><p class=\"text-gray-600 mb-4 line-clamp-2\">Master the art of digital marketing with hands-on workshops covering SEO, social media, content marketing, and paid advertising strategies.</p><div class=\"space-y-3 mb-4\"><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg> <span class=\"text-sm\">March 22, 2025 • 10:00 AM - 4:00 PM</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z\"></path></svg> <span class=\"text-sm\">Virtual Event (Zoom)</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1\"></path></svg> <span class=\"text-sm font-semibold text-green-600\">KSh 1,800</span></div></div><div class=\"mb-4\"><p class=\"text-xs text-gray-500 mb-2\">Event Rules:</p><ul class=\"text-xs text-gray-600 space-y-1\"><li>• Laptop required for exercises</li><li>• Camera must be on during sessions</li><li>• Invitation link sent 24h before</li></ul></div><button class=\"w-full bg-primary text-white py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium\">Request Invitation</button></div></div><!-- Event Card 3 - Startup Meetup --><div class=\"bg-white rounded-2xl shadow-lg overflow-hidden card-hover\"><div class=\"relative\"><div class=\"h-48 bg-gradient-to-r from-green-500 to-teal-600 flex items-center justify-center\"><div class=\"text-center text-white\"><div class=\"w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3\"><svg class=\"w-8 h-8\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z\"></path></svg></div><h3 class=\"text-lg font-bold\">SF</h3></div></div><div class=\"absolute top-4 left-4\"><span class=\"bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium\">Public</span></div><div class=\"absolute top-4 right-4\"><button class=\"w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-red-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z\"></path></svg></button></div></div><div class=\"p-6\"><div class=\"flex items-center justify-between mb-3\"><span class=\"bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium\">Networking</span><div class=\"flex items-center text-gray-500 text-sm\"><svg class=\"w-4 h-4 mr-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z\"></path></svg> 89 attending</div></div><h3 class=\"text-xl font-bold text-gray-900 mb-2\">Startup Founders Meetup</h3><p class=\"text-gray-600 mb-4 line-clamp-2\">Connect with fellow entrepreneurs, share experiences, and build meaningful relationships in Kenya's thriving startup ecosystem.</p><div class=\"space-y-3 mb-4\"><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg> <span class=\"text-sm\">April 5, 2025 • 6:00 PM - 9:00 PM</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"></path> <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"></path></svg> <span class=\"text-sm\">iHub Nairobi, Ngong Road</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1\"></path></svg> <span class=\"text-sm font-semibold text-green-600\">Free</span></div></div></div></div></div></div></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<!-- Events Grid --><section class=\"py-12\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"mb-8\"><h2 class=\"text-3xl font-bold text-gray-900 mb-2\">Upcoming Events</h2><p class=\"text-gray-600\">Found 24 events in Nairobi</p></div><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8\"><!-- Event Card 1 - Tech Conference -->")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, event := range events {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"bg-white rounded-2xl shadow-lg overflow-hidden card-hover\"><div class=\"relative\"><div class=\"h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center\"><div class=\"text-center text-white\"><div class=\"w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3\"><svg class=\"w-8 h-8\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z\"></path></svg></div><h3 class=\"text-lg font-bold\">TC</h3></div></div><div class=\"absolute top-4 left-4\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 = []any{"text-white px-3 py-1 rounded-full text-sm font-medium", templ.KV("bg-green-500", event.Public), templ.KV("bg-yellow-500", !event.Public)}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var5...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<span class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var6 string
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var5).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if event.Public {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "Public")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "Private")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</span></div><div class=\"absolute top-4 right-4\"><button class=\"w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z\"></path></svg></button></div></div><div class=\"p-6\"><div class=\"flex items-center justify-between mb-3\"><span class=\"bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 string
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(event.EventType.Name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 172, Col: 31}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</span><div class=\"flex items-center text-gray-500 text-sm\"><svg class=\"w-4 h-4 mr-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z\"></path></svg> ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(event.Capacity)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 182, Col: 25}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, " attending</div></div><h3 class=\"text-xl font-bold text-gray-900 mb-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(event.Name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 185, Col: 68}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</h3><p class=\"text-gray-600 mb-4 line-clamp-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var10 string
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(*event.Description)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 187, Col: 28}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</p><div class=\"space-y-3 mb-4\"><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg> <span class=\"text-sm\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var11 string
+			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(time.FormatEventTime(event.FromTime, event.ToTime))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 199, Col: 83}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"></path> <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"></path></svg> <span class=\"text-sm\">Nairobi Convention Center, Nairobi</span></div><div class=\"flex items-center text-gray-600\"><svg class=\"w-4 h-4 mr-3\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1\"></path></svg> <span class=\"text-sm font-semibold text-green-600\">KSh 2,500</span></div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if event.PoliciesAndRules != nil {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<div class=\"mb-4\"><p class=\"text-xs text-gray-500 mb-2\">Event Rules:</p><ul class=\"text-xs text-gray-600 space-y-1\"><li>• ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var12 string
+				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(*event.PoliciesAndRules)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/frontend/components/index/index_components.templ`, Line: 234, Col: 43}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</li></ul></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<button class=\"w-full bg-primary text-white py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium\">Register Now</button></div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</div></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

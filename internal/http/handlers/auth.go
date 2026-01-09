@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -84,9 +85,7 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		otpExpiry := time.Now().Add(3 * time.Minute)
-
-		err = generateOTP(r.Context(), s.otpService, user.Email, &otpExpiry)
+		err = generateOTP(r.Context(), s.otpService, user.Email, time.Now().Add(3*time.Minute))
 
 		if err != nil {
 			s.logger.Err(err)
@@ -133,15 +132,7 @@ func (s *SessionsHandler) signIn(w http.ResponseWriter, r *http.Request) {
 func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
-			w.WriteHeader(400)
-			component := components.ErrorMessage("error processing request")
-			err = component.Render(context.Background(), w)
-
-			if err != nil {
-				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
-				return
-			}
-
+			renderHXError(w, http.StatusNotFound, err)
 			return
 		}
 
@@ -156,33 +147,28 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 
 		err := domain.ValidateCreateUser(params)
 
+		if err != nil {
+			renderHXError(w, http.StatusBadRequest, err)
+			return
+		}
+
 		user, err := s.userService.CreateUser(r.Context(), params)
 
 		if err != nil {
-			var errMsg = "error processing request"
+			var errMsg = errors.New("error processing request")
 			var validationErr validation.Errors
 
 			if errors.As(err, &validationErr) {
-				errMsg = err.Error()
+				errMsg = err
 			}
 
-			w.WriteHeader(400)
-			component := components.ErrorMessage(errMsg)
-			err = component.Render(context.Background(), w)
-
-			if err != nil {
-				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
-				return
-			}
-
+			renderHXError(w, http.StatusBadRequest, errMsg)
 			return
 		}
 
 		s.logger.WithField("Email", user.Email).Info("Account created successfully")
 
-		otpExpiry := time.Now().Add(3 * time.Minute)
-
-		err = generateOTP(r.Context(), s.otpService, user.Email, &otpExpiry)
+		err = generateOTP(r.Context(), s.otpService, user.Email, time.Now().Add(3*time.Minute))
 
 		if err != nil {
 			http.Error(w, fmt.Sprintln("error sending otp"), http.StatusInternalServerError)
@@ -227,15 +213,7 @@ func (s *SessionsHandler) signup(w http.ResponseWriter, r *http.Request) {
 func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
-			w.WriteHeader(400)
-			component := components.ErrorMessage("Invalid OTP")
-			err = component.Render(context.Background(), w)
-
-			if err != nil {
-				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
-				return
-			}
-
+			renderHXError(w, http.StatusBadRequest, errors.New("invalid OTP"))
 			return
 		}
 
@@ -265,15 +243,7 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 		err = rawOTP.ValidateUserOTP()
 
 		if err != nil {
-			w.WriteHeader(400)
-			component := components.ErrorMessage(err.Error())
-			err = component.Render(context.Background(), w)
-
-			if err != nil {
-				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
-				return
-			}
-
+			renderHXError(w, http.StatusBadRequest, err)
 			return
 		}
 
@@ -281,31 +251,15 @@ func (s *SessionsHandler) verifyOTP(w http.ResponseWriter, r *http.Request) {
 
 		otpHash := crypto.HashStringSHA512(userOTP)
 
-		if time.Now().After(*otp.ExpiresAt) || otpHash != otp.Value {
-			w.WriteHeader(400)
-			component := components.ErrorMessage("Invalid OTP")
-			err = component.Render(context.Background(), w)
-
-			if err != nil {
-				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
-				return
-			}
-
+		if time.Now().After(otp.ExpiresAt) || otpHash != otp.Value {
+			renderHXError(w, http.StatusBadRequest, errors.New("invalid OTP"))
 			return
 		}
 
 		user, err := s.userService.GetUserByEmail(r.Context(), authCookie.Value)
 
 		if err != nil {
-			w.WriteHeader(404)
-			component := components.ErrorMessage("User NOT found")
-			err = component.Render(context.Background(), w)
-
-			if err != nil {
-				http.Error(w, fmt.Sprintln("error processing request"), http.StatusInternalServerError)
-				return
-			}
-
+			renderHXError(w, http.StatusBadRequest, errors.New("user NOT found"))
 			return
 		}
 
@@ -399,9 +353,14 @@ func (s *SessionsHandler) signout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func generateOTP(ctx context.Context, otpService domain.OTPService, email string, expiry *time.Time) (err error) {
+func generateOTP(ctx context.Context, otpService domain.OTPService, email string, expiry time.Time) error {
 	otp, err := generators.GenerateCode(6)
-	fmt.Printf("GENERATED OTP %s", otp)
+
+	if err != nil {
+		return err
+	}
+
+	log.Printf("Generated OTP %s for %s", otp, email)
 
 	_, err = otpService.CreateOTP(ctx, sqlc.CreateOTPParams{
 		Identifier: email,
@@ -409,7 +368,11 @@ func generateOTP(ctx context.Context, otpService domain.OTPService, email string
 		ExpiresAt:  expiry,
 	})
 
-	return
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func ReadUserIP(r *http.Request) string {

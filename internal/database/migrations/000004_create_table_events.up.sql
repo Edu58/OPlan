@@ -4,10 +4,10 @@ CREATE TABLE IF NOT EXISTS "event_types" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
     name CITEXT NOT NULL,
     description TEXT,
-    active BOOLEAN DEFAULT true,
+    active BOOLEAN NOT NULL DEFAULT True,
 
-    inserted_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    inserted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE UNIQUE INDEX event_types_name_idx ON event_types (name);
@@ -23,14 +23,14 @@ CREATE TABLE IF NOT EXISTS "events" (
     min_age INTEGER NOT NULL,
     max_age INTEGER,
 
-    age_restriction BOOLEAN DEFAULT false,
-    public BOOLEAN DEFAULT true,
-    require_ticket BOOLEAN DEFAULT false,
+    age_restriction BOOLEAN NOT NULL DEFAULT False,
+    public BOOLEAN NOT NULL DEFAULT True,
+    require_ticket BOOLEAN NOT NULL DEFAULT False,
 
     event_type_id UUID REFERENCES event_types (id),
 
-    inserted_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    inserted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX events_min_age_idx ON events (min_age);

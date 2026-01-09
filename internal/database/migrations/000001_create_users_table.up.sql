@@ -5,12 +5,12 @@ CREATE TABLE IF NOT EXISTS "users" (
     last_name VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     msisdn VARCHAR(255),
-    email_verified BOOLEAN DEFAULT false,
-    msisdn_verified BOOLEAN DEFAULT false,
-    active BOOLEAN DEFAULT false,
+    email_verified BOOLEAN NOT NULL DEFAULT False,
+    msisdn_verified BOOLEAN NOT NULL DEFAULT False,
+    active BOOLEAN NOT NULL DEFAULT False,
 
-    inserted_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    inserted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE UNIQUE INDEX users_email_idx ON users (email);

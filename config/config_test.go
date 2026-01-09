@@ -11,38 +11,41 @@ import (
 )
 
 func setupConfig() (map[string]string, *os.File) {
-	sample_configs := map[string]string{
+	sampleConfigs := map[string]string{
 		"HOST":           "localhost",
 		"PORT":           "6000",
 		"MIGRATIONS_URL": "file://test_migration_url",
 		"DSN_URL":        "postgres://test_postgres_dsn",
 	}
 
-	test_config_file, err := os.CreateTemp("", "test*.env")
+	testConfigFile, err := os.CreateTemp("", "test*.env")
 
 	if err != nil {
 		panic(err)
 	}
 
-	return sample_configs, test_config_file
+	return sampleConfigs, testConfigFile
 }
 
 func TestLoadConfig(t *testing.T) {
-	sample_configs, test_config_file := setupConfig()
-	defer os.Remove(test_config_file.Name())
+	sampleConfigs, testConfigFile := setupConfig()
+	defer os.Remove(testConfigFile.Name())
 
-	for key, value := range sample_configs {
+	for key, value := range sampleConfigs {
 		line := fmt.Sprintf("%s=%s\n", key, value)
-		_, err := test_config_file.WriteString(line)
+		_, err := testConfigFile.WriteString(line)
 		assert.NoError(t, err)
 	}
 
-	test_config_file.Sync()
+	err := testConfigFile.Sync()
+	if err != nil {
+		return
+	}
 
-	t.Run("Config file loads", func(t *testing.T) {
-		fileDir := filepath.Dir(test_config_file.Name())
-		filename := filepath.Base(test_config_file.Name())
-		fileExt := filepath.Ext(test_config_file.Name())
+	t.Run("Config file loas", func(t *testing.T) {
+		fileDir := filepath.Dir(testConfigFile.Name())
+		filename := filepath.Base(testConfigFile.Name())
+		fileExt := filepath.Ext(testConfigFile.Name())
 		configType, _ := strings.CutPrefix(fileExt, ".")
 
 		config, err := LoadConfig(fileDir, filename, configType)

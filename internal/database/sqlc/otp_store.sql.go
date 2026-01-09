@@ -22,9 +22,9 @@ RETURNING id, identifier, value, expires_at
 `
 
 type CreateOTPParams struct {
-	Identifier string     `json:"identifier"`
-	Value      string     `json:"value"`
-	ExpiresAt  *time.Time `json:"expires_at"`
+	Identifier string    `json:"identifier"`
+	Value      string    `json:"value"`
+	ExpiresAt  time.Time `json:"expires_at"`
 }
 
 func (q *Queries) CreateOTP(ctx context.Context, arg CreateOTPParams) (OtpStore, error) {
@@ -78,9 +78,9 @@ RETURNING id, identifier, value, expires_at
 `
 
 type UpdateOTPParams struct {
-	Identifier string     `json:"identifier"`
-	Value      string     `json:"value"`
-	ExpiresAt  *time.Time `json:"expires_at"`
+	Identifier string    `json:"identifier"`
+	Value      string    `json:"value"`
+	ExpiresAt  time.Time `json:"expires_at"`
 }
 
 func (q *Queries) UpdateOTP(ctx context.Context, arg UpdateOTPParams) (OtpStore, error) {

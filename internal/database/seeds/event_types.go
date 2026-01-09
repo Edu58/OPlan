@@ -9,20 +9,19 @@ import (
 )
 
 func seedEventTypes(ctx context.Context, queries *sqlc.Queries) error {
-	active := true
 
 	types := []sqlc.CreateEventTypeParams{
 		{
 			Name:   "Technology",
-			Active: &active,
+			Active: true,
 		},
 		{
 			Name:   "Business",
-			Active: &active,
+			Active: true,
 		},
 		{
 			Name:   "Networking",
-			Active: &active,
+			Active: true,
 		},
 	}
 

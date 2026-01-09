@@ -29,7 +29,7 @@ func (u *UserService) CreateUser(ctx context.Context, params sqlc.CreateUserPara
 
 	user, err := u.repo.GetUserByEmail(ctx, params.Email)
 
-	if user.Active != nil {
+	if user.Active {
 		return sqlc.User{}, fmt.Errorf("user with email '%s' already exists", params.Email)
 	}
 
