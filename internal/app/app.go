@@ -33,6 +33,7 @@ type App struct {
 	userService      *services.UserService
 	otpService       *services.OTPService
 	eventTypeService *services.EventTypeService
+	eventsService    *services.EventsService
 	eventService     *services.EventService
 	logger           logger.Logger
 }
@@ -90,15 +91,19 @@ func (app *App) InitServices() {
 	app.sessionService = services.NewSessionService(app.store, app.logger)
 	app.userService = services.NewUserService(app.store, app.logger)
 	app.otpService = services.NewOTPHandler(app.store, app.logger)
-	app.eventService = services.NewEventService(app.store, app.logger)
+	app.eventsService = services.NewEventsService(app.store, app.logger)
 	app.eventTypeService = services.NewEventTypeService(app.store, app.logger)
+	app.eventService = services.NewEventService(app.store, app.logger)
 }
 
 func (app *App) InitHandlers() {
 	app.mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 
-	indexHandler := handlers.NewIndexHandler(app.eventService, app.eventTypeService, app.sessionService, app.logger)
+	indexHandler := handlers.NewIndexHandler(app.eventsService, app.eventTypeService, app.sessionService, app.logger)
 	indexHandler.RegisterRoutes(app.mux)
+
+	eventHandler := handlers.NewEventHandler(app.eventsService, app.eventTypeService, app.sessionService, app.logger)
+	eventHandler.RegisterRoutes(app.mux)
 
 	authHandler := handlers.NewSessionHandler(app.sessionService, app.userService, app.otpService, app.logger)
 	authHandler.RegisterRoutes(app.mux)

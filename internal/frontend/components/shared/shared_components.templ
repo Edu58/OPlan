@@ -13,7 +13,7 @@ templ BaseLayout(title string) {
 			<script defer src="/static/js/htmx-ext-response-targets.min.js"></script>
 			<script defer src="/static/js/alpine.min.js"></script>
 		</head>
-		<body hx-ext="response-targets">
+		<body hx-ext="response-targets" class="bg-gray-50 min-h-screen">
 			{ children... }
 		</body>
 	</html>
@@ -27,7 +27,7 @@ templ PageLayout(title string, email string) {
 		} else {
 			@Header()
 		}
-		<div class="pt-16 min-h-screen">
+		<div class="pt-16">
 			{ children... }
 		</div>
 		@Footer()
@@ -37,7 +37,7 @@ templ PageLayout(title string, email string) {
 // Layout with just simple footer (for auth pages)
 templ AuthLayout(title string) {
 	@BaseLayout(title) {
-		<div class="min-h-screen">
+		<div>
 			{ children... }
 		</div>
 		@SimpleFooter()

@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type EventsRepository interface {
+type EventRepository interface {
 	ListEvents(ctx context.Context, arg sqlc.ListEventsParams) ([]sqlc.ListEventsRow, error)
 	GetEventById(ctx context.Context, id uuid.UUID) (sqlc.Event, error)
 	GetEventByName(ctx context.Context, name string) (sqlc.Event, error)
@@ -16,6 +16,6 @@ type EventsRepository interface {
 	DeleteEventById(ctx context.Context, id uuid.UUID) error
 }
 
-type EventsService interface {
+type EventService interface {
 	EventsRepository
 }

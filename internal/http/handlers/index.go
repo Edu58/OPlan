@@ -19,12 +19,12 @@ const (
 
 type IndexHandler struct {
 	logger           logger.Logger
-	eventService     domain.EventService
+	eventService     domain.EventsService
 	eventTypeService domain.EventTypesService
 	sessionService   domain.SessionService
 }
 
-func NewIndexHandler(eventService domain.EventService, eventTypeService domain.EventTypesService, sessionService domain.SessionService, logger logger.Logger) *IndexHandler {
+func NewIndexHandler(eventService domain.EventsService, eventTypeService domain.EventTypesService, sessionService domain.SessionService, logger logger.Logger) *IndexHandler {
 	return &IndexHandler{logger, eventService, eventTypeService, sessionService}
 }
 

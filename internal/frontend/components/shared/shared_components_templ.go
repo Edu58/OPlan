@@ -43,7 +43,7 @@ func BaseLayout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Oplan</title><link href=\"/static/css/output.css\" rel=\"stylesheet\"><script defer src=\"/static/js/htmx.min.js\"></script><script defer src=\"/static/js/htmx-ext-response-targets.min.js\"></script><script defer src=\"/static/js/alpine.min.js\"></script></head><body hx-ext=\"response-targets\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Oplan</title><link href=\"/static/css/output.css\" rel=\"stylesheet\"><script defer src=\"/static/js/htmx.min.js\"></script><script defer src=\"/static/js/htmx-ext-response-targets.min.js\"></script><script defer src=\"/static/js/alpine.min.js\"></script></head><body hx-ext=\"response-targets\" class=\"bg-gray-50 min-h-screen\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -104,7 +104,7 @@ func PageLayout(title string, email string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " <div class=\"pt-16 min-h-screen\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " <div class=\"pt-16\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -164,7 +164,7 @@ func AuthLayout(title string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"min-h-screen\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -1,0 +1,24 @@
+package templates
+
+import (
+	"github.com/Edu58/Oplan/internal/frontend/components/event"
+	shared_components "github.com/Edu58/Oplan/internal/frontend/components/shared"
+)
+
+templ EventDetail(title string, email string) {
+	@shared_components.PageLayout(title, email) {
+		@components.EventHeroSection()
+		<!-- Main Content -->
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+				<!-- Main Content -->
+				<div class="lg:col-span-2 space-y-12">
+					@components.EventAboutSection()
+					@components.EventScheduleSection()
+					@components.EventLocationSection()
+				</div>
+				@components.EventSidebar()
+			</div>
+		</div>
+	}
+}

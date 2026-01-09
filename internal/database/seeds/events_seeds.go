@@ -9,7 +9,7 @@ import (
 )
 
 func seedEvents(ctx context.Context, queries *sqlc.Queries) error {
-	maxAge := gofakeit.Int32()
+	maxAge := int32(gofakeit.Int8())
 	description := gofakeit.ProductDescription()
 	policies := `Event Rules:
 	• Professional attire required

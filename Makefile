@@ -39,7 +39,7 @@ templ:
 
 tailwind:
 	@echo "Building Tailwind CSS..."
-	@npx tailwindcss -i ./web/static/css/input.css -o ./web/static/css/output.css
+	@npx tailwindcss -i ./web/static/css/input.css -o ./web/static/css/output.css --minify
 
 tailwind-watch:
 	@echo "Watching Tailwind CSS..."

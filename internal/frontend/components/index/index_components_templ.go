@@ -245,7 +245,7 @@ func Events(events []sqlc.ListEventsRow) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<button class=\"w-full bg-primary text-white py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium\">Register Now</button></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<a href=\"/event/12345\" class=\"w-full btn btn-primary\">Register Now</a></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
